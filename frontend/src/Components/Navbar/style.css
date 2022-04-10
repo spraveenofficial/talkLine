@@ -1,0 +1,90 @@
+nav {
+  height: 30px;
+  height: 5rem;
+  width: 100%;
+  top: 0;
+  z-index: 99999999;
+  display: flex;
+  flex-direction: row;
+  gap: 7%;
+  background: linear-gradient(to bottom, var(--clr-bg), transparent);
+}
+.mobile-menu {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  padding: 20px;
+}
+.logo {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--bg-color);
+}
+.mobile-nav-container {
+  position: fixed;
+  z-index: 9999999;
+  top: 0;
+  width: 100vw;
+  padding: 4rem 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  background: rgb(100, 96, 96);
+}
+.mobile-nav {
+  justify-content: flex-end;
+  background: transparent;
+}
+.hamburger {
+  fill: rgba(240, 246, 255, 0.1);
+  width: 5rem;
+  z-index: 99999999;
+  cursor: pointer;
+  position: absolute;
+  right: 0.5rem;
+  top: -11px;
+  fill: var(--bg-color);
+}
+
+.desktop-navbar {
+  /* background: red; */
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 50px;
+  align-items: center;
+}
+
+.navitems {
+  display: flex;
+  gap: 30px;
+}
+
+.navitems a {
+  /* opacity: 0.6; */
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+  color: var(--bg-color);
+}
+.navitems p,
+.mobnavitems p {
+  cursor: pointer;
+}
+
+.mobnavitems {
+  display: flex;
+  flex-direction: column;
+}
+.mobnavitems a {
+  margin: 15px 0px;
+  flex-direction: column;
+  color: var(--bg-color);
+  text-decoration: none;
+}
+
+.mobnavitems p {
+  margin-top: 0.625rem;
+}
