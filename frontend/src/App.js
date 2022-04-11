@@ -1,6 +1,6 @@
 import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Home } from "./Pages/index";
+import { Home, Signup } from "./Pages/index";
 import { Navbar } from "./Components/index";
 function App() {
   return (
@@ -8,6 +8,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="signup" element={<Signup />} />
       </Routes>
     </Router>
   );

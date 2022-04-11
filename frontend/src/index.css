@@ -155,3 +155,8 @@ a {
   background: var(--bg-color);
   border-radius: 0.625rem;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
