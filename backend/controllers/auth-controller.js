@@ -19,7 +19,7 @@ const sendOtp = async (req, res) => {
   const hash = hashServices.hashOtp(data);
   const user = new User({ name, email, password });
   try {
-    // const saveUser = await user.save();
+    const saveUser = await user.save();
     // const sendEmailWithOtp = await Email.sendSignupOtp(email, otp);
     res.status(200).json({
       success: true,

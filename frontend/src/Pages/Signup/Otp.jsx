@@ -3,6 +3,7 @@ import { Button, Toast } from "../../Components";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyOtp } from "../../Redux/Actions";
+import { animation } from "../../Utils/animation";
 export function Otp({ onBack, onNext }) {
   const [otp, setOtp] = useState({
     1: "",
@@ -28,21 +29,6 @@ export function Otp({ onBack, onNext }) {
     if (response) {
       return onNext();
     }
-  };
-  const animation = {
-    hidden: {
-      x: "-10%",
-      opacity: 0,
-    },
-    show: {
-      x: "-0%",
-      opacity: 1,
-      transition: {
-        duration: 1,
-        type: "tween",
-        ease: "easeOut",
-      },
-    },
   };
   return (
     <motion.div

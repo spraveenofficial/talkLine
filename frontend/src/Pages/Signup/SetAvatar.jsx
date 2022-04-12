@@ -1,30 +1,17 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "../../Components";
+import { Button, Toast } from "../../Components";
 import { setProfile } from "../../Redux/Actions/auth-actions";
 import { verifyUser } from "../../Redux/Actions";
-export function SetAvatar({ onBack, onNext }) {
+import { animation } from "../../Utils/animation";
+export function SetAvatar({ onBack }) {
   const [image, setImage] = useState("/images/monkey-avatar.png");
+  const isButtonDisabled = image === "/images/monkey-avatar.png";
   const dispatch = useDispatch();
   const { loading, success, message } = useSelector(
     (state) => state.uploadAvatar
   );
-  const animation = {
-    hidden: {
-      x: "-10%",
-      opacity: 0,
-    },
-    show: {
-      x: "-0%",
-      opacity: 1,
-      transition: {
-        duration: 1,
-        type: "tween",
-        ease: "easeOut",
-      },
-    },
-  };
   const handleAvatar = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -34,12 +21,10 @@ export function SetAvatar({ onBack, onNext }) {
     };
   };
   const handleUploadAvatar = async () => {
-    // console.log("femfin")
     const response = await dispatch(setProfile({ avatar: image }));
-    // if (response) {
-    //   return onNext();
-    // }
-    // console.log(image);
+    if (response) {
+      return dispatch(verifyUser());
+    }
   };
   const handleSkipAvatar = () => {
     dispatch(verifyUser());
@@ -52,6 +37,7 @@ export function SetAvatar({ onBack, onNext }) {
       exit="hidden"
       className="flex flex-col items-center justify-center h-full w-80 max-w-sm mobile:max-w-full mobile:p-10 mobile:w-full"
     >
+      {message && !success && <Toast message={message} success={success} />}
       <div className="w-full max-w-sm">
         <div className="bg-white">
           <div onClick={() => onBack()} className="justify-items-start">
@@ -75,7 +61,11 @@ export function SetAvatar({ onBack, onNext }) {
                 Choose a different photo
               </label>
             </div>
-            <Button loading={loading} onClick={() => handleUploadAvatar()}>
+            <Button
+              disabled={isButtonDisabled}
+              loading={loading}
+              onClick={() => handleUploadAvatar()}
+            >
               Upload Avatar
             </Button>
             <button
