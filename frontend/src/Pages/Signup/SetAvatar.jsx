@@ -1,8 +1,14 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../Components";
+import { setProfile } from "../../Redux/Actions/auth-actions";
 export function SetAvatar({ onBack, onNext }) {
   const [image, setImage] = useState("/images/monkey-avatar.png");
+  const dispatch = useDispatch();
+  const { loading, success, message } = useSelector(
+    (state) => state.uploadAvatar
+  );
   const animation = {
     hidden: {
       x: "-10%",
@@ -25,6 +31,15 @@ export function SetAvatar({ onBack, onNext }) {
     reader.onloadend = function () {
       setImage(reader.result);
     };
+  };
+  console.log(image);
+  const handleUploadAvatar = async () => {
+    // console.log("femfin")
+    const response = await dispatch(setProfile({ avatar: image }));
+    // if (response) {
+    //   return onNext();
+    // }
+    // console.log(image);
   };
   return (
     <motion.div
@@ -57,7 +72,12 @@ export function SetAvatar({ onBack, onNext }) {
                 Choose a different photo
               </label>
             </div>
-            <Button>Upload Avatar</Button>
+            <Button loading={loading} onClick={() => handleUploadAvatar()}>
+              Upload Avatar
+            </Button>
+            <button className="block flex w-full justify-center bg-red-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2">
+              Skip
+            </button>
           </div>
         </div>
       </div>

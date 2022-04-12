@@ -9,6 +9,9 @@ import {
   OTP_VERIFY_REQUEST,
   OTP_VERIFY_SUCCESS,
   OTP_VERIFY_FAIL,
+  USER_AVATAR_UPLOAD_REQUEST,
+  USER_AVATAR_UPLOAD_SUCCESS,
+  USER_AVATAR_UPLOAD_FAILURE,
 } from "../Constants/auth-constants";
 export const auth = (
   state = { isAuthenticated: false, loading: true, user: null },
@@ -70,6 +73,32 @@ export const verifyOtp = (
         message: "OTP verified",
       };
     case OTP_VERIFY_FAIL:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        message: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const uploadAvatar = (
+  state = { loading: false, message: "", success: false },
+  action
+) => {
+  switch (action.type) {
+    case USER_AVATAR_UPLOAD_REQUEST:
+      return { ...state, loading: true };
+    case USER_AVATAR_UPLOAD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        message: "Avatar uploaded",
+      };
+    case USER_AVATAR_UPLOAD_FAILURE:
       return {
         ...state,
         loading: false,

@@ -1,1 +1,1 @@
-export { signup, verifyOtp } from "./auth-actions";
+export { signup, verifyOtp, setProfile } from "./auth-actions";

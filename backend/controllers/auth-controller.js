@@ -4,7 +4,8 @@ import hashServices from "../services/hash-services.js";
 import otpServices from "../services/otp-services.js";
 import userService from "../services/user-services.js";
 import Email from "../services/email-services.js";
-
+import Jimp from "jimp";
+import path from "path";
 // @desc    Send OTP
 // @route   POST /api/v1/auth/send-otp
 // @access  Public
@@ -70,4 +71,39 @@ const verifyOtp = async (req, res) => {
   }
 };
 
-export { sendOtp, verifyOtp };
+// @desc    Upload Profile aka Avatar
+// @route   POST /api/v1/auth/upload-avatar
+// @access  Private
+
+const uploadAvatar = async (req, res) => {
+  // Activation logic
+  const { avatar } = req.body;
+  // Image Base64
+  const __dirname = path.resolve();
+  const buffer = Buffer.from(
+    avatar.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),
+    "base64"
+  );
+  const imagePath = `${Date.now()}-${Math.round(Math.random() * 1e9)}.png`;
+  try {
+    var jimResp = await Jimp.read(buffer);
+    jimResp.resize(200, Jimp.AUTO).write(`${__dirname}/storage/${imagePath}`);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Could not process the image" });
+  }
+  const { id } = req.data;
+  try {
+    const user = await userService.findUser({ _id: id });
+    if (!user) {
+      res.status(404).json({ message: "User not found!" });
+    }
+    user.avatar = `/storage/${imagePath}`;
+    user.save();
+    res.json({ user: user });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong!" });
+  }
+};
+
+export { sendOtp, verifyOtp, uploadAvatar };

@@ -7,6 +7,9 @@ import {
   OTP_VERIFY_REQUEST,
   OTP_VERIFY_SUCCESS,
   OTP_VERIFY_FAIL,
+  USER_AVATAR_UPLOAD_REQUEST,
+  USER_AVATAR_UPLOAD_SUCCESS,
+  USER_AVATAR_UPLOAD_FAILURE,
 } from "../Constants/auth-constants";
 
 export const signup = (payload) => async (dispatch) => {
@@ -73,6 +76,45 @@ export const verifyOtp = (payload) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: OTP_VERIFY_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+    return false;
+  }
+};
+
+export const setProfile = (payload) => async (dispatch) => {
+  console.log("fkwefoin");
+  try {
+    dispatch({
+      type: USER_AVATAR_UPLOAD_REQUEST,
+    });
+    const { data } = await axios({
+      method: "POST",
+      url: `${baseUrl}/auth/upload-avatar`,
+      data: payload,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if (!data.success) {
+      dispatch({
+        type: USER_AVATAR_UPLOAD_FAILURE,
+        payload: data.message,
+      });
+      return false;
+    } else {
+      dispatch({
+        type: USER_AVATAR_UPLOAD_SUCCESS,
+        payload: data.avatar,
+      });
+      return true;
+    }
+  } catch (error) {
+    dispatch({
+      type: USER_AVATAR_UPLOAD_FAILURE,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
