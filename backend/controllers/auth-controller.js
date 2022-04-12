@@ -17,8 +17,8 @@ const sendOtp = async (req, res) => {
   const hash = hashServices.hashOtp(data);
   const user = new User({ name, email, password });
   try {
-    const saveUser = await user.save();
-    const sendEmailWithOtp = await Email.sendSignupOtp(email, otp);
+    // const saveUser = await user.save();
+    // const sendEmailWithOtp = await Email.sendSignupOtp(email, otp);
     res.status(200).json({
       success: true,
       message: "User created successfully",
@@ -48,25 +48,25 @@ const verifyOtp = async (req, res) => {
   const { otp, hash, email } = req.body;
   const [hashedOtp, expires] = hash.split(".");
   if (Date.now() > +expires) {
-    res.status(400).json({ success: false, message: "OTP expired!" });
+    return res.status(400).json({ success: false, message: "OTP expired!" });
   }
   const data = `${email}.${otp}.${expires}`;
   const isValid = otpServices.verifyOtp(hashedOtp, data);
   if (!isValid) {
-    res.status(400).json({ success: false, message: "Invalid OTP" });
+    return res.status(400).json({ success: false, message: "Invalid OTP" });
   }
   try {
     let user = await userService.findUser({ email });
     user.isActivated = true;
     await user.save();
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "User activated successfully",
       token: generateAuthToken(user._id),
     });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ success: false, message: "Db error" });
+    return res.status(500).json({ success: false, message: "Db error" });
   }
 };
 

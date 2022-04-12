@@ -1,40 +1,47 @@
-import { Button, Input } from "../../Components";
+import { Button, Input, Toast } from "../../Components";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { signup } from "../../Redux/Actions";
 export function EmailPassword({ onNext }) {
+  const dispatch = useDispatch();
+  const { loading, user, success, message } = useSelector(
+    (state) => state.signup
+  );
   const formik = useFormik({
     initialValues: {
-      name: "",
-      email: "",
-      password: "",
+      name: user.name,
+      email: user.email,
+      password: user.password,
     },
-    onSubmit: (values) => {
-      // alert(JSON.stringify(values, null, 2));
-      // console.log(values);
-      onNext();
+    onSubmit: async (values) => {
+      const data = await dispatch(signup(values));
+      if (data) {
+        return onNext();
+      }
     },
     validate: (values) => {
-      // const regularExpression = new RegExp(
-      //   "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-      // );
-      // let errors = {};
-      // if (!values.email) {
-      //   errors.email = "Valid email is required";
-      // } else if (
-      //   !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)
-      // ) {
-      //   errors.email = "Invalid email address";
-      // }
-      // if (!values.name) {
-      //   errors.name = "Valid name is required";
-      // }
-      // if (!values.password) {
-      //   errors.password = "Valid password is required";
-      // } else if (!regularExpression.test(values.password)) {
-      //   errors.password =
-      //     "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character";
-      // }
-      // return errors;
+      const regularExpression = new RegExp(
+        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+      );
+      let errors = {};
+      if (!values.email) {
+        errors.email = "Valid email is required";
+      } else if (
+        !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)
+      ) {
+        errors.email = "Invalid email address";
+      }
+      if (!values.name) {
+        errors.name = "Valid name is required";
+      }
+      if (!values.password) {
+        errors.password = "Valid password is required";
+      } else if (!regularExpression.test(values.password)) {
+        errors.password =
+          "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character";
+      }
+      return errors;
     },
   });
   return (
@@ -118,7 +125,7 @@ export function EmailPassword({ onNext }) {
           />
         </svg>
         <Input
-          type="text"
+          type="password"
           name="password"
           onChange={formik.handleChange}
           value={formik.values.password}
@@ -127,7 +134,10 @@ export function EmailPassword({ onNext }) {
           placeholder="Enter Password"
         />
       </div>
-      <Button type="submit">Signup</Button>
+      {message && !success && <Toast message={message} success={success} />}
+      <Button loading={loading} type="submit">
+        Signup
+      </Button>
       <Link to="/login">
         <span className="text-sm ml-2 hover:text-blue-500 cursor-pointer">
           Already have an Account ?
