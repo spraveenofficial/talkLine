@@ -6,6 +6,7 @@ import userService from "../services/user-services.js";
 import Email from "../services/email-services.js";
 import Jimp from "jimp";
 import path from "path";
+
 // @desc    Send OTP
 // @route   POST /api/v1/auth/send-otp
 // @access  Public
@@ -106,4 +107,65 @@ const uploadAvatar = async (req, res) => {
   }
 };
 
-export { sendOtp, verifyOtp, uploadAvatar };
+// @desc    User Verify
+// @route   POST /api/v1/auth/verify
+// @access  Private
+
+const verifyUser = async (req, res) => {
+  const { id } = req.data;
+  try {
+    const user = await User.findOne({ _id: id }).select("id name email avatar");
+    if (!user) {
+      res.status(404).json({ success: false, message: "User not found!" });
+    }
+    res.json({ message: "User verified successfully", success: true, user });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Something went wrong!" });
+  }
+};
+
+const loginUsingOtp = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found!" });
+    }
+    if (user && (await user.matchPassword(password))) {
+      const otp = await otpServices.generateOtp();
+      const ttl = 1000 * 60 * 2; // 2 min
+      const expires = Date.now() + ttl;
+      const data = `${email}.${otp}.${expires}`;
+      const hash = hashServices.hashOtp(data);
+      const token = generateAuthToken(user._id);
+      res.status(200).json({
+        success: true,
+        message: "Otp Sent Successfully",
+        hash: `${hash}.${expires}`,
+        otp: otp,
+      });
+    } else if (!user) {
+      return res.json({
+        message: "User Not Found, Signup Now",
+        statusCode: 500,
+        success: false,
+      });
+    } else {
+      return res.json({
+        message: "Invalid Password",
+        statusCode: 500,
+        success: false,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ success: false, message: "Something went wrong!" });
+  }
+};
+
+export { sendOtp, verifyOtp, uploadAvatar, verifyUser, loginUsingOtp };

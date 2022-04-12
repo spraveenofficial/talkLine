@@ -44,7 +44,7 @@ const UserSchema = new Schema(
     toJSON: { getters: true },
   }
 );
-UserSchema.index({ name: "text" });
+// UserSchema.index({ name: "text" });
 
 // UserSchema.virtual("subscribers", {
 //   ref: "Subscription",

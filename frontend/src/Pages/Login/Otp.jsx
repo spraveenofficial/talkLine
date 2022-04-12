@@ -1,11 +1,34 @@
 import { useState } from "react";
-import { Button } from "../../Components";
+import { Button, Toast } from "../../Components";
 import { motion } from "framer-motion";
-export function Otp({ onBack, onNext }) {
-  const [otp, setOtp] = useState("");
+import { useDispatch, useSelector } from "react-redux";
+import { verifyOtp, verifyUser } from "../../Redux/Actions";
+export function Otp({ onBack }) {
+  const dispatch = useDispatch();
+  const [otp, setOtp] = useState({
+    1: "",
+    2: "",
+    3: "",
+    4: "",
+  });
+  const { user } = useSelector((state) => state.login);
+  const { loading, success, message } = useSelector((state) => state.verifyOtp);
   const handleOtpChange = (e) => {
-    const { value } = e.target;
-    setOtp((oldvalue) => oldvalue.concat(value));
+    const { name, value } = e.target;
+    setOtp((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const enTeredOtp = Object.values(otp).join("");
+
+  const handleVerifyOtp = async () => {
+    const response = await dispatch(
+      verifyOtp({ otp: enTeredOtp, hash: user.hash, email: user.email })
+    );
+    if (response) {
+      return dispatch(verifyUser());
+    }
   };
   const animation = {
     hidden: {
@@ -51,6 +74,7 @@ export function Otp({ onBack, onNext }) {
                 maxLength="1"
                 onChange={handleOtpChange}
                 placeholder="0"
+                name="1"
               />
               <input
                 type="number"
@@ -58,6 +82,7 @@ export function Otp({ onBack, onNext }) {
                 maxLength="1"
                 onChange={handleOtpChange}
                 placeholder="0"
+                name="2"
               />
               <input
                 type="number"
@@ -65,6 +90,7 @@ export function Otp({ onBack, onNext }) {
                 maxLength="1"
                 onChange={handleOtpChange}
                 placeholder="0"
+                name="3"
               />
               <input
                 type="text"
@@ -72,14 +98,23 @@ export function Otp({ onBack, onNext }) {
                 maxLength="1"
                 onChange={handleOtpChange}
                 placeholder="0"
+                name="4"
               />
             </div>
-            <p>You are just one step ahead.</p>
+            {!loading && message && (
+              <Toast
+                message={success ? "Redirecting.." : message}
+                success={success}
+              />
+            )}
+            <p className="mb-10">You are just one step ahead.</p>
             <button className="resend">
               Resend OTP
               <i className="fa fa-caret-right ml-2"></i>
             </button>
-            <Button>Verify Otp</Button>
+            <Button loading={loading} onClick={() => handleVerifyOtp()}>
+              Verify Otp
+            </Button>
           </div>
         </div>
       </div>

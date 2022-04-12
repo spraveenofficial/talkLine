@@ -1,16 +1,23 @@
-import { Button, Input } from "../../Components";
+import { Button, Input, Toast } from "../../Components";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogin } from "../../Redux/Actions";
 export function EmailPassword({ onNext }) {
+  const dispatch = useDispatch();
+  const { loading, user, success, message } = useSelector(
+    (state) => state.login
+  );
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: user.email,
+      password: user.password,
     },
-    onSubmit: (values) => {
-      // alert(JSON.stringify(values, null, 2));
-      // console.log(values);
-      onNext();
+    onSubmit: async (values) => {
+      const response = await dispatch(userLogin(values));
+      if (response) {
+        return onNext();
+      }
     },
     validate: (values) => {
       const regularExpression = new RegExp(
@@ -86,7 +93,7 @@ export function EmailPassword({ onNext }) {
           />
         </svg>
         <Input
-          type="text"
+          type="password"
           name="password"
           onChange={formik.handleChange}
           value={formik.values.password}
@@ -95,7 +102,12 @@ export function EmailPassword({ onNext }) {
           placeholder="Enter Password"
         />
       </div>
-      <Button type="submit">Login</Button>
+      <Button loading={loading} type="submit">
+        Login
+      </Button>
+      {!loading && message && !success && (
+        <Toast message={message} success={success} />
+      )}
       <div className="flex justify-between mt-15">
         <Link to="/signup">
           <span className="text-sm ml-2 hover:text-blue-500 cursor-pointer">

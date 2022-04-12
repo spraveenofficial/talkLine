@@ -12,7 +12,11 @@ import {
   USER_AVATAR_UPLOAD_REQUEST,
   USER_AVATAR_UPLOAD_SUCCESS,
   USER_AVATAR_UPLOAD_FAILURE,
+  USER_LOGIN_REQUEST,
+  USER_LOGIN_SUCCESS,
+  USER_LOGIN_FAILURE,
 } from "../Constants/auth-constants";
+
 export const auth = (
   state = { isAuthenticated: false, loading: true, user: null },
   action
@@ -103,6 +107,33 @@ export const uploadAvatar = (
         ...state,
         loading: false,
         success: false,
+        message: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const login = (
+  state = { loading: false, success: false, user: {}, message: "" },
+  action
+) => {
+  switch (action.type) {
+    case USER_LOGIN_REQUEST:
+      return { ...state, loading: true };
+    case USER_LOGIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        user: action.payload,
+      };
+    case USER_LOGIN_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        user: {},
         message: action.payload,
       };
     default:

@@ -10,6 +10,12 @@ import {
   USER_AVATAR_UPLOAD_REQUEST,
   USER_AVATAR_UPLOAD_SUCCESS,
   USER_AVATAR_UPLOAD_FAILURE,
+  USER_LOAD_REQUEST,
+  USER_LOAD_SUCCESS,
+  USER_LOAD_FAILURE,
+  USER_LOGIN_REQUEST,
+  USER_LOGIN_SUCCESS,
+  USER_LOGIN_FAILURE,
 } from "../Constants/auth-constants";
 
 export const signup = (payload) => async (dispatch) => {
@@ -115,6 +121,90 @@ export const setProfile = (payload) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_AVATAR_UPLOAD_FAILURE,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+    return false;
+  }
+};
+
+export const verifyUser = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: USER_LOAD_REQUEST,
+    });
+    const token = localStorage.getItem("token");
+    const { data } = await axios({
+      method: "GET",
+      url: `${baseUrl}/auth/verify`,
+      headers: {
+        token: `Bearer ${token}`,
+      },
+    });
+    if (!data.success) {
+      // localStorage.removeItem("token");
+      dispatch({
+        type: USER_LOAD_FAILURE,
+      });
+    } else {
+      console.log(data);
+      dispatch({
+        type: USER_LOAD_SUCCESS,
+        payload: data.data,
+      });
+    }
+  } catch (error) {
+    localStorage.removeItem("token");
+    dispatch({
+      type: USER_LOAD_FAILURE,
+    });
+  }
+};
+
+export const userLogout = () => async (dispatch) => {
+  localStorage.removeItem("token");
+  dispatch({
+    type: USER_LOAD_FAILURE,
+  });
+};
+
+export const getUser = () => async (dispatch) => {
+  dispatch({
+    type: USER_LOAD_FAILURE,
+  });
+};
+
+export const userLogin = (payload) => async (dispatch) => {
+  try {
+    dispatch({
+      type: USER_LOGIN_REQUEST,
+    });
+    const { data } = await axios({
+      method: "POST",
+      url: `${baseUrl}/auth/login`,
+      data: payload,
+    });
+    if (!data.success) {
+      dispatch({
+        type: USER_LOGIN_FAILURE,
+        payload: data.message,
+      });
+      return false;
+    } else {
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: {
+          ...payload,
+          hash: data.hash,
+        },
+      });
+      return true;
+    }
+  } catch (error) {
+    dispatch({
+      type: USER_LOGIN_FAILURE,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
