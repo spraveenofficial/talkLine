@@ -18,7 +18,7 @@ import {
 } from "../Constants/auth-constants";
 
 export const auth = (
-  state = { isAuthenticated: false, loading: false, user: null },
+  state = { isAuthenticated: false, loading: true, user: null },
   action
 ) => {
   switch (action.type) {

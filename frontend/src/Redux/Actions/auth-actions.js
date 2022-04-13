@@ -152,7 +152,7 @@ export const verifyUser = () => async (dispatch) => {
       console.log(data);
       dispatch({
         type: USER_LOAD_SUCCESS,
-        payload: data.data,
+        payload: data.user,
       });
     }
   } catch (error) {

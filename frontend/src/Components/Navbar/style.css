@@ -88,3 +88,9 @@ nav {
 .mobnavitems p {
   margin-top: 0.625rem;
 }
+
+@media screen and (min-width: 768px) and (max-width: 1624px) {
+  nav {
+    display: none;
+  }
+}

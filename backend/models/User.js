@@ -19,7 +19,7 @@ const UserSchema = new Schema(
     },
     avatar: {
       type: String,
-      default: "/storage/monkey-avatar.jpg",
+      default: "/monkey-avatar.jpg",
       get: (avatar) => {
         if (avatar) {
           return `${process.env.BASE_URL}${avatar}`;

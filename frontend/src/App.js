@@ -1,6 +1,6 @@
 import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Home, Signup, Login } from "./Pages/index";
+import { Home, Signup, Login, Error } from "./Pages/index";
 import { Navbar } from "./Components/index";
 import { GuestRoutes, ProtectedRoutes } from "./Utils/routes";
 import { verifyUser } from "./Redux/Actions";
@@ -11,7 +11,7 @@ function App() {
   const token = localStorage.getItem("token") ? true : false;
   const { loading, isAuthenticated } = useSelector((state) => state.auth);
   useEffect(() => {
-    if (!isAuthenticated && token && !loading) {
+    if (token && !isAuthenticated) {
       dispatch(verifyUser());
     }
   }, [dispatch, token]);
@@ -31,6 +31,7 @@ function App() {
           <Routes>
             <Route element={<ProtectedRoutes />}>
               <Route path="/" element={<Home />} />
+              <Route path="*" element={<Error />} />
             </Route>
             <Route element={<GuestRoutes />}>
               <Route path="signup" element={<Signup />} />

@@ -6,11 +6,13 @@ import bodyParser from "body-parser";
 import "./database/db.js";
 import AuthRoutes from "./routes/auth-routes.js";
 import apiRoutes from "./routes/routes.js";
+import path from "path";
 dotenv.config();
 
 const app = express();
+const __dirname = path.resolve();
 app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser({limit: '50mb'}));
+app.use(bodyParser({ limit: "50mb" }));
 // Registering morgan for development
 app.use(morgan("dev"));
 
@@ -24,6 +26,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3505;
 
+app.use("/v1/api", express.static(path.join(__dirname, "storage")));
 // Registering Routes
 app.use("/few", apiRoutes);
 app.use("/v1/api/auth/", AuthRoutes);
