@@ -26,7 +26,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3505;
 
-app.use("/v1/api", express.static(path.join(__dirname, "storage")));
+app.use("/v1/api/storage", express.static(path.join(__dirname, "storage")));
 // Registering Routes
 app.use("/few", apiRoutes);
 app.use("/v1/api/auth/", AuthRoutes);
