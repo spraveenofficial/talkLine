@@ -144,12 +144,11 @@ export const verifyUser = () => async (dispatch) => {
       },
     });
     if (!data.success) {
-      // localStorage.removeItem("token");
+      localStorage.removeItem("token");
       dispatch({
         type: USER_LOAD_FAILURE,
       });
     } else {
-      console.log(data);
       dispatch({
         type: USER_LOAD_SUCCESS,
         payload: data.user,
@@ -170,7 +169,7 @@ export const userLogout = () => async (dispatch) => {
   });
 };
 
-export const getUser = () => async (dispatch) => {
+export const nullUser = () => async (dispatch) => {
   dispatch({
     type: USER_LOAD_FAILURE,
   });

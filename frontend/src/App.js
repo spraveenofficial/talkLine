@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home, Signup, Login, Error } from "./Pages/index";
 import { Navbar } from "./Components/index";
 import { GuestRoutes, ProtectedRoutes } from "./Utils/routes";
-import { verifyUser } from "./Redux/Actions";
+import { verifyUser, nullUser } from "./Redux/Actions";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 function App() {
@@ -13,6 +13,8 @@ function App() {
   useEffect(() => {
     if (token && !isAuthenticated) {
       dispatch(verifyUser());
+    } else {
+      dispatch(nullUser());
     }
   }, [dispatch, token]);
   return (

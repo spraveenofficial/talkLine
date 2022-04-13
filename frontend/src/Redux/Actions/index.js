@@ -4,6 +4,6 @@ export {
   setProfile,
   verifyUser,
   userLogout,
-  getUser,
+  nullUser,
   userLogin,
 } from "./auth-actions";
