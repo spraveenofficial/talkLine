@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS reset */
+/* Importing Poppins Font from Google Font. */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap");
+
+/* CSS reset */
 
 :root {
   --bg-color: #1a202c;
@@ -12,6 +14,7 @@
   --card-text: rgb(182, 179, 179);
   --black-text: black;
   --green-color: #219c21;
+  --primary-color: #4f46e5;
 }
 
 body,
@@ -45,7 +48,6 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif;
-  /* background: var(--bg-color); */
   color: var(--bg-color);
 }
 table {
@@ -142,6 +144,11 @@ a {
   padding-bottom: 0.625rem;
 }
 
+.active {
+  background: var(--primary-color);
+  font-weight: bold;
+}
+
 /* Components which is not possible by tailwind */
 .snackbars {
   background: rgb(33, 184, 33);
@@ -158,23 +165,22 @@ a {
   transform: translate(-50%);
   z-index: 2;
   display: flex;
-  /* display: none; */
 }
 
-/* Webkit Scrollbar */
+/* Scrollbar */
 
 ::-webkit-scrollbar {
-  /* width: 0.625rem; */
-  width: 1px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
-  /* background-color: white; */
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-color);
+  background: var(--primary-color);
   border-radius: 0.625rem;
 }
+
+/* Disabling Counter for Input Tag which type will be Number */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

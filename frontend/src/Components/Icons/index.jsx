@@ -16,6 +16,7 @@ const HomeIcon = (props) => (
 );
 const ExploreIcon = (props) => (
   <svg
+    {...props}
     className="mr-4 h-6 w-6"
     fill="none"
     strokeLinecap="round"
@@ -30,6 +31,7 @@ const ExploreIcon = (props) => (
 
 const NotificationIcon = (props) => (
   <svg
+    {...props}
     className="mr-4 h-6 w-6"
     fill="none"
     strokeLinecap="round"
@@ -43,6 +45,7 @@ const NotificationIcon = (props) => (
 );
 const MessageIcon = (props) => (
   <svg
+    {...props}
     className="mr-4 h-6 w-6"
     fill="none"
     strokeLinecap="round"
@@ -56,6 +59,7 @@ const MessageIcon = (props) => (
 );
 const BookMarkIcon = (props) => (
   <svg
+    {...props}
     className="mr-4 h-6 w-6"
     fill="none"
     strokeLinecap="round"
@@ -69,6 +73,7 @@ const BookMarkIcon = (props) => (
 );
 const ListIcon = (props) => (
   <svg
+    {...props}
     className="mr-4 h-6 w-6"
     fill="none"
     strokeLinecap="round"
@@ -82,6 +87,7 @@ const ListIcon = (props) => (
 );
 const ProfileIcon = (props) => (
   <svg
+    {...props}
     className="mr-4 h-6 w-6"
     fill="none"
     strokeLinecap="round"
@@ -95,6 +101,7 @@ const ProfileIcon = (props) => (
 );
 const MoreIcon = (props) => (
   <svg
+    {...props}
     className="mr-4 h-6 w-6"
     fill="none"
     strokeLinecap="round"
@@ -106,6 +113,58 @@ const MoreIcon = (props) => (
     <path d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
   </svg>
 );
+
+const EmailIcon = (props) => (
+  <svg
+    {...props}
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5 text-gray-400"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+    />
+  </svg>
+);
+
+const PasswordIcon = (props) => (
+  <svg
+    {...props}
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5 text-gray-400"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+  >
+    <path
+      fillRule="evenodd"
+      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const NameIcon = (props) => (
+  <svg
+    {...props}
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5 text-gray-400"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M20.822 18.096c-3.439-.794-6.641-1.49-5.09-4.418 4.719-8.912 1.251-13.678-3.732-13.678-5.081 0-8.464 4.949-3.732 13.678 1.597 2.945-1.725 3.641-5.09 4.418-2.979.688-3.178 2.143-3.178 4.663l.005 1.241h10.483l.704-3h1.615l.704 3h10.483l.005-1.241c.001-2.52-.198-3.975-3.177-4.663zm-8.231 1.904h-1.164l-.91-2h2.994l-.92 2z"
+    />
+  </svg>
+);
 export {
   HomeIcon,
   ExploreIcon,
@@ -115,4 +174,7 @@ export {
   ListIcon,
   ProfileIcon,
   MoreIcon,
+  EmailIcon,
+  PasswordIcon,
+  NameIcon,
 };

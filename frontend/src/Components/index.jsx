@@ -12,6 +12,8 @@ export { CreatePost } from "./CreatePost";
 
 export { Modal } from "./Modal";
 
+export { Sidebar } from "./Sidebar";
+
 export {
   HomeIcon,
   ExploreIcon,
@@ -21,4 +23,7 @@ export {
   ListIcon,
   ProfileIcon,
   MoreIcon,
+  EmailIcon,
+  PasswordIcon,
+  NameIcon,
 } from "./Icons";
