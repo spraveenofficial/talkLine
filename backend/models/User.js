@@ -19,13 +19,8 @@ const UserSchema = new Schema(
     },
     avatar: {
       type: String,
-      default: "/storage/monkey-avatar.jpg",
-      get: (avatar) => {
-        if (avatar) {
-          return `${process.env.BASE_URL}/storage${avatar}`;
-        }
-        return avatar;
-      },
+      default:
+        "https://res.cloudinary.com/dtswa0rzu/image/upload/v1649933676/monkey-avatar_nbyc1i.png",
     },
     isActivated: {
       type: Boolean,
@@ -38,30 +33,16 @@ const UserSchema = new Schema(
       type: String,
       default: "Hi,There i am using TalkLine.",
     },
+    isPrivate: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
     toJSON: { getters: true },
   }
 );
-// UserSchema.index({ name: "text" });
-
-// UserSchema.virtual("subscribers", {
-//   ref: "Subscription",
-//   localField: "_id",
-//   foreignField: "channelId",
-//   justOne: false,
-//   count: true,
-//   // match: {  },
-// });
-
-// UserSchema.virtual("videos", {
-//   ref: "Video",
-//   localField: "_id",
-//   foreignField: "userId",
-//   justOne: false,
-//   count: true,
-// });
 
 // Ecrypt Password
 UserSchema.pre("save", async function (next) {
@@ -73,9 +54,12 @@ UserSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
+// Match Password
 UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
+// User Model
 const User = mongoose.model("User", UserSchema);
 
 export default User;

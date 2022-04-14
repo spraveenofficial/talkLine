@@ -4,8 +4,7 @@ import hashServices from "../services/hash-services.js";
 import otpServices from "../services/otp-services.js";
 import userService from "../services/user-services.js";
 import Email from "../services/email-services.js";
-import Jimp from "jimp";
-import path from "path";
+import cloudinary from "cloudinary";
 
 // @desc    Send OTP
 // @route   POST /api/v1/auth/send-otp
@@ -78,32 +77,45 @@ const verifyOtp = async (req, res) => {
 
 const uploadAvatar = async (req, res) => {
   // Activation logic
+  const { id } = req.data;
   const { avatar } = req.body;
   // Image Base64
-  const __dirname = path.resolve();
   const buffer = Buffer.from(
     avatar.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),
     "base64"
   );
-  const imagePath = `${Date.now()}-${Math.round(Math.random() * 1e9)}.png`;
+  const imagePath = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
   try {
-    var jimResp = await Jimp.read(buffer);
-    jimResp.resize(200, Jimp.AUTO).write(`${__dirname}/storage/${imagePath}`);
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.CLOUD_API_KEY,
+      api_secret: process.env.CLOUD_API_SECRET,
+      secure: true,
+    });
+    await cloudinary.v2.uploader
+      .upload_stream(
+        {
+          resource_type: "image",
+          public_id: imagePath,
+          format: "png",
+        },
+        async (err, result) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              success: false,
+              message: "Something went wrong!",
+            });
+          }
+          const user = await userService.findUser({ _id: id });
+          user.avatar = result.secure_url;
+          user.save();
+          res.json({ message: "Avatar uploaded successfully", success: true });
+        }
+      )
+      .end(buffer);
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Could not process the image" });
-  }
-  const { id } = req.data;
-  try {
-    const user = await userService.findUser({ _id: id });
-    if (!user) {
-      res.status(404).json({ message: "User not found!" });
-    }
-    user.avatar = `/storage/${imagePath}`;
-    user.save();
-    res.json({ user: user });
-  } catch (err) {
-    res.status(500).json({ message: "Something went wrong!" });
   }
 };
 
@@ -140,7 +152,6 @@ const loginUsingOtp = async (req, res) => {
       const expires = Date.now() + ttl;
       const data = `${email}.${otp}.${expires}`;
       const hash = hashServices.hashOtp(data);
-      const token = generateAuthToken(user._id);
       res.status(200).json({
         success: true,
         message: "Otp Sent Successfully",
