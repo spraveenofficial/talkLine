@@ -99,7 +99,7 @@ export function Otp({ onBack }) {
               <i className="fa fa-caret-right ml-2"></i>
             </button>
             <Button loading={loading} onClick={() => handleVerifyOtp()}>
-              Verify Otp
+              {loading ? "Verifying..." : "Verify"}
             </Button>
           </div>
         </div>

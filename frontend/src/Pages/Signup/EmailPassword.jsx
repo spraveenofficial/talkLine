@@ -136,7 +136,7 @@ export function EmailPassword({ onNext }) {
       </div>
       {message && !success && <Toast message={message} success={success} />}
       <Button loading={loading} type="submit">
-        Signup
+        {loading ? "Sending otp.." : "Signup"}
       </Button>
       <Link to="/login">
         <span className="text-sm ml-2 hover:text-blue-500 cursor-pointer">

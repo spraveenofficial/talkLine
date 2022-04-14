@@ -66,7 +66,7 @@ export function SetAvatar({ onBack }) {
               loading={loading}
               onClick={() => handleUploadAvatar()}
             >
-              Upload Avatar
+              {loading ? "Uploading..." : "Upload"}
             </Button>
             <button
               onClick={() => handleSkipAvatar()}

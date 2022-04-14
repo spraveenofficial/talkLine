@@ -103,7 +103,7 @@ export function EmailPassword({ onNext }) {
         />
       </div>
       <Button loading={loading} type="submit">
-        Login
+        {loading ? "Sending otp..." : "Login"}
       </Button>
       {!loading && message && !success && (
         <Toast message={message} success={success} />
