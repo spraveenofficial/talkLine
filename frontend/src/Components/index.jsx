@@ -10,6 +10,8 @@ export { EachPost } from "./EachPosts";
 
 export { CreatePost } from "./CreatePost";
 
+export { Modal } from "./Modal";
+
 export {
   HomeIcon,
   ExploreIcon,

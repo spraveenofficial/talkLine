@@ -1,4 +1,3 @@
-// import { CreatePost } from "../../Components";
 import {
   HomeIcon,
   ExploreIcon,
@@ -9,12 +8,14 @@ import {
   ProfileIcon,
   MoreIcon,
   CreatePost,
+  Modal
 } from "../../Components";
 import { useSelector } from "react-redux";
 export function Home() {
   const { user } = useSelector((state) => state.auth);
   return (
     <div className="p-relative flex">
+      <Modal />
       <div className="bg-red-100 w-1/5 text-white h-12 h-auto mobile:hidden flex flex-col">
         <h1 className="text-3xl text-black font-bold text-center mt-20">
           TalkLine
