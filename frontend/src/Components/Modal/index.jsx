@@ -13,7 +13,10 @@ export function Modal(props) {
   return (
     show && (
       <AnimatePresence>
-        <motion.div className="backdrop-blur-sm modal overscroll-auto bg-slate-800 bg-opacity-50 flex justify-center items-center absolute w-full h-full top-0 left-0">
+        <motion.div
+          style={{ height: "calc(100vh)" }}
+          className="z-50 backdrop-blur-sm modal overscroll-auto bg-slate-800 bg-opacity-50 flex justify-center items-center fixed w-full top-0 left-0"
+        >
           <motion.div
             initial="hidden"
             animate="visible"

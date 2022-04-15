@@ -3,12 +3,12 @@ import { useSelector } from "react-redux";
 export function CreatePost() {
   const { user } = useSelector((state) => state.auth);
   return (
-    <div className="w-2/4 border border-gray-600 h-auto  border-t-0 mobile:w-full">
+    <div className="w-2/3 border border-gray-600 h-auto border-t-0 mobile:w-full">
       <hr className="border-gray-600" />
       <div className="flex">
-        <div className="m-2 w-12 py-1">
+        <div className="m-2 w-14 py-1">
           <img
-            className="inline-block h-14 w-14 rounded-full"
+            className="inline-block h-16 w-16 rounded-full"
             src={user.avatar}
             alt=""
           />
@@ -108,7 +108,7 @@ export function CreatePost() {
 
         <div className="flex-1">
           <button className="bg-indigo-600 mt-5 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-full mr-8 float-right">
-            Create Post
+            Post
           </button>
         </div>
       </div>

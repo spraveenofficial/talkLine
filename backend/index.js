@@ -30,4 +30,6 @@ app.use("/few", apiRoutes);
 app.use("/v1/api/auth/", AuthRoutes);
 
 // Server initialize
-app.listen(PORT, () => console.log(`App started running on ${PORT}`));
+const serverRunning = app.listen(PORT, () => console.log(`App started running on ${PORT}`));
+
+

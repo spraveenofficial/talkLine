@@ -6,6 +6,7 @@ import { GuestRoutes, ProtectedRoutes } from "./Utils/routes";
 import { verifyUser, nullUser } from "./Redux/Actions";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+// import { Testing } from "./Components/TestComponent/test";
 function App() {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token") ? true : false;
