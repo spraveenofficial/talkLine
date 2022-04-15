@@ -5,10 +5,12 @@ export function Home() {
     <div className="flex relative h-full mobile:flex-col">
       <Sidebar />
       <CreatePost />
-      <aside className="bg-red-100 w-2/5 pr-3 h-full
-       relative mobile:w-full">
+      <aside
+        className="w-2/5 pr-3 h-full
+       relative mobile:w-full"
+      >
         <div className="flex flex-col flex-shrink-1 h-full">
-          <div className="fixed top-0 h-full">
+          <div className="fixed top-0 h-full mobile:relative">
             <div className="relative text-gray-300 p-5">
               <button type="submit" className="absolute ml-4 mt-3 mr-4">
                 <svg
