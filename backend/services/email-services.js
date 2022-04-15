@@ -15,7 +15,9 @@ class Email {
       subject: "OTP ! Welcome to TalkLine. ",
       text: `Hey there! Welcome to TalkLine. Your OTP is ${otp}. This Otp will be valid for 2 minutes only. \n\n\n\nRegards,\nTalkLine Team.`,
     };
-    transporter.sendMail(mailOptions);
+    const response = transporter.sendMail(mailOptions,(result)=>{
+     console.log(result);
+    });
   }
 }
 
