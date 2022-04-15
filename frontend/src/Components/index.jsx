@@ -12,6 +12,7 @@ export { CreatePost } from "./CreatePost";
 
 export { Modal } from "./Modal";
 
+export { FileUpload } from "./Modal/upload";
 export { Sidebar } from "./Sidebar";
 
 export {

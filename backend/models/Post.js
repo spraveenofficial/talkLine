@@ -9,7 +9,7 @@ const newPostSchema = new Schema(
       ref: "User",
       required: true,
     },
-    content: {
+    caption: {
       type: String,
       required: true,
     },
