@@ -1,4 +1,4 @@
-import { CreatePost, Sidebar } from "../../Components";
+import { CreatePost, Sidebar, EachPost } from "../../Components";
 
 export function Home() {
   return (
@@ -37,7 +37,6 @@ export function Home() {
                 className=" bg-dim-700 h-10 px-10 pr-5 w-full rounded-full text-sm focus:outline-none bg-purple-white shadow rounded border-0"
               />
             </div>
-            {/*people suggetion to follow section*/}
             <div className="max-w-full rounded-lg  bg-dim-700 overflow-hidden shadow-lg m-4">
               <div className="flex">
                 <div className="flex-1 m-2">
@@ -76,7 +75,6 @@ export function Home() {
                 </div>
               </div>
               <hr className="border-gray-800" />
-              {/*second person who to follow*/}
               <div className="flex flex-shrink-0">
                 <div className="flex-1 ">
                   <div className="flex items-center w-48">

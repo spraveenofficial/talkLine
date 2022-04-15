@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { TestingComponent } from "../../Components/TestComponent";
 
 export function Error() {
   const navigate = useNavigate();
