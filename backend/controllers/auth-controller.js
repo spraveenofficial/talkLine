@@ -152,6 +152,9 @@ const loginUsingOtp = async (req, res) => {
       const expires = Date.now() + ttl;
       const data = `${email}.${otp}.${expires}`;
       const hash = hashServices.hashOtp(data);
+
+      //Sending Otp Via Email
+      const sendEmailWithOtp = await Email.sendSignupOtp(email, otp);
       res.status(200).json({
         success: true,
         message: "Otp Sent Successfully",
