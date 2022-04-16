@@ -4,6 +4,6 @@ const router = express.Router();
 import { createPost } from "../controllers/post-controller.js";
 router.use(middleware);
 
-router.route("/create-post").post(createPost);
+router.route("/").post(createPost);
 
 export default router;

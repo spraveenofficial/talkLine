@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { EachPost, Modal } from "..";
+import { createNewPost } from "../../Redux/Actions";
 export function CreatePost() {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const state = useSelector((state) => state.newPost);
+  console.log(state);
   const [caption, setCaption] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);
@@ -15,7 +19,6 @@ export function CreatePost() {
     };
     setIsFileUploadOpen(false);
   };
-  console.log(selectedImage);
   const ModalToUploadPhoto = () => (
     <Modal isOpen={isFileUploadOpen}>
       <div className="extraOutline justify-center p-4 bg-white w-max bg-whtie m-auto rounded-lg">
@@ -60,6 +63,19 @@ export function CreatePost() {
     </Modal>
   );
 
+  const handleNewPost = () => {
+    console.log("iemfi");
+    dispatch(
+      createNewPost({
+        caption,
+        isPhoto: selectedImage !== null ? true : false,
+        photoUrl: selectedImage,
+      })
+    );
+    setCaption("");
+    setSelectedImage(null);
+  };
+
   return (
     <div className="w-2/3 border border-gray-600 h-auto border-t-0 mobile:w-full">
       <ModalToUploadPhoto />
@@ -78,6 +94,8 @@ export function CreatePost() {
             rows="2"
             cols="50"
             placeholder="What's happening?"
+            onChange={(e) => setCaption(e.target.value)}
+            value={caption}
           ></textarea>
         </div>
       </div>
@@ -179,8 +197,11 @@ export function CreatePost() {
         </div>
 
         <div className="flex-1">
-          <button className="bg-indigo-600 mt-5 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-full mr-8 float-right">
-            Post
+          <button
+            onClick={() => handleNewPost()}
+            className="bg-indigo-600 mt-5 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-full mr-8 float-right"
+          >
+            {state.loading ? "Posting..." : "Post"}
           </button>
         </div>
       </div>

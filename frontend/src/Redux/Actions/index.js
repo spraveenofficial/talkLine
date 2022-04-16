@@ -9,3 +9,5 @@ export {
 } from "./auth-actions";
 
 export { loadUserProfile, updateBio } from "./profile-actions";
+
+export { createNewPost } from "./post-actions";
