@@ -12,4 +12,5 @@ router.use(middleware);
 router.route("/").get(getProfile);
 router.route("/:id").get(getEachProfile);
 router.route("/search").post(seachUser);
+
 export default router;

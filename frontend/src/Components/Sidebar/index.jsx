@@ -50,7 +50,7 @@ export function Sidebar() {
               TalkLine
             </h1>
             <NavLink
-              className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full text-white"
+              className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full text-black"
               activeclassname="active"
               to="/"
             >
@@ -100,6 +100,7 @@ export function Sidebar() {
             <NavLink
               className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full text-black"
               activeclassname="active"
+              exact
               to="/profile"
             >
               <ProfileIcon />

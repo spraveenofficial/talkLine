@@ -103,7 +103,9 @@ const uploadAvatar = async (req, res) => {
 const verifyUser = async (req, res) => {
   const { id } = req.data;
   try {
-    const user = await User.findOne({ _id: id }).select("id name email avatar");
+    const user = await User.findOne({ _id: id }).select(
+      "id name email avatar bio"
+    );
     if (!user) {
       res.status(404).json({ success: false, message: "User not found!" });
     }

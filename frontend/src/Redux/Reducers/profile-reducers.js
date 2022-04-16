@@ -5,7 +5,13 @@ import {
   CLEAR_PROFILE,
 } from "../Constants/profile-constants";
 export const profile = (
-  state = { loading: false, success: false, user: {}, message: "" },
+  state = {
+    error: false,
+    loading: false,
+    success: false,
+    user: {},
+    message: "",
+  },
   action
 ) => {
   switch (action.type) {
@@ -25,6 +31,7 @@ export const profile = (
         success: false,
         user: {},
         message: action.payload,
+        error: true,
       };
     case CLEAR_PROFILE:
       return {

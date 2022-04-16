@@ -1,12 +1,16 @@
 import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Home, Signup, Login, Error } from "./Pages/index";
-import { Navbar } from "./Components/index";
+import { Signup, Login, Error } from "./Pages/index";
+import {
+  Navbar,
+  HomeComponent,
+  ProfileComponent,
+  UserProfileComponent,
+} from "./Components";
 import { GuestRoutes, ProtectedRoutes } from "./Utils/routes";
 import { verifyUser, nullUser } from "./Redux/Actions";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// import { Testing } from "./Components/TestComponent/test";
 function App() {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token") ? true : false;
@@ -33,8 +37,14 @@ function App() {
           <Navbar />
           <Routes>
             <Route element={<ProtectedRoutes />}>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<HomeComponent />} />
               <Route path="*" element={<Error />} />
+              <Route path="/profile" exact element={<ProfileComponent />} />
+              <Route
+                path="/user/:id"
+                exact
+                element={<UserProfileComponent />}
+              />
             </Route>
             <Route element={<GuestRoutes />}>
               <Route path="signup" element={<Signup />} />

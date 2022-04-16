@@ -28,3 +28,5 @@ export {
   PasswordIcon,
   NameIcon,
 } from "./Icons";
+
+export { HomeComponent, ProfileComponent, UserProfileComponent } from "./Shared/RenderFragment";
