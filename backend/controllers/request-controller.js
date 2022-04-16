@@ -3,10 +3,10 @@ import FriendRequest from "../models/Friend-request.js";
 
 const sendFriendRequest = async (req, res) => {
   const { id } = req.data;
-  const { recieverId } = req.body;
+  const { receiverId } = req.body;
   try {
     const sender = await User.findOne({ _id: id });
-    const reciever = await User.findOne({ _id: recieverId });
+    const reciever = await User.findOne({ _id: receiverId });
     if (!sender) {
       return res
         .status(404)
@@ -19,7 +19,7 @@ const sendFriendRequest = async (req, res) => {
     }
     const friendRequest = new FriendRequest({
       senderId: id,
-      recieverId,
+      receiverId,
       status: "pending",
     });
     const savedFriendRequest = await friendRequest.save();
@@ -90,4 +90,40 @@ const acceptFriendRequest = async (req, res) => {
   }
 };
 
-export { sendFriendRequest, getFriendRequests, acceptFriendRequest };
+const getMyFriends = async (req, res) => {
+  const { id } = req.data;
+  const acceptedFriends = await FriendRequest.find({
+    $or: [
+      { senderId: id, status: "accepted" },
+      { receiverId: id, status: "accepted" },
+    ],
+  }).select();
+  // Get exact friendName from acceptedFriends
+  const friends = acceptedFriends.map((friend) => {
+    if (friend.senderId.toString() === id) {
+      return friend.receiverId;
+    } else {
+      return friend.senderId;
+    }
+  });
+  try {
+    const users = await User.find({ _id: { $in: friends } }).select(
+      "id name avatar bio "
+    );
+    res.status(200).json({
+      success: true,
+      message: "Friends fetched successfully",
+      users,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Something went wrong!" });
+  }
+};
+
+export {
+  sendFriendRequest,
+  getFriendRequests,
+  acceptFriendRequest,
+  getMyFriends,
+};

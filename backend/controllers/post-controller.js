@@ -1,5 +1,7 @@
 import Post from "../models/Post.js";
 import imageService from "../services/image-services.js";
+import User from "../models/User.js";
+import FriendRequest from "../models/Friend-request.js";
 // @desc    Create Post
 // @route   POST /api/v1/post/create-post
 // @access  Private
@@ -78,4 +80,33 @@ const getPostsOfEachUser = async (req, res) => {
   }
 };
 
-export { createPost, getPostsOfEachUser };
+const getPosts = async (req, res) => {
+  // Get Posts of my and my friends who's status is accepted
+  const { id } = req.data;
+  const acceptedFriends = await FriendRequest.find({
+    $or: [
+      { senderId: id, status: "accepted" },
+      { receiverId: id, status: "accepted" },
+    ],
+  }).select();
+  // Get Posts of my and my friends who's status is accepted
+  const friends = acceptedFriends.map((friend) => {
+    if (friend.senderId.toString() === id) {
+      return friend.receiverId.toString();
+    } else {
+      return friend.senderId.toString();
+    }
+  });
+  console.log(friends);
+  const posts = await Post.find({
+    $or: [{ userId: id }, { userId: { $in: friends } }],
+  }).sort({ createdAt: -1 });
+  console.log(posts);
+  res.status(200).json({
+    success: true,
+    message: "Posts fetched successfully",
+    posts,
+  });
+};
+
+export { createPost, getPostsOfEachUser, getPosts };
