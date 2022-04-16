@@ -13,10 +13,10 @@ class Email {
       from: process.env.EMAIL_ID,
       to: email,
       subject: "OTP ! Welcome to TalkLine. ",
-      text: `Hey there! Welcome to TalkLine. Your OTP is ${otp}. This Otp will be valid for 2 minutes only. \n\n\n\nRegards,\nTalkLine Team.`,
+      text: `Hey there! Welcome to TalkLine. Your OTP is ${otp}. This Otp will be valid for 2 minutes only. \n\n\nRegards,\nTalkLine Team.`,
     };
-    const response = transporter.sendMail(mailOptions,(result)=>{
-     console.log(result);
+    const response = transporter.sendMail(mailOptions, function (error, info) {
+      console.log(error, info);
     });
   }
 }
