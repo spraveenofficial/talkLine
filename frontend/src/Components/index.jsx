@@ -27,6 +27,11 @@ export {
   EmailIcon,
   PasswordIcon,
   NameIcon,
+  PencilIcon,
 } from "./Icons";
 
-export { HomeComponent, ProfileComponent, UserProfileComponent } from "./Shared/RenderFragment";
+export {
+  HomeComponent,
+  ProfileComponent,
+  UserProfileComponent,
+} from "./Shared/RenderFragment";

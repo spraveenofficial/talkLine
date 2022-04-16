@@ -66,4 +66,23 @@ const seachUser = async (req, res) => {
   }
 };
 
-export { getProfile, getEachProfile, seachUser };
+const updateBio = async (req, res) => {
+  const { id } = req.data;
+  const { bio } = req.body;
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id: id },
+      { $set: { bio } },
+      { new: true }
+    ).select("id name email avatar bio");
+    return res.json({
+      message: "Bio updated successfully",
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Something went wrong!" });
+  }
+};
+export { getProfile, getEachProfile, seachUser, updateBio };
