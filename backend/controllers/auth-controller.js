@@ -4,8 +4,7 @@ import hashServices from "../services/hash-services.js";
 import otpServices from "../services/otp-services.js";
 import userService from "../services/user-services.js";
 import Email from "../services/email-services.js";
-import cloudinary from "cloudinary";
-
+import imageServices from "../services/image-services.js";
 // @desc    Send OTP
 // @route   POST /api/v1/auth/send-otp
 // @access  Public
@@ -85,38 +84,16 @@ const uploadAvatar = async (req, res) => {
     "base64"
   );
   const imagePath = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-  try {
-    cloudinary.config({
-      cloud_name: process.env.CLOUD_NAME,
-      api_key: process.env.CLOUD_API_KEY,
-      api_secret: process.env.CLOUD_API_SECRET,
-      secure: true,
-    });
-    await cloudinary.v2.uploader
-      .upload_stream(
-        {
-          resource_type: "image",
-          public_id: imagePath,
-          format: "png",
-        },
-        async (err, result) => {
-          if (err) {
-            console.log(err);
-            return res.status(500).json({
-              success: false,
-              message: "Something went wrong!",
-            });
-          }
-          const user = await userService.findUser({ _id: id });
-          user.avatar = result.secure_url;
-          user.save();
-          res.json({ message: "Avatar uploaded successfully", success: true });
-        }
-      )
-      .end(buffer);
-  } catch (err) {
-    res.status(500).json({ message: "Could not process the image" });
+  const uploadAvatar = await imageServices.upload(buffer, imagePath);
+  if (!uploadAvatar) {
+    return res
+      .status(500)
+      .json({ message: "Could not process the image", success: false });
   }
+  const user = await userService.findUser({ _id: id });
+  user.avatar = uploadAvatar;
+  user.save();
+  res.json({ message: "Avatar uploaded successfully", success: true });
 };
 
 // @desc    User Verify

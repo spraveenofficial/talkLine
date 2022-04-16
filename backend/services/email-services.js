@@ -17,13 +17,11 @@ class Email {
       text: `Hey there! Welcome to TalkLine. Your OTP is ${otp}. This Otp will be valid for 2 minutes only. \n\n\nRegards,\nTalkLine Team.`,
     };
     await new Promise((resolve, reject) => {
-      // send mail
       transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
           console.error(err);
           reject(err);
         } else {
-          console.log(info);
           resolve(info);
         }
       });

@@ -5,7 +5,7 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import "./database/db.js";
 import AuthRoutes from "./routes/auth-routes.js";
-import apiRoutes from "./routes/routes.js";
+import PostRoutes from "./routes/post-routes.js";
 dotenv.config();
 
 const app = express();
@@ -26,10 +26,10 @@ app.use(express.json());
 const PORT = process.env.PORT || 3505;
 
 // Registering Routes
-app.use("/few", apiRoutes);
 app.use("/v1/api/auth/", AuthRoutes);
+app.use("/v1/api/post/", PostRoutes)
 
 // Server initialize
-const serverRunning = app.listen(PORT, () => console.log(`App started running on ${PORT}`));
-
-
+const serverRunning = app.listen(PORT, () =>
+  console.log(`App started running on ${PORT}`)
+);
