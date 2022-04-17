@@ -1,6 +1,6 @@
 import { Sidebar } from "..";
 import { CreatePost } from "../CreatePost";
-import { Home, Profile, UserProfile } from "../../Pages";
+import { Home, Notification, Profile, UserProfile } from "../../Pages";
 const HomeComponent = () => (
   <div className="flex relative h-full mobile:flex-col">
     <Sidebar />
@@ -25,4 +25,12 @@ const UserProfileComponent = () => (
   </div>
 );
 
-export { HomeComponent, ProfileComponent, UserProfileComponent };
+const NotificationComponent = () => (
+  <div className="flex relative h-full mobile:flex-col">
+    <Sidebar />
+    <Notification />
+    <Home />
+  </div>
+);
+
+export { HomeComponent, ProfileComponent, UserProfileComponent, NotificationComponent };

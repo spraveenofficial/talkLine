@@ -6,6 +6,7 @@ import {
   HomeComponent,
   ProfileComponent,
   UserProfileComponent,
+  NotificationComponent,
 } from "./Components";
 import { GuestRoutes, ProtectedRoutes } from "./Utils/routes";
 import { verifyUser, nullUser } from "./Redux/Actions";
@@ -44,6 +45,11 @@ function App() {
                 path="/user/:id"
                 exact
                 element={<UserProfileComponent />}
+              />
+              <Route
+                path="/notification"
+                exact
+                element={<NotificationComponent />}
               />
             </Route>
             <Route element={<GuestRoutes />}>
