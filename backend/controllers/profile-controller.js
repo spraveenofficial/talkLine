@@ -30,21 +30,20 @@ const getEachProfile = async (req, res) => {
   }
   try {
     const user = await User.findOne({ _id: id }).select(
-      "id name email avatar bio cover"
+      "id name email avatar bio cover createdAt"
     );
     if (!user) {
-      res
+      return res
         .status(404)
         .json({ success: false, message: "User not found in our Database!" });
     }
-    res.json({
+    return res.status(200).json({
       message: "User fetched successfully",
       success: true,
       data: user,
     });
   } catch (err) {
-    console.log(err);
-    res
+    return res
       .status(500)
       .json({ success: false, message: "User Not Found in our Database!" });
   }
@@ -85,6 +84,5 @@ const updateBio = async (req, res) => {
     res.status(500).json({ success: false, message: "Something went wrong!" });
   }
 };
-
 
 export { getProfile, getEachProfile, seachUser, updateBio };

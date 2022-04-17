@@ -28,6 +28,8 @@ const UserSchema = new Schema(
     },
     cover: {
       type: String,
+      default:
+        "https://res.cloudinary.com/dtswa0rzu/image/upload/v1650196033/talkline_default_cover.png",
     },
     bio: {
       type: String,

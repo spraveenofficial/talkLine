@@ -28,6 +28,7 @@ export {
   PasswordIcon,
   NameIcon,
   PencilIcon,
+  JoinedIcon,
 } from "./Icons";
 
 export {

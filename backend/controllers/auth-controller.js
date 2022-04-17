@@ -104,7 +104,7 @@ const verifyUser = async (req, res) => {
   const { id } = req.data;
   try {
     const user = await User.findOne({ _id: id }).select(
-      "id name email avatar bio"
+      "id name email avatar bio cover"
     );
     if (!user) {
       res.status(404).json({ success: false, message: "User not found!" });

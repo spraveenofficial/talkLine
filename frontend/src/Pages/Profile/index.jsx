@@ -6,7 +6,7 @@ export function Profile() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [isOpenToChangeBio, setIsOpenToChangeBio] = useState(false);
-  
+
   // Modal to Update Bio
   const ModalToUpdateBio = () => {
     const [bio, setBio] = useState("");
@@ -46,11 +46,17 @@ export function Profile() {
       <ModalToUpdateBio />
       <div className="mx-auto">
         <div className="w-full">
-          <div className="w-full bg-blue-600 h-48 rounded-t-lg"></div>
+          <div className="w-full bg-blue-600 h-48 rounded-t-lg">
+            <img
+              src={user.cover}
+              alt=""
+              className="w-full max-h-full object-cover"
+            />
+          </div>
           <div className="absolute -mt-20 ml-5">
             <img
               src={user.avatar}
-              className="bg-transparent border border-gray-300 h-36 w-40 rounded-lg shadow-md border-b border-primary"
+              className="bg-gray-100 border border-gray-300 h-36 w-40 rounded-lg shadow-md border-b border-primary"
               alt="userAvatar"
             />
           </div>
