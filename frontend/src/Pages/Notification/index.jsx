@@ -1,6 +1,14 @@
-import { PencilIcon } from "../../Components";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchNotification } from "../../Redux/Actions";
 
 export function Notification() {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.notification);
+  console.log(data);
+  useEffect(() => {
+    dispatch(fetchNotification());
+  }, []);
   return (
     <div className="w-2/3 bg-white block py-2 mobile:w-full mobile:py-0">
       <div className="w-full p-4 bg-cyan-100">

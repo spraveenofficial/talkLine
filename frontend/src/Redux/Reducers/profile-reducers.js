@@ -3,6 +3,9 @@ import {
   FETCH_PROFILE_SUCCESS,
   FETCH_PROFILE_FAILURE,
   CLEAR_PROFILE,
+  SEND_FRIEND_REQUEST,
+  UNSEND_FRIEND_REQUEST,
+  ACCEPT_FRIEND_REQUEST,
 } from "../Constants/profile-constants";
 export const profile = (
   state = {
@@ -40,6 +43,40 @@ export const profile = (
         success: false,
         user: {},
         message: "",
+      };
+    case SEND_FRIEND_REQUEST:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        user: {
+          ...state.user,
+          isRequested: { ...state.user.isRequested, haveSentRequest: true },
+        },
+      };
+    case UNSEND_FRIEND_REQUEST:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        user: {
+          ...state.user,
+          isRequested: { ...state.user.isRequested, haveSentRequest: false },
+        },
+      };
+    case ACCEPT_FRIEND_REQUEST:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        user: {
+          ...state.user,
+          isRequested: {
+            ...state.user.isRequested,
+            isFriend: true,
+            haveToAccept: false,
+          },
+        },
       };
     default:
       return state;

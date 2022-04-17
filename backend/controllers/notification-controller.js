@@ -1,6 +1,5 @@
 import Notification from "../models/Notification.js";
 
-
 // @desc    User Notificaion
 // @route   GET /api/v1/notification
 // @access  Private
@@ -11,8 +10,12 @@ const getNotifications = async (req, res) => {
     const notifications = await Notification.find({ to: id }).select();
     if (notifications.length === 0) {
       return res
-        .status(404)
-        .json({ success: false, message: "No Notification found!" });
+        .status(200)
+        .json({
+          success: true,
+          message: "No Notification found!",
+          notifications: [],
+        });
     }
     return res.status(200).json({
       success: true,

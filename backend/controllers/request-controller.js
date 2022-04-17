@@ -91,18 +91,13 @@ const acceptFriendRequest = async (req, res) => {
   const { id } = req.data;
   const { friendRequestId } = req.body;
   try {
-    const friendRequest = await FriendRequest.findOne({ _id: friendRequestId });
+    const friendRequest = await FriendRequest.findOne({
+      $or: [
+        { senderId: id, receiverId: friendRequestId },
+        { senderId: friendRequestId, receiverId: id },
+      ],
+    });
     if (!friendRequest) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Friend request not found!" });
-    }
-    if (friendRequest.recieverId.toString() !== id) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Friend request not found!" });
-    }
-    if (friendRequest.status !== "pending") {
       return res
         .status(404)
         .json({ success: false, message: "Friend request not found!" });
@@ -120,6 +115,25 @@ const acceptFriendRequest = async (req, res) => {
   }
 };
 
+const cancelFriendRequest = async (req, res) => {
+  const { id } = req.data;
+  const { friendRequestId } = req.body;
+  try {
+    const checkIfExist = await FriendRequest.findOneAndDelete({
+      $or: [
+        { senderId: id, receiverId: friendRequestId },
+        { senderId: friendRequestId, receiverId: id },
+      ],
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Friend request cancelled successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Something went wrong!" });
+  }
+};
 
 // @desc    Get User Friend List
 // @route   GET /api/v1/friend
@@ -161,4 +175,5 @@ export {
   getFriendRequests,
   acceptFriendRequest,
   getMyFriends,
+  cancelFriendRequest,
 };

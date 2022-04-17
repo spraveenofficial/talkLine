@@ -1,0 +1,68 @@
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import {
+  sendFriendRequest,
+  cancelFriendRequest,
+  acceptFriendRequest,
+} from "../../Redux/Actions";
+
+export function ProfileButton(props) {
+  const dispatch = useDispatch();
+  const user = props.user.isRequested;
+  const { id } = useParams();
+  const handleSendFriendRequest = () => {
+    dispatch(sendFriendRequest(id));
+  };
+  const handleCancelFriendRequest = () => {
+    dispatch(cancelFriendRequest(id));
+  };
+  const handleAcceptFriendRequest = () => {
+    dispatch(acceptFriendRequest(id));
+  };
+  return (
+    <>
+      {!user.isFriend && !user.haveSentRequest && !user.haveToAccept ? (
+        <button
+          onClick={() => handleSendFriendRequest()}
+          className="bg-indigo-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-indigo-800"
+        >
+          Send Request
+        </button>
+      ) : user.haveSentRequest && !user.isFriend ? (
+        <button
+          onClick={() => handleCancelFriendRequest()}
+          className="bg-indigo-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-indigo-800"
+        >
+          Cancel Request
+        </button>
+      ) : (
+        user.isFriend && (
+          <div>
+            <button
+              //   onClick={() => handleUnfriend()}
+              className="bg-red-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-red-800"
+            >
+              Unfriend
+            </button>
+          </div>
+        )
+      )}
+      {!user.isFriend && user.haveToAccept && (
+        <div className="flex">
+          <button
+            onClick={() => handleAcceptFriendRequest()}
+            className="bg-green-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-green-800"
+          >
+            Accept Request
+          </button>
+          <button
+            //   onClick={() => handleCancelFriendRequest()}
+            className="bg-red-600 ml-1 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-indigo-800"
+          >
+            Cancel Request
+          </button>
+        </div>
+      )}
+    </>
+  );
+}

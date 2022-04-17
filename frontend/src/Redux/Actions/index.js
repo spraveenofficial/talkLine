@@ -8,6 +8,14 @@ export {
   userLogin,
 } from "./auth-actions";
 
-export { loadUserProfile, updateBio } from "./profile-actions";
+export {
+  loadUserProfile,
+  updateBio,
+  sendFriendRequest,
+  cancelFriendRequest,
+  acceptFriendRequest,
+} from "./profile-actions";
 
 export { createNewPost } from "./post-actions";
+
+export { fetchNotification } from "./notification-actions";

@@ -35,5 +35,7 @@ export {
   HomeComponent,
   ProfileComponent,
   UserProfileComponent,
-  NotificationComponent
+  NotificationComponent,
 } from "./Shared/RenderFragment";
+
+export { ProfileButton } from "./Shared/User-Profile";

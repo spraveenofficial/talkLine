@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { loadUserProfile } from "../../Redux/Actions";
-import { JoinedIcon } from "../../Components";
+import { JoinedIcon, ProfileButton } from "../../Components";
 import moment from "moment";
 export function UserProfile() {
   const { id } = useParams();
@@ -20,7 +20,7 @@ export function UserProfile() {
           <div className="w-full bg-blue-600 h-48 rounded-t-lg">
             <img
               src={user.cover}
-              className="w-full max-h-full object-cover"
+              className="w-full h-full object-cover"
               alt=""
             />
           </div>
@@ -48,9 +48,7 @@ export function UserProfile() {
                 <JoinedIcon />
                 Joined {moment(user.createdAt).format("LL")}
               </p>
-              <button className="bg-indigo-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-indigo-800">
-                Send Request
-              </button>
+              <ProfileButton user={user} />
             </>
           ) : (
             error && (

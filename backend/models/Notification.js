@@ -14,7 +14,6 @@ const notificationSchema = new Schema(
 );
 
 notificationSchema.pre("save", function () {
-  console.log("pre save", this);
   if (this.isNew) {
     var from_name = this.from.name;
     switch (this.type) {

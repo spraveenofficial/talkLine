@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-
+import FriendRequest from "../models/Friend-request.js";
 // @desc    Get User Profile
 // @route   GET /api/v1/friend
 // @access  Private
@@ -38,8 +38,25 @@ const getEachProfile = async (req, res) => {
       .json({ success: false, message: "You can't see your own profile!" });
   }
   try {
+    const checkIfAlreadyFriend = await FriendRequest.findOne({
+      $or: [
+        { senderId: requestUserId, receiverId: id },
+        { senderId: id, receiverId: requestUserId },
+      ],
+      status: "accepted",
+    });
+    const checkIfExist = await FriendRequest.findOne({
+      $or: [
+        { senderId: id, receiverId: requestUserId },
+        { senderId: requestUserId, receiverId: id },
+      ],
+    });
+    const checkIfUserHaveSentFriendRequest = await FriendRequest.findOne({
+      senderId: requestUserId,
+      receiverId: id,
+    });
     const user = await User.findOne({ _id: id }).select(
-      "id name email avatar bio cover createdAt"
+      "id name avatar bio cover createdAt"
     );
     if (!user) {
       return res
@@ -49,7 +66,15 @@ const getEachProfile = async (req, res) => {
     return res.status(200).json({
       message: "User fetched successfully",
       success: true,
-      data: user,
+      data: {
+        ...user._doc,
+        isRequested: {
+          isFriend: checkIfAlreadyFriend ? true : false,
+          haveSentRequest: checkIfUserHaveSentFriendRequest ? true : false,
+          haveToAccept:
+            !checkIfUserHaveSentFriendRequest && checkIfExist ? true : false,
+        },
+      },
     });
   } catch (err) {
     return res
