@@ -8,6 +8,7 @@ import AuthRoutes from "./routes/auth-routes.js";
 import PostRoutes from "./routes/post-routes.js";
 import ProfileRoutes from "./routes/profile-routes.js";
 import RequestRoutes from "./routes/request-routes.js";
+import NotificationRoute from "./routes/notification-routes.js";
 dotenv.config();
 
 const app = express();
@@ -32,6 +33,7 @@ app.use("/v1/api/auth/", AuthRoutes);
 app.use("/v1/api/post/", PostRoutes);
 app.use("/v1/api/profile/", ProfileRoutes);
 app.use("/v1/api/friend/", RequestRoutes);
+app.use("/v1/api/notification/", NotificationRoute);
 
 // Server initialize
 const serverRunning = app.listen(PORT, () =>

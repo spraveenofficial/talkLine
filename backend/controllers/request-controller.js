@@ -1,6 +1,11 @@
 import User from "../models/User.js";
 import FriendRequest from "../models/Friend-request.js";
 import Notification from "../models/Notification.js";
+
+// @desc    Send friend request
+// @route   POST /api/v1/friend/send
+// @access  Private
+
 const sendFriendRequest = async (req, res) => {
   const { id } = req.data;
   const { receiverId } = req.body;
@@ -17,28 +22,43 @@ const sendFriendRequest = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Reciever not found!" });
     }
-    const friendRequest = new FriendRequest({
-      senderId: id,
-      receiverId,
-      status: "pending",
+    const checkIfExist = await FriendRequest.findOne({
+      $or: [
+        { senderId: id, receiverId: receiverId },
+        { senderId: receiverId, receiverId: id },
+      ],
     });
-    const savedFriendRequest = await friendRequest.save();
-    Notification.create({
-      from: sender,
-      to: reciever,
-      type: "friend_request",
-      url: `/user/${id}`,
-    });
-    res.status(200).json({
-      success: true,
-      message: "Friend request sent successfully",
-      friendRequest: savedFriendRequest,
-    });
+    if (checkIfExist) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Friend request already sent!" });
+    } else {
+      const friendRequest = new FriendRequest({
+        senderId: id,
+        receiverId,
+        status: "pending",
+      });
+      const savedFriendRequest = await friendRequest.save();
+      Notification.create({
+        from: sender,
+        to: reciever,
+        type: "friend_request",
+        url: `/user/${id}`,
+      });
+      return res.status(200).json({
+        success: true,
+        message: "Friend request sent successfully",
+        friendRequest: savedFriendRequest,
+      });
+    }
   } catch (err) {
-    console.log(err);
     res.status(500).json({ success: false, message: "Something went wrong!" });
   }
 };
+
+// @desc    Get friend request
+// @route   GET /api/v1/friend
+// @access  Private
 
 const getFriendRequests = async (req, res) => {
   const { id } = req.data;
@@ -62,6 +82,10 @@ const getFriendRequests = async (req, res) => {
     res.status(500).json({ success: false, message: "Something went wrong!" });
   }
 };
+
+// @desc    Accept friend request
+// @route   GET /api/v1/friend
+// @access  Private
 
 const acceptFriendRequest = async (req, res) => {
   const { id } = req.data;
@@ -95,6 +119,11 @@ const acceptFriendRequest = async (req, res) => {
     res.status(500).json({ success: false, message: "Something went wrong!" });
   }
 };
+
+
+// @desc    Get User Friend List
+// @route   GET /api/v1/friend
+// @access  Private
 
 const getMyFriends = async (req, res) => {
   const { id } = req.data;

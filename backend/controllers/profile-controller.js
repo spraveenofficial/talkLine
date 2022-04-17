@@ -1,4 +1,9 @@
 import User from "../models/User.js";
+
+// @desc    Get User Profile
+// @route   GET /api/v1/friend
+// @access  Private
+
 const getProfile = async (req, res) => {
   const { id } = req.data;
   try {
@@ -19,6 +24,10 @@ const getProfile = async (req, res) => {
     res.status(500).json({ success: false, message: "Something went wrong!" });
   }
 };
+
+// @desc    Get Each User Profile
+// @route   GET /api/v1/friend
+// @access  Private
 
 const getEachProfile = async (req, res) => {
   const { id } = req.params;
@@ -49,6 +58,10 @@ const getEachProfile = async (req, res) => {
   }
 };
 
+// @desc    Search Users
+// @route   GET /api/v1/friend
+// @access  Private
+
 const seachUser = async (req, res) => {
   const { name } = req.body;
   try {
@@ -64,6 +77,10 @@ const seachUser = async (req, res) => {
     res.status(500).json({ success: false, message: "Something went wrong!" });
   }
 };
+
+// @desc    Update User Bio
+// @route   GET /api/v1/friend
+// @access  Private
 
 const updateBio = async (req, res) => {
   const { id } = req.data;
