@@ -29,7 +29,8 @@ export {
   NameIcon,
   PencilIcon,
   JoinedIcon,
-  FriendRequestPendingIcon
+  FriendRequestPendingIcon,
+  FriendRequestAcceptedIcon,
 } from "./Icons";
 
 export {

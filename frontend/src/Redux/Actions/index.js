@@ -18,4 +18,4 @@ export {
 
 export { createNewPost } from "./post-actions";
 
-export { fetchNotification } from "./notification-actions";
+export { fetchNotification, markAsSeen } from "./notification-actions";

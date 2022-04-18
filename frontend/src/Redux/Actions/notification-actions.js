@@ -34,3 +34,21 @@ export const fetchNotification = () => async (dispatch) => {
     return false;
   }
 };
+
+export const markAsSeen = (notificationId) => async (dispatch) => {
+  try {
+    const { data } = await axios({
+      method: "POST",
+      url: `${baseUrl}/notification`,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+      data: {
+        notificationId,
+      },
+    });
+    return data;
+  } catch (error) {
+    return false;
+  }
+};
