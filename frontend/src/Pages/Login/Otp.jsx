@@ -4,7 +4,11 @@ import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyOtp, verifyUser } from "../../Redux/Actions";
 import { animation } from "../../Utils/animation";
+import { useLocation, useNavigate } from "react-router-dom";
 export function Otp({ onBack }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  let from = location.state?.from?.pathname || "/";
   const dispatch = useDispatch();
   const [otp, setOtp] = useState({
     1: "",
@@ -28,7 +32,7 @@ export function Otp({ onBack }) {
       verifyOtp({ otp: enTeredOtp, hash: user.hash, email: user.email })
     );
     if (response) {
-      return dispatch(verifyUser());
+      return dispatch(verifyUser()) && navigate(from, { replace: true });
     }
   };
   return (

@@ -7,15 +7,15 @@ import Notification from "../models/Notification.js";
 const getNotifications = async (req, res) => {
   const { id } = req.data;
   try {
-    const notifications = await Notification.find({ to: id }).select();
+    const notifications = await Notification.find({ to: id })
+      .select("createdAt message seen type url id")
+      .sort({ createdAt: -1 });
     if (notifications.length === 0) {
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: "No Notification found!",
-          notifications: [],
-        });
+      return res.status(200).json({
+        success: true,
+        message: "No Notification found!",
+        notifications: [],
+      });
     }
     return res.status(200).json({
       success: true,

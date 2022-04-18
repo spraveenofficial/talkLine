@@ -29,6 +29,7 @@ export {
   NameIcon,
   PencilIcon,
   JoinedIcon,
+  FriendRequestPendingIcon
 } from "./Icons";
 
 export {
@@ -36,6 +37,9 @@ export {
   ProfileComponent,
   UserProfileComponent,
   NotificationComponent,
+  ExploreComponent,
 } from "./Shared/RenderFragment";
 
 export { ProfileButton } from "./Shared/User-Profile";
+
+export { ExploreCard } from "./ExploreCard";

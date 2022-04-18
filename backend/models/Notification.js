@@ -26,6 +26,8 @@ notificationSchema.pre("save", function () {
       case "friend_request":
         this.message = `${from_name} sent you a friend request`;
         break;
+      case "friend_accept":
+        this.message = `${from_name} accepted your friend request`;
     }
   }
 });
