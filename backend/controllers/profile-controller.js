@@ -94,7 +94,9 @@ const seachUser = async (req, res) => {
     const users = await User.find({
       name: { $regex: name, $options: "i" },
       _id: { $ne: id },
-    }).select("id name bio avatar");
+    })
+      .select("id name bio avatar")
+      .limit(10);
     if (users.length === 0) {
       return res
         .status(404)

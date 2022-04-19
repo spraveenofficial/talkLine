@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   HomeIcon,
   ExploreIcon,
@@ -16,6 +16,7 @@ import { userLogout } from "../../Redux/Actions";
 
 export function Sidebar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const [isSelectedLogout, setIsSelectedLogout] = useState(false);
   const ShowModalToLogout = () => (
@@ -41,7 +42,10 @@ export function Sidebar() {
       <div className="sticky left-0 top-0 w-1/5 text-white mobile:hidden flex flex-col ml-2 h-screen">
         <div className="pr-3 h-full flex flex-col justify-between">
           <div className="px-2">
-            <h1 className="text-3xl text-black font-bold text-center mt-20 mb-9">
+            <h1
+              className="text-3xl text-black font-bold text-center mt-20 mb-9 cursor-pointer"
+              onClick={() => navigate("/")}
+            >
               TalkLine
             </h1>
             <NavLink
