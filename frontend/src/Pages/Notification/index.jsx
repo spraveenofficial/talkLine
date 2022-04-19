@@ -56,7 +56,7 @@ export function Notification() {
             <div className="flex w-full justify-between">
               <p className="text-black font-semibold">{notification.message}</p>
               <p className="font-semibold text-sm">
-                {moment(notification.createdAt).startOf("day").fromNow()}
+                {moment(notification.createdAt).fromNow()}
               </p>
             </div>
           </div>

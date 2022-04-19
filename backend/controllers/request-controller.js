@@ -119,10 +119,16 @@ const cancelFriendRequest = async (req, res) => {
   const { id } = req.data;
   const { friendRequestId } = req.body;
   try {
-    const checkIfExist = await FriendRequest.findOneAndDelete({
+    await FriendRequest.findOneAndDelete({
       $or: [
         { senderId: id, receiverId: friendRequestId },
         { senderId: friendRequestId, receiverId: id },
+      ],
+    });
+    await Notification.findOneAndDelete({
+      $or: [
+        { from: id, to: friendRequestId, type: "friend_request" },
+        { from: friendRequestId, to: id, type: "friend_request" },
       ],
     });
     return res.status(200).json({
