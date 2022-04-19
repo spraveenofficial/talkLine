@@ -7,6 +7,9 @@ import {
   SEND_FRIEND_REQUEST,
   UNSEND_FRIEND_REQUEST,
   ACCEPT_FRIEND_REQUEST,
+  EXPLORE_PERSONS_REQUEST,
+  EXPLORE_PERSONS_SUCCESS,
+  EXPLORE_PERSONS_FAILURE,
 } from "../Constants/profile-constants";
 import { UPDATE_USER_BIO } from "../Constants/auth-constants";
 export const loadUserProfile = (id) => async (dispatch) => {
@@ -16,7 +19,7 @@ export const loadUserProfile = (id) => async (dispatch) => {
     });
     const { data } = await axios({
       method: "GET",
-      url: `${baseUrl}/profile/${id}`,
+      url: `${baseUrl}/profile/profile/${id}`,
       headers: {
         token: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -111,6 +114,34 @@ export const acceptFriendRequest = (id) => async (dispatch) => {
       payload: data.data,
     });
   } catch (error) {
+    return false;
+  }
+};
+
+export const explorePersons = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: EXPLORE_PERSONS_REQUEST,
+    });
+    const { data } = await axios({
+      method: "GET",
+      url: `${baseUrl}/profile/explore`,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    dispatch({
+      type: EXPLORE_PERSONS_SUCCESS,
+      payload: data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: EXPLORE_PERSONS_FAILURE,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
     return false;
   }
 };

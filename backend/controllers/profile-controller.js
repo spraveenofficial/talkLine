@@ -127,4 +127,46 @@ const updateBio = async (req, res) => {
   }
 };
 
-export { getProfile, getEachProfile, seachUser, updateBio };
+// @desc    Get Explore Users
+// @route   GET /api/v1/friend/explore
+// @access  Private
+
+const explorePersons = async (req, res) => {
+  const { id } = req.data;
+  const checkIfInFriendSchema = await FriendRequest.find({
+    $or: [
+      { senderId: id, receiverId: { $ne: id } },
+      { senderId: { $ne: id }, receiverId: id },
+    ],
+  })
+    .select("senderId receiverId")
+    .lean();
+  try {
+    const users = await User.find({
+      _id: {
+        $nin: [
+          id,
+          ...checkIfInFriendSchema.map((user) => user.receiverId),
+          ...checkIfInFriendSchema.map((user) => user.senderId),
+        ],
+      },
+    })
+      .select("id name bio avatar")
+      .limit(20);
+    if (users.length === 0) {
+      res.status(404).json({ success: false, message: "User not found!" });
+    }
+    return res.status(200).json({
+      message: "User fetched successfully",
+      success: true,
+      data: users.map((user) => ({
+        ...user._doc,
+        isRequested: false,
+      })),
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Something went wrong!" });
+  }
+};
+
+export { getProfile, getEachProfile, seachUser, updateBio, explorePersons };

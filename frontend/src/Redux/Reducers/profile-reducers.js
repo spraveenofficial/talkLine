@@ -6,6 +6,10 @@ import {
   SEND_FRIEND_REQUEST,
   UNSEND_FRIEND_REQUEST,
   ACCEPT_FRIEND_REQUEST,
+  EXPLORE_PERSONS_REQUEST,
+  EXPLORE_PERSONS_SUCCESS,
+  EXPLORE_PERSONS_FAILURE,
+  SEND_REQUEST_FROM_EXPLORE,
 } from "../Constants/profile-constants";
 export const profile = (
   state = {
@@ -77,6 +81,56 @@ export const profile = (
             haveToAccept: false,
           },
         },
+      };
+    default:
+      return state;
+  }
+};
+
+export const explore = (
+  state = {
+    error: false,
+    loading: false,
+    success: false,
+    users: [],
+    message: "",
+  },
+  action
+) => {
+  switch (action.type) {
+    case EXPLORE_PERSONS_REQUEST:
+      return { ...state, loading: true };
+    case EXPLORE_PERSONS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        users: action.payload,
+      };
+    case EXPLORE_PERSONS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        users: [],
+        message: action.payload,
+        error: true,
+      };
+    case SEND_REQUEST_FROM_EXPLORE:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        users: state.users.map((user) => {
+          if (user._id === action.payload) {
+            return {
+              ...user,
+              isRequested: true,
+            };
+          } else {
+            return user;
+          }
+        }),
       };
     default:
       return state;

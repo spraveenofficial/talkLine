@@ -14,6 +14,7 @@ export {
   sendFriendRequest,
   cancelFriendRequest,
   acceptFriendRequest,
+  explorePersons,
 } from "./profile-actions";
 
 export { createNewPost } from "./post-actions";
