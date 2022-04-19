@@ -89,17 +89,25 @@ const getEachProfile = async (req, res) => {
 
 const seachUser = async (req, res) => {
   const { name } = req.body;
+  const { id } = req.data;
   try {
     const users = await User.find({
       name: { $regex: name, $options: "i" },
-    }).select("id name email avatar");
+      _id: { $ne: id },
+    }).select("id name bio avatar");
     if (users.length === 0) {
-      res.status(404).json({ success: false, message: "User not found!" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found!" });
     }
-    res.json({ message: "User fetched successfully", success: true, users });
+    return res
+      .status(200)
+      .json({ message: "User fetched successfully", success: true, users });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ success: false, message: "Something went wrong!" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Something went wrong!" });
   }
 };
 

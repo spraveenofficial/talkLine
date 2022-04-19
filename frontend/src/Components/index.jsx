@@ -31,6 +31,7 @@ export {
   JoinedIcon,
   FriendRequestPendingIcon,
   FriendRequestAcceptedIcon,
+  SearchIcon,
 } from "./Icons";
 
 export {
@@ -44,3 +45,5 @@ export {
 export { ProfileButton } from "./Shared/User-Profile";
 
 export { ExploreCard } from "./ExploreCard";
+
+export { RightSidebar } from "./RightSideBar";

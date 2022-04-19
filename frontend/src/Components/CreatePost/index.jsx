@@ -208,6 +208,7 @@ export function CreatePost() {
 
       <hr className="border-indigo-600 border-4" />
       <EachPost />
+      <EachPost />
     </div>
   );
 }
