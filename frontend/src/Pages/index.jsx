@@ -6,3 +6,4 @@ export { Profile } from "./Profile";
 export { UserProfile } from "./Profile/other-profile";
 export { Notification } from "./Notification";
 export { Explore } from "./Explore";
+export { Message } from "./Messages";

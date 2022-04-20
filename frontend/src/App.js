@@ -8,6 +8,7 @@ import {
   UserProfileComponent,
   NotificationComponent,
   ExploreComponent,
+  MessageComponent,
 } from "./Components";
 import { GuestRoutes, ProtectedRoutes } from "./Utils/routes";
 import { verifyUser, nullUser } from "./Redux/Actions";
@@ -41,18 +42,11 @@ function App() {
             <Route element={<ProtectedRoutes />}>
               <Route path="/" element={<HomeComponent />} />
               <Route path="*" element={<Error />} />
-              <Route path="/profile" exact element={<ProfileComponent />} />
-              <Route
-                path="/user/:id"
-                exact
-                element={<UserProfileComponent />}
-              />
-              <Route
-                path="/notification"
-                exact
-                element={<NotificationComponent />}
-              />
-              <Route path="/explore" exact element={<ExploreComponent />} />
+              <Route path="profile" element={<ProfileComponent />} />
+              <Route path="/user/:id" element={<UserProfileComponent />} />
+              <Route path="notification" element={<NotificationComponent />} />
+              <Route path="explore" element={<ExploreComponent />} />
+              <Route path="messages" element={<MessageComponent />} />
             </Route>
             <Route element={<GuestRoutes />}>
               <Route path="signup" element={<Signup />} />

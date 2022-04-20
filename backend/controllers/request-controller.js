@@ -161,7 +161,6 @@ const getMyFriends = async (req, res) => {
       { receiverId: id, status: "accepted" },
     ],
   }).select();
-  // Get exact friendName from acceptedFriends
   const friends = acceptedFriends.map((friend) => {
     if (friend.senderId.toString() === id) {
       return friend.receiverId;
@@ -171,7 +170,7 @@ const getMyFriends = async (req, res) => {
   });
   try {
     const users = await User.find({ _id: { $in: friends } }).select(
-      "id name avatar bio "
+      "id name avatar bio"
     );
     res.status(200).json({
       success: true,

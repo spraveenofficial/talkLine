@@ -40,6 +40,7 @@ export {
   UserProfileComponent,
   NotificationComponent,
   ExploreComponent,
+  MessageComponent,
 } from "./Shared/RenderFragment";
 
 export { ProfileButton } from "./Shared/User-Profile";
