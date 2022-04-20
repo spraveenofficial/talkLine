@@ -9,6 +9,7 @@ import PostRoutes from "./routes/post-routes.js";
 import ProfileRoutes from "./routes/profile-routes.js";
 import RequestRoutes from "./routes/request-routes.js";
 import NotificationRoute from "./routes/notification-routes.js";
+import { Server } from "socket.io";
 dotenv.config();
 
 const app = express();
@@ -39,3 +40,30 @@ app.use("/v1/api/notification/", NotificationRoute);
 const serverRunning = app.listen(PORT, () =>
   console.log(`App started running on ${PORT}`)
 );
+
+// Socket.io
+const io = new Server(serverRunning, {
+  cors: { origin: "http://localhost:3000" },
+});
+let users = [];
+
+const addUser = (userId, socketId) => {
+  !users.some((user) => user.userId === userId) &&
+    users.push({ userId, socketId });
+};
+
+const removeUser = (socketId) => {
+  users = users.filter((user) => user.socketId !== socketId);
+};
+io.on("connection", (socket) => {
+  socket.on("new-user", (data) => {
+    console.log("new user connected");
+    addUser(data.id, socket.id);
+    io.emit("connectedUsers", users);
+  }),
+    socket.on("disconnect", () => {
+      console.log("user disconnected");
+      removeUser(socket.id);
+      io.emit("connectedUsers", users);
+    });
+});

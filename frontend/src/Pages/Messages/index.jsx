@@ -1,4 +1,7 @@
 import { MessageIcon } from "../../Components";
+import { io } from "socket.io-client";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const ChatSupport = () => {
   return (
@@ -14,6 +17,18 @@ const ChatSupport = () => {
 };
 
 export function Message() {
+  const { user } = useSelector((state) => state.auth);
+  const [activeUsers, setActiveUsers] = useState([]);
+  const socket = useRef();
+  useEffect(() => {
+    socket.current = io("ws://localhost:4000");
+    socket.current.emit("new-user", user);
+  }, []);
+  useEffect(() => {
+    socket.current.on("connectedUsers", (users) => {
+      setActiveUsers(users);
+    });
+  }, [user]);
   return (
     <div className="w-2/3 bg-white block p-2 mobile:w-full mobile:py-0">
       <div className="w-full p-4 bg-indigo-100 flex text-center items-center gap-2 rounded-2xl">
@@ -28,6 +43,7 @@ export function Message() {
           placeholder="Search Friends"
         />
       </div>
+      <div className="w-max-full">{JSON.stringify(activeUsers)}</div>
       {/* <div className="w-full mt-2">
         <div className="relative w-max">
           <h1 className="font-black font-semibold ml-4 text-md mb-2">

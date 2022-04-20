@@ -122,7 +122,7 @@ export function Sidebar() {
                   src={user.avatar}
                   alt="userAvatar"
                 />
-                <span class="absolute right-1 bottom-1 transform translate-y-1/4 w-4 h-4 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
+                <span className="absolute right-1 bottom-1 transform translate-y-1/4 w-4 h-4 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
               </div>
               <div
                 style={{
