@@ -92,16 +92,20 @@ const acceptFriendRequest = async (req, res) => {
   const { friendRequestId } = req.body;
   try {
     const friendRequest = await FriendRequest.findOne({
-      $or: [
-        { senderId: id, receiverId: friendRequestId },
-        { senderId: friendRequestId, receiverId: id },
-      ],
-    });
+      senderId: friendRequestId,
+      receiverId: id,
+    }).populate("senderId receiverId", "id name avatar bio", "User");
     if (!friendRequest) {
       return res
         .status(404)
         .json({ success: false, message: "Friend request not found!" });
     }
+    Notification.create({
+      from: friendRequest.receiverId,
+      to: friendRequest.senderId,
+      type: "friend_accept",
+      url: `/user/${id}`,
+    });
     friendRequest.status = "accepted";
     const savedFriendRequest = await friendRequest.save();
     res.status(200).json({

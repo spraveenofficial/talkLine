@@ -62,7 +62,7 @@ export function SearchBarforSideBar() {
             return (
               <div
                 className="flex flex-col "
-                onClick={() => navigate(`user/${eachUser.id}`)}
+                onClick={() => navigate(`/user/${eachUser.id}`)}
               >
                 <div className="mb-2 bg-indigo-100 cursor-pointer rounded-xl hover:bg-indigo-200">
                   <div className="flex items-center p-2 pl-2 border-l-2 relative ">
