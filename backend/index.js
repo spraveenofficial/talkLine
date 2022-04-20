@@ -43,7 +43,10 @@ const serverRunning = app.listen(PORT, () =>
 
 // Socket.io
 const io = new Server(serverRunning, {
-  cors: { origin: ["http://localhost:3000", "https://talk-line.vercel.app"] },
+  cors: {
+    origin: ["http://localhost:3000", "https://talk-line.vercel.app"],
+    credentials: true,
+  },
 });
 let users = [];
 

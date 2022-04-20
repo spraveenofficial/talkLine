@@ -18,7 +18,6 @@ const ChatSupport = () => {
 
 export function Message() {
   const ENDPOINT = process.env.REACT_APP_SOCKET_URL;
-  console.log(ENDPOINT);
   const { user } = useSelector((state) => state.auth);
   const [activeUsers, setActiveUsers] = useState([]);
   const socket = useRef();
@@ -45,16 +44,25 @@ export function Message() {
           placeholder="Search Friends"
         />
       </div>
-      <div className="w-max-full">{JSON.stringify(activeUsers)}</div>
-      {/* <div className="w-full mt-2">
+      {/* <div className="w-max-full">{JSON.stringify(activeUsers)}</div> */}
+      <div className="w-full mt-2">
         <div className="relative w-max">
           <h1 className="font-black font-semibold ml-4 text-md mb-2">
             Active Users
           </h1>
           <span className="absolute top-0 transform translate-y-1/4 w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
         </div>
-        <div className="rounded-xl border-black border w-full h-20 "></div>
-      </div> */}
+        <div className="rounded-xl border-black border w-full h-20 flex items-center ">
+          <div class="relative">
+            <img
+              class="w-16 h-16 rounded-full"
+              src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+              alt=""
+            />
+            <span class="top-0 left-12 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
