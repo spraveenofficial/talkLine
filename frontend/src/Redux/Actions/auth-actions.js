@@ -151,7 +151,9 @@ export const verifyUser = () => async (dispatch) => {
     } else {
       dispatch({
         type: USER_LOAD_SUCCESS,
-        payload: data.user,
+        // Add data.user and data.friends
+        payload: { ...data.user, friends: data.friends },
+        // payload: {...data.user, data.friends},
       });
     }
   } catch (error) {

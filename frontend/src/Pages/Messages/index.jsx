@@ -17,12 +17,14 @@ const ChatSupport = () => {
 };
 
 export function Message() {
+  const ENDPOINT = process.env.REACT_APP_SOCKET_URL;
+  console.log(ENDPOINT);
   const { user } = useSelector((state) => state.auth);
   const [activeUsers, setActiveUsers] = useState([]);
   const socket = useRef();
   useEffect(() => {
-    socket.current = io("ws://localhost:4000");
-    socket.current.emit("new-user", user);
+    socket.current = io(ENDPOINT);
+    socket.current.emit("new-user", user.id);
   }, []);
   useEffect(() => {
     socket.current.on("connectedUsers", (users) => {

@@ -5,6 +5,7 @@ import otpServices from "../services/otp-services.js";
 import userService from "../services/user-services.js";
 import Email from "../services/email-services.js";
 import imageServices from "../services/image-services.js";
+import FriendRequest from "../models/Friend-request.js";
 // @desc    Send OTP
 // @route   POST /api/v1/auth/send-otp
 // @access  Public
@@ -107,9 +108,32 @@ const verifyUser = async (req, res) => {
       "id name email avatar bio cover"
     );
     if (!user) {
-      res.status(404).json({ success: false, message: "User not found!" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found!" });
     }
-    res.json({ message: "User verified successfully", success: true, user });
+    const acceptedFriends = await FriendRequest.find({
+      $or: [
+        { senderId: id, status: "accepted" },
+        { receiverId: id, status: "accepted" },
+      ],
+    }).select();
+    const friends = acceptedFriends.map((friend) => {
+      if (friend.senderId.toString() === id) {
+        return friend.receiverId;
+      } else {
+        return friend.senderId;
+      }
+    });
+    const friendsList = await User.find({ _id: { $in: friends } }).select(
+      "id name avatar bio"
+    );
+    res.json({
+      message: "User verified successfully",
+      success: true,
+      user,
+      friends: friendsList,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, message: "Something went wrong!" });

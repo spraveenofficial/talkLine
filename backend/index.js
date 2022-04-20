@@ -43,7 +43,7 @@ const serverRunning = app.listen(PORT, () =>
 
 // Socket.io
 const io = new Server(serverRunning, {
-  cors: { origin: "http://localhost:3000" },
+  cors: { origin: ["http://localhost:3000", "https://talk-line.vercel.app"] },
 });
 let users = [];
 
@@ -56,9 +56,9 @@ const removeUser = (socketId) => {
   users = users.filter((user) => user.socketId !== socketId);
 };
 io.on("connection", (socket) => {
-  socket.on("new-user", (data) => {
+  socket.on("new-user", (id) => {
     console.log("new user connected");
-    addUser(data.id, socket.id);
+    addUser(id, socket.id);
     io.emit("connectedUsers", users);
   }),
     socket.on("disconnect", () => {
