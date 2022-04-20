@@ -27,6 +27,7 @@ export function Message() {
   }, []);
   useEffect(() => {
     socket.current.on("connectedUsers", (users) => {
+      console.log(users);
       setActiveUsers(users);
     });
   }, [user]);
@@ -52,14 +53,14 @@ export function Message() {
           </h1>
           <span className="absolute top-0 transform translate-y-1/4 w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
         </div>
-        <div className="rounded-xl border-black border w-full h-20 flex items-center ">
+        <div className="px-2 rounded-xl border-black border w-full h-20 flex items-center ">
           <div class="relative">
             <img
               class="w-16 h-16 rounded-full"
               src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
               alt=""
             />
-            <span class="top-0 left-12 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
+            <span class="bottom-0 left-12 absolute  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
           </div>
         </div>
       </div>
