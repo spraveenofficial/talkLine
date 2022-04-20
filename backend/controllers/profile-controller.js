@@ -96,7 +96,7 @@ const seachUser = async (req, res) => {
       _id: { $ne: id },
     })
       .select("id name bio avatar")
-      .limit(10);
+      .limit(5);
     if (users.length === 0) {
       return res
         .status(404)

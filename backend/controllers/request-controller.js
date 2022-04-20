@@ -84,7 +84,7 @@ const getFriendRequests = async (req, res) => {
 };
 
 // @desc    Accept friend request
-// @route   GET /api/v1/friend
+// @route   POST /api/v1/friend
 // @access  Private
 
 const acceptFriendRequest = async (req, res) => {
@@ -114,6 +114,10 @@ const acceptFriendRequest = async (req, res) => {
     res.status(500).json({ success: false, message: "Something went wrong!" });
   }
 };
+
+// @desc    Cancel friend request
+// @route   POST /api/v1/friend
+// @access  Private
 
 const cancelFriendRequest = async (req, res) => {
   const { id } = req.data;
