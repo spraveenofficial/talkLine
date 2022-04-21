@@ -200,3 +200,12 @@ input::-webkit-inner-spin-button {
     opacity: 0.3;
   }
 }
+
+/* Make .activeContainer scrollble without scrollbar */
+.activeContainer {
+  overflow-y: scroll;
+  width: 100%;
+}
+.activeContainer::-webkit-scrollbar {
+  display: none;
+}

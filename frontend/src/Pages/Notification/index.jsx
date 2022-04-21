@@ -82,17 +82,10 @@ export function Notification() {
       {success && notifications.length >= 1
         ? notifications.map((eachNotification) => {
             return (
-              <>
-                <NotificationComponent
-                  key={eachNotification._id}
-                  notification={eachNotification}
-                />
-                <div className="w-full h-40 border bg-indigo-200 rounded-xl flex justify-center text-center items-center">
-                  <h1 className="text-xl font-bold">
-                    Caught up all the Notifications.
-                  </h1>
-                </div>
-              </>
+              <NotificationComponent
+                key={eachNotification._id}
+                notification={eachNotification}
+              />
             );
           })
         : success &&
