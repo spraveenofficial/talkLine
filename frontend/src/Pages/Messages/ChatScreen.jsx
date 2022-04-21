@@ -29,7 +29,7 @@ export const ChatScreen = ({ socket }) => {
     socket.current.on("receiveMessage", (data) => {
       dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
     });
-  });
+  }, [selectedId]);
   return (
     <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen mt-4">
       <div className="flex sm:items-center justify-between py-3 border-2 border-gray-200">
