@@ -37,7 +37,7 @@ export function Message() {
       </div>
       <div className="w-full mt-2">
         <h1 className="font-black font-semibold text-md mb-2">Users</h1>
-        <div className="activeContainer drop-shadow-md px-2 rounded-xl border-black border w-full h-20 flex items-center gap-5 flex-nowrap justify-between">
+        <div className="activeContainer drop-shadow-md px-2 rounded-xl border-black border w-full h-20 flex items-center gap-5 flex-nowrap">
           {friends.length === 0 ? (
             <h1 className="text-center flex w-full font-bold text-black justify-center">
               No friends, connect to users.
@@ -77,7 +77,7 @@ export function Message() {
         />
       </div>
       {selectedId?.id ? (
-        <ChatScreen />
+        <ChatScreen socket={socket} />
       ) : (
         <div className="w-full h-72 flex justify-center items-center">
           <h1 className="text-center text-2xl font-bold">

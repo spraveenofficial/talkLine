@@ -46,8 +46,9 @@ export const sendMessage = (payload) => async (dispatch) => {
       },
     });
     dispatch({ type: UPDATE_SENT_MESSAGE, payload: data.message });
-    console.log(data);
+    return data.message;
   } catch (error) {
     console.log(error);
+    return false;
   }
 };

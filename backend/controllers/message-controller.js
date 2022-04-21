@@ -17,7 +17,7 @@ const accessChats = async (req, res) => {
       ],
     })
       .select("-receiver")
-      .populate("sender", "name");
+      .populate("sender", "name avatar");
     //   .sort({ createdAt: -1 });
     if (chats.length === 0) {
       return res.status(200).json({
@@ -49,7 +49,7 @@ const sendMessage = async (req, res) => {
   };
   try {
     let message = await Message.create(newMessage);
-    message = await message.populate("sender", "name");
+    message = await message.populate("sender", "name avatar");
     return res.status(200).json({
       success: true,
       message: "Message sent successfully",
