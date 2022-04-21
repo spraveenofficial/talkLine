@@ -20,3 +20,5 @@ export {
 export { createNewPost } from "./post-actions";
 
 export { fetchNotification, markAsSeen } from "./notification-actions";
+
+export { fetchChat, sendMessage } from "./messages-action";

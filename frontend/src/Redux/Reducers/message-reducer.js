@@ -4,11 +4,12 @@ import {
   MESSAGE_ERROR,
   MESSAGE_CLEAR,
   MESSAGE_SELECT,
+  UPDATE_SENT_MESSAGE,
 } from "../Constants/message-constant";
 const initialState = {
   selectedId: null,
   loading: false,
-  message: [],
+  chats: [],
   error: null,
   success: null,
 };
@@ -23,7 +24,7 @@ export const message = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        message: action.payload,
+        chats: action.payload,
         success: true,
       };
     case MESSAGE_ERROR:
@@ -44,6 +45,11 @@ export const message = (state = initialState, action) => {
       return {
         ...state,
         selectedId: action.payload,
+      };
+    case UPDATE_SENT_MESSAGE:
+      return {
+        ...state,
+        chats: [...state.chats, action.payload],
       };
     default:
       return state;

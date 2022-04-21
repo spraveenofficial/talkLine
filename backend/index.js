@@ -8,7 +8,8 @@ import AuthRoutes from "./routes/auth-routes.js";
 import PostRoutes from "./routes/post-routes.js";
 import ProfileRoutes from "./routes/profile-routes.js";
 import RequestRoutes from "./routes/request-routes.js";
-import NotificationRoute from "./routes/notification-routes.js";
+import NotificationRoutes from "./routes/notification-routes.js";
+import MessageRoutes from "./routes/message-routes.js";
 import { Server } from "socket.io";
 dotenv.config();
 
@@ -34,7 +35,8 @@ app.use("/v1/api/auth/", AuthRoutes);
 app.use("/v1/api/post/", PostRoutes);
 app.use("/v1/api/profile/", ProfileRoutes);
 app.use("/v1/api/friend/", RequestRoutes);
-app.use("/v1/api/notification/", NotificationRoute);
+app.use("/v1/api/notification/", NotificationRoutes);
+app.use("/v1/api/message/", MessageRoutes);
 
 // Server initialize
 const serverRunning = app.listen(PORT, () =>
