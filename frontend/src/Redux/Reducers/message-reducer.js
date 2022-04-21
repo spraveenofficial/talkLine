@@ -33,6 +33,7 @@ export const message = (state = initialState, action) => {
         loading: false,
         error: action.payload,
         success: false,
+        selectedId: null,
       };
     case MESSAGE_CLEAR:
       return {
@@ -40,6 +41,7 @@ export const message = (state = initialState, action) => {
         loading: false,
         error: null,
         success: null,
+        selectedId: null,
       };
     case MESSAGE_SELECT:
       return {

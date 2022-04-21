@@ -8,16 +8,29 @@ import {
   isSameUser,
 } from "./renderlogin";
 
-export const ChatScreen = ({ socket }) => {
+export const ChatScreen = ({ socket, onLineFriends }) => {
+  console.log(onLineFriends);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [userMessage, setUserMessage] = useState("");
   const { selectedId, loading, chats } = useSelector((state) => state.message);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const isThisUserOnline = onLineFriends.some(
+    (eachUser) => eachUser.userId === selectedId.id
+  );
   useEffect(() => {
     dispatch(fetchChat(selectedId.id));
+    socket.current.on("typing", () => setIsTyping(true));
+    socket.current.on("stop typing", () => setIsTyping(false));
   }, [selectedId]);
 
-  const handleSendMessage = async () => {
+  useEffect(() => {
+    socket.current.on("receiveMessage", (data) => {
+      dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
+    });
+  }, [selectedId]);
+  const handleSendMessage = async (e) => {
     if (userMessage === "" || userMessage === null) return;
     const data = await dispatch(
       sendMessage({ message: userMessage, receiverId: selectedId.id })
@@ -25,11 +38,68 @@ export const ChatScreen = ({ socket }) => {
     socket.current.emit("send-message", data);
     setUserMessage("");
   };
-  useEffect(() => {
-    socket.current.on("receiveMessage", (data) => {
-      dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
-    });
-  }, [selectedId]);
+
+  const typingHandler = (e) => {
+    setUserMessage(e.target.value);
+    if (!typing) {
+      setTyping(true);
+      socket.current.emit("typing", selectedId.id);
+    }
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.current.emit("stop typing", selectedId.id);
+        setTyping(false);
+      }
+    }, timerLength);
+  };
+
+  const TypingComponent = () => (
+    <div className="flex">
+      <img
+        src={selectedId.avatar}
+        className="w-8 h-8 rounded-full mt-2 mr-1 cursor-pointer"
+      />
+      <div
+        class="flex flex-col space-y-2 text-xs border-1 items-start px-4 rounded-lg inline-block
+bg-gray-300 text-gray-600 rounded-bl-none justify-center"
+      >
+        <svg class="w-5 h-4" viewBox="0 0 15 3">
+          <circle cx="1.5" cy="1.5" r="1.5">
+            <animate
+              attributeName="opacity"
+              dur="1s"
+              values="0;1;0"
+              repeatCount="indefinite"
+              begin="0.1"
+            ></animate>
+          </circle>
+          <circle cx="7.5" cy="1.5" r="1.5">
+            <animate
+              attributeName="opacity"
+              dur="1s"
+              values="0;1;0"
+              repeatCount="indefinite"
+              begin="0.2"
+            ></animate>
+          </circle>
+          <circle cx="13.5" cy="1.5" r="1.5">
+            <animate
+              attributeName="opacity"
+              dur="1s"
+              values="0;1;0"
+              repeatCount="indefinite"
+              begin="0.3"
+            ></animate>
+          </circle>
+        </svg>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen mt-4">
       <div className="flex sm:items-center justify-between py-3 border-2 border-gray-200">
@@ -48,7 +118,7 @@ export const ChatScreen = ({ socket }) => {
               </span>
             </div>
             <span className="rounded-lg text-sm inline-block text-gray-600">
-              Online
+              {isThisUserOnline ? "Online" : "Offline"}
             </span>
           </div>
         </div>
@@ -110,6 +180,7 @@ export const ChatScreen = ({ socket }) => {
             </div>
           ))
         )}
+        {isTyping && <TypingComponent />}
       </div>
       <div className="border-t-2 border-gray-200 pt-4 mb-2 sm:mb-0">
         <div className="relative flex justify-between">
@@ -137,13 +208,13 @@ export const ChatScreen = ({ socket }) => {
           <input
             type="text"
             placeholder="Write message!"
-            onChange={(e) => setUserMessage(e.target.value)}
+            onChange={typingHandler}
             value={userMessage}
             className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-md py-3"
           />
           <div className="items-center text-center inset-y-0 sm:flex ml-2">
             <button
-              onClick={() => handleSendMessage()}
+              onClick={handleSendMessage}
               type="button"
               className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-indigo-600 hover:bg-blue-400 focus:outline-none"
             >

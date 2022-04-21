@@ -8,15 +8,17 @@ export function Message() {
   const dispatch = useDispatch();
   const ENDPOINT = process.env.REACT_APP_SOCKET_URL;
   const { user } = useSelector((state) => state.auth);
-  const { selectedId, loading, message, error, success } = useSelector(
-    (state) => state.message
-  );
+  const { selectedId } = useSelector((state) => state.message);
   const { friends } = user;
   const [activeUsers, setActiveUsers] = useState([]);
-  const socket = useRef();
+  let socket = useRef();
+  console.log(activeUsers);
   useEffect(() => {
     socket.current = io(ENDPOINT);
     socket.current.emit("new-user", user.id);
+    return () => {
+      dispatch({ type: "MESSAGE_CLEAR" });
+    };
   }, []);
   useEffect(() => {
     socket.current.on("connectedUsers", (users) => {
@@ -40,7 +42,7 @@ export function Message() {
         <div className="activeContainer drop-shadow-md px-2 rounded-xl border-black border w-full h-20 flex items-center gap-5 flex-nowrap">
           {friends.length === 0 ? (
             <h1 className="text-center flex w-full font-bold text-black justify-center">
-              No friends, connect to users.
+              No friends, connect to users first.
             </h1>
           ) : (
             friends.map((eachFriend) => {
@@ -77,7 +79,7 @@ export function Message() {
         />
       </div>
       {selectedId?.id ? (
-        <ChatScreen socket={socket} />
+        <ChatScreen socket={socket} onLineFriends={activeUsers} />
       ) : (
         <div className="w-full h-72 flex justify-center items-center">
           <h1 className="text-center text-2xl font-bold">
