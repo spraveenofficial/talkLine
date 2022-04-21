@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { TypingIcon } from "../../Components";
 import { fetchChat, sendMessage } from "../../Redux/Actions";
 import {
   isLastMessage,
@@ -9,8 +11,8 @@ import {
 } from "./renderlogin";
 
 export const ChatScreen = ({ socket, onLineFriends }) => {
-  console.log(onLineFriends);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const [userMessage, setUserMessage] = useState("");
   const { selectedId, loading, chats } = useSelector((state) => state.message);
@@ -27,9 +29,12 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
 
   useEffect(() => {
     socket.current.on("receiveMessage", (data) => {
+      console.log(data);
       dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
     });
   }, [selectedId]);
+
+  // Function to send message
   const handleSendMessage = async (e) => {
     if (userMessage === "" || userMessage === null) return;
     const data = await dispatch(
@@ -39,6 +44,7 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
     setUserMessage("");
   };
 
+  // Function to handle typing
   const typingHandler = (e) => {
     setUserMessage(e.target.value);
     if (!typing) {
@@ -67,42 +73,14 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
         class="flex flex-col space-y-2 text-xs border-1 items-start px-4 rounded-lg inline-block
 bg-gray-300 text-gray-600 rounded-bl-none justify-center"
       >
-        <svg class="w-5 h-4" viewBox="0 0 15 3">
-          <circle cx="1.5" cy="1.5" r="1.5">
-            <animate
-              attributeName="opacity"
-              dur="1s"
-              values="0;1;0"
-              repeatCount="indefinite"
-              begin="0.1"
-            ></animate>
-          </circle>
-          <circle cx="7.5" cy="1.5" r="1.5">
-            <animate
-              attributeName="opacity"
-              dur="1s"
-              values="0;1;0"
-              repeatCount="indefinite"
-              begin="0.2"
-            ></animate>
-          </circle>
-          <circle cx="13.5" cy="1.5" r="1.5">
-            <animate
-              attributeName="opacity"
-              dur="1s"
-              values="0;1;0"
-              repeatCount="indefinite"
-              begin="0.3"
-            ></animate>
-          </circle>
-        </svg>
+        <TypingIcon />
       </div>
     </div>
   );
 
   return (
     <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen mt-4">
-      <div className="flex sm:items-center justify-between py-3 border-2 border-gray-200">
+      <div className="flex justify-between py-3 rounded-xl border-2 border-gray-200">
         <div className="relative flex items-center space-x-4 px-4">
           <div className="relative flex items-center">
             <img
@@ -113,7 +91,10 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
           </div>
           <div className="flex flex-col leading-tight">
             <div className="text-xl mt-1 flex items-center">
-              <span className="text-gray-700 mr-3 font-semibold">
+              <span
+                onClick={() => navigate(`/user/${selectedId.id}`)}
+                className="text-gray-700 mr-3 font-semibold cursor-pointer"
+              >
                 {selectedId.name}
               </span>
             </div>
@@ -123,10 +104,7 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
           </div>
         </div>
       </div>
-      <div
-        id="chats"
-        className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
-      >
+      <div className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
         {loading ? (
           <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center bg-slate-50">
             <div

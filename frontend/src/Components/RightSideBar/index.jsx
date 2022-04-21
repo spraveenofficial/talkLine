@@ -28,7 +28,7 @@ export function RightSidebar() {
                     Praveen
                   </p>
                   <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                    @ShonaDesign
+                    @spraveenofficial
                   </p>
                 </div>
               </div>
@@ -55,7 +55,7 @@ export function RightSidebar() {
                     Praveen
                   </p>
                   <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                    @ShonaDesign
+                    @spraveenofficial
                   </p>
                 </div>
               </div>

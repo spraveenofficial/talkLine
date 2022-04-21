@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   sendFriendRequest,
   cancelFriendRequest,
@@ -8,6 +8,7 @@ import {
 
 export function ProfileButton(props) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = props.user.isRequested;
   const { id } = useParams();
   const handleSendFriendRequest = () => {
@@ -18,6 +19,17 @@ export function ProfileButton(props) {
   };
   const handleAcceptFriendRequest = () => {
     dispatch(acceptFriendRequest(id));
+  };
+  const handleNavigateToChat = () => {
+    const transfromData = {
+      id: props.user._id,
+      ...props.user,
+    };
+    // dispatch({
+    //   type: "MESSAGE_SELECT",
+    //   payload: transfromData,
+    // });
+    navigate("/messages");
   };
   return (
     <>
@@ -37,7 +49,13 @@ export function ProfileButton(props) {
         </button>
       ) : (
         user.isFriend && (
-          <div>
+          <div className="gap-2 flex">
+            <button
+              onClick={() => handleNavigateToChat()}
+              className="bg-indigo-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-red-800"
+            >
+              Message
+            </button>
             <button
               //   onClick={() => handleUnfriend()}
               className="bg-red-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-red-800"

@@ -12,7 +12,6 @@ export function Message() {
   const { friends } = user;
   const [activeUsers, setActiveUsers] = useState([]);
   let socket = useRef();
-  console.log(activeUsers);
   useEffect(() => {
     socket.current = io(ENDPOINT);
     socket.current.emit("new-user", user.id);
@@ -36,6 +35,13 @@ export function Message() {
       <div className="w-full p-4 bg-indigo-100 flex text-center items-center gap-2 rounded-2xl">
         <h2 className="text-2xl font-bold">Messaging</h2>
         <MessageIcon className="h-8 w-8" />
+      </div>
+      <div className="mt-4">
+        <input
+          type="text"
+          className="bg-dim-700 font-black h-10 p-4 w-full rounded-full text-sm focus:outline-none bg-purple-white shadow rounded border"
+          placeholder="Search Friends"
+        />
       </div>
       <div className="w-full mt-2">
         <h1 className="font-black font-semibold text-md mb-2">Users</h1>
@@ -70,13 +76,6 @@ export function Message() {
             })
           )}
         </div>
-      </div>
-      <div className="mt-4">
-        <input
-          type="text"
-          className="bg-dim-700 font-black h-10 p-4 w-full rounded-full text-sm focus:outline-none bg-purple-white shadow rounded border"
-          placeholder="Search Friends"
-        />
       </div>
       {selectedId?.id ? (
         <ChatScreen socket={socket} onLineFriends={activeUsers} />

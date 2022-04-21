@@ -32,6 +32,7 @@ export {
   FriendRequestPendingIcon,
   FriendRequestAcceptedIcon,
   SearchIcon,
+  TypingIcon
 } from "./Icons";
 
 export {
