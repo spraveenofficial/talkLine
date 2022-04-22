@@ -97,15 +97,29 @@ const getPosts = async (req, res) => {
       return friend.senderId.toString();
     }
   });
-  console.log(friends);
   const posts = await Post.find({
     $or: [{ userId: id }, { userId: { $in: friends } }],
-  }).sort({ createdAt: -1 });
-  console.log(posts);
+  })
+    .sort({ createdAt: -1 })
+    .populate("userId", "name avatar");
+  if (posts.length === 0) {
+    return res.status(200).json({
+      success: true,
+      message: "No posts found",
+      posts,
+    });
+  }
   res.status(200).json({
     success: true,
     message: "Posts fetched successfully",
-    posts,
+    posts: posts.map((post) => {
+      return {
+        ...post._doc,
+        userId: post.userId._id,
+        userName: post.userId.name,
+        userAvatar: post.userId.avatar,
+      };
+    }),
   });
 };
 

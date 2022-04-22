@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { TypingIcon } from "../../Components";
@@ -11,6 +11,10 @@ import {
 } from "./renderlogin";
 
 export const ChatScreen = ({ socket, onLineFriends }) => {
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -21,6 +25,8 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
   const isThisUserOnline = onLineFriends.some(
     (eachUser) => eachUser.userId === selectedId.id
   );
+
+
   useEffect(() => {
     dispatch(fetchChat(selectedId.id));
     socket.current.on("typing", () => setIsTyping(true));
@@ -28,11 +34,18 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
   }, [selectedId]);
 
   useEffect(() => {
+    scrollToBottom();
+  }, [chats, isTyping]);
+
+
+  useEffect(() => {
     socket.current.on("receiveMessage", (data) => {
-      console.log(data);
-      dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
+      const checkIfThisExists = chats.find((chat) => chat.id !== data.id);
+      if (checkIfThisExists) {
+        dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
+      }
     });
-  }, [selectedId]);
+  }, []);
 
   // Function to send message
   const handleSendMessage = async (e) => {
@@ -141,7 +154,10 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
                 }}
                 className="chat-message flex items-center justify-between"
               >
-                <div className="flex items-end justify-end">
+                <div
+                  ref={messagesEndRef}
+                  className="flex items-end justify-end"
+                >
                   <div className="flex flex-col space-y-2 text-xs max-w-xs border-1 items-end">
                     <span
                       className={`px-4 py-2 rounded-lg inline-block  ${

@@ -5,6 +5,6 @@ import { createPost, getPosts } from "../controllers/post-controller.js";
 router.use(middleware);
 
 router.route("/").post(createPost);
-router.route("/").get(getPosts);
+router.route("/feed").get(getPosts);
 
 export default router;
