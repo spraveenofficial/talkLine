@@ -17,7 +17,7 @@ export {
   explorePersons,
 } from "./profile-actions";
 
-export { createNewPost } from "./post-actions";
+export { createNewPost, getFeed } from "./post-actions";
 
 export { fetchNotification, markAsSeen } from "./notification-actions";
 

@@ -1,29 +1,43 @@
-export function EachPost() {
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+export function EachPost(props) {
+  const navigate = useNavigate();
+  const postData = props.post;
+  const navigateToUserProfile = () => {
+    navigate(`/user/${postData.userId}`);
+  };
   return (
     <div className="container w-full b">
       <div className="flex items-center space-x-2 pt-4 p-4">
         <img
-          className="w-10 rounded-full"
-          src="https://d2qp0siotla746.cloudfront.net/img/use-cases/profile-picture/template_3.jpg"
+          className="w-12 h-12 rounded-full"
+          src={postData.userAvatar}
           alt="sara"
         />
         <div>
-          <h2 className="text-gray-800 font-bold cursor-pointer">
-            Praveen Kumar Singh
+          <h2
+            onClick={navigateToUserProfile}
+            className="text-gray-800 font-bold cursor-pointer"
+          >
+            {postData.userName}
           </h2>
-          <p className="text-sm font-semibold">2 min ago</p>
+          <p className="text-sm font-semibold">
+            {moment(postData.createdAt).fromNow()}
+          </p>
         </div>
       </div>
       <div className="p-4">
         <p className="text-l font-bold text-gray-800 cursor-pointer">
-          Lampara Look
+          {postData.caption}
         </p>
       </div>
-      <img
-        className="w-full h-80 cursor-pointer p-4 bg-no-repeat bg-center bg-cover"
-        src="https://images.unsplash.com/photo-1525268771113-32d9e9021a97?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-        alt=""
-      />
+      {postData.isPhoto && (
+        <img
+          className="w-full h-80 cursor-pointer p-4 bg-no-repeat bg-center bg-cover"
+          src={postData.photoUrl}
+          alt=""
+        />
+      )}
       <div className="flex p-4 justify-between">
         <div className="flex space-x-2">
           <div className="flex space-x-1 items-center">

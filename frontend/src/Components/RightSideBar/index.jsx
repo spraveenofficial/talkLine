@@ -1,7 +1,7 @@
 import { SearchBarforSideBar } from "./searchBar";
 export function RightSidebar() {
   return (
-    <div className="sticky left-0 top-0 w-2/5 text-white flex flex-col h-screen mobile:w-full">
+    <div className="sticky left-0 top-0 w-2/6 text-white flex flex-col h-screen mobile:w-full">
       <div className="pr-3 h-full flex flex-col">
         <SearchBarforSideBar />
         <div className="max-w-full rounded-lg  bg-dim-700 overflow-hidden shadow-lg m-4">
@@ -28,7 +28,7 @@ export function RightSidebar() {
                     Praveen
                   </p>
                   <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                    @spraveenofficial
+                    @ShonaDesign
                   </p>
                 </div>
               </div>
@@ -55,7 +55,7 @@ export function RightSidebar() {
                     Praveen
                   </p>
                   <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                    @spraveenofficial
+                    @ShonaDesign
                   </p>
                 </div>
               </div>

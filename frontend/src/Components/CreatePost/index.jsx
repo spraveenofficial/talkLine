@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { EachPost, Modal } from "..";
+import { Modal, Promotion, Feed } from "..";
 import { createNewPost } from "../../Redux/Actions";
 export function CreatePost() {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ export function CreatePost() {
   };
   const ModalToUploadPhoto = () => (
     <Modal isOpen={isFileUploadOpen}>
-      <div className="extraOutline justify-center p-4 bg-white w-max bg-whtie m-auto rounded-lg">
+      <div className="extraOutline mb-5 justify-center p-4 bg-white w-max bg-whtie m-auto rounded-lg">
         <div className="relative border-4 border-dotted border-gray-300 rounded-lg mobile:w-full mobile:m-2 px-16 py-14">
           <svg
             className="text-indigo-500 w-24 mx-auto mb-4"
@@ -64,7 +64,6 @@ export function CreatePost() {
   );
 
   const handleNewPost = () => {
-    console.log("iemfi");
     dispatch(
       createNewPost({
         caption,
@@ -77,7 +76,8 @@ export function CreatePost() {
   };
 
   return (
-    <div className="w-2/3 border border-gray-600 h-auto border-t-0 mobile:w-full">
+    <div className="w-2/3 border mb-4 border-gray-600 h-auto border-t-1 mobile:w-full">
+      <Promotion />
       <ModalToUploadPhoto />
       <hr className="border-gray-600" />
       <div className="flex">
@@ -207,8 +207,7 @@ export function CreatePost() {
       </div>
 
       <hr className="border-indigo-600 border-4" />
-      <EachPost />
-      <EachPost />
+      <Feed />
     </div>
   );
 }

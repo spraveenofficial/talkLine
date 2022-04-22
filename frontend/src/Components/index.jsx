@@ -32,7 +32,7 @@ export {
   FriendRequestPendingIcon,
   FriendRequestAcceptedIcon,
   SearchIcon,
-  TypingIcon
+  TypingIcon,
 } from "./Icons";
 
 export {
@@ -49,3 +49,7 @@ export { ProfileButton } from "./Shared/User-Profile";
 export { ExploreCard } from "./ExploreCard";
 
 export { RightSidebar } from "./RightSideBar";
+
+export { Promotion } from "./Shared/Promotion";
+
+export { Feed } from "./Shared/Feed";

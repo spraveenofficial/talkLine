@@ -2,6 +2,9 @@ import {
   NEW_POST_REQUEST,
   NEW_POST_SUCCESS,
   NEW_POST_FAILURE,
+  FEED_FETCH_REQUEST,
+  FEED_FETCH_SUCCESS,
+  FEED_FETCH_FAILURE,
 } from "../Constants/post-constants";
 
 export const newPost = (
@@ -31,6 +34,32 @@ export const newPost = (
         loading: false,
         success: false,
         message: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const feed = (
+  state = { loading: false, success: false, posts: [], error: null },
+  action
+) => {
+  switch (action.type) {
+    case FEED_FETCH_REQUEST:
+      return { ...state, loading: true };
+    case FEED_FETCH_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        posts: action.payload,
+      };
+    case FEED_FETCH_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        error: action.payload,
       };
     default:
       return state;
