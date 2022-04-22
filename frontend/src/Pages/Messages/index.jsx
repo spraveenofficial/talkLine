@@ -1,16 +1,21 @@
 import { MessageIcon } from "../../Components";
 import { io } from "socket.io-client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChatScreen } from "./ChatScreen";
+import { useSocket } from "../../Context/socket-context";
+import { debounce } from "../../Utils/debounce";
 
 export function Message() {
   const dispatch = useDispatch();
+  const data = useSocket();
   const ENDPOINT = process.env.REACT_APP_SOCKET_URL;
   const { user } = useSelector((state) => state.auth);
   const { selectedId } = useSelector((state) => state.message);
   const { friends } = user;
   const [activeUsers, setActiveUsers] = useState([]);
+  const [search, setSearch] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
   let socket = useRef();
   useEffect(() => {
     socket.current = io(ENDPOINT);
@@ -25,26 +30,74 @@ export function Message() {
     });
   }, [user]);
   const handleSelectToChat = (user) => {
+    if (searchResult.length > 0) {
+      setSearch("");
+      setSearchResult([]);
+    }
     dispatch({
       type: "MESSAGE_SELECT",
       payload: user,
     });
   };
+  const handleSearchFriends = (e) => {
+    const { value } = e.target;
+    // setSearch(value);
+    const result = user.friends.filter((user) =>
+      user.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setSearchResult(result);
+  };
+  const handleType = useCallback(debounce(handleSearchFriends), []);
   return (
     <div className="w-2/3 bg-white block p-2 mobile:w-full mobile:py-0">
       <div className="w-full p-4 bg-indigo-100 flex text-center items-center gap-2 rounded-2xl">
         <h2 className="text-2xl font-bold">Messaging</h2>
         <MessageIcon className="h-8 w-8" />
       </div>
-      <div className="mt-4">
+      <div className="mt-4 relative">
         <input
           type="text"
           className="bg-dim-700 font-black h-10 p-4 w-full rounded-full text-sm focus:outline-none bg-purple-white shadow rounded border"
           placeholder="Search Friends"
+          onChange={handleType}
+          // value={search}
         />
+        <div className="absolute w-full top-100 left-0 right-0 z-40 pt-2 pb-1 max-h-select overflow-y-auto">
+          {searchResult.map((eachUser) => {
+            return (
+              <div
+                key={eachUser.id}
+                className="flex flex-col "
+                onClick={() => handleSelectToChat(eachUser)}
+              >
+                <div className="mb-2 bg-indigo-100 cursor-pointer rounded-xl hover:bg-indigo-200">
+                  <div className="flex items-center p-2 pl-2 border-l-2 relative ">
+                    <div className="w-10 flex flex-col items-center">
+                      <div className="flex relative justify-center items-center mt-1 rounded-full ">
+                        <img
+                          className="rounded-full w-10 h-10"
+                          alt="userProfile"
+                          src={eachUser.avatar}
+                        />
+                      </div>
+                    </div>
+                    <div className="w-11/12 items-center flex">
+                      <div className="mx-2 text-black font-semibold hover:font-white whitespace-nowrap overflow-hidden text-ellipsis">
+                        {eachUser.name}
+                        <div className="text-xs w-full normal-case font-semibold text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
+                          {eachUser.bio}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
       <div className="w-full mt-2">
-        <h1 className="font-black font-semibold text-md mb-2">Users</h1>
+        <h1 className="font-black font-semibold text-md mb-2">Your Friends</h1>
         <div className="activeContainer drop-shadow-md px-2 rounded-xl border-black border w-full h-20 flex items-center gap-5 flex-nowrap">
           {friends.length === 0 ? (
             <h1 className="text-center flex w-full font-bold text-black justify-center">

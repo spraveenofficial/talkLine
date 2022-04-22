@@ -18,10 +18,13 @@ import {
   USER_LOGIN_FAILURE,
 } from "../Constants/auth-constants";
 
-export const auth = (
-  state = { isAuthenticated: false, loading: true, user: null, posts: null },
-  action
-) => {
+const initialState = {
+  isAuthenticated: false,
+  loading: localStorage.getItem("token") ? true : false,
+  user: {},
+  post: null,
+};
+export const auth = (state = initialState, action) => {
   switch (action.type) {
     case USER_LOAD_REQUEST:
       return { isAuthenticated: false, loading: true, user: null };

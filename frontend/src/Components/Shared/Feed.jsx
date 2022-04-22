@@ -5,11 +5,10 @@ import { EachPost } from "../EachPosts";
 export function Feed() {
   const dispatch = useDispatch();
   const { posts, loading, success } = useSelector((state) => state.feed);
-  console.log(posts);
   useEffect(() => {
     dispatch(getFeed());
   }, []);
-  
+
   return (
     <div className="w-full bg-white block">
       {loading ? (
@@ -22,7 +21,7 @@ export function Feed() {
         </div>
       ) : success && posts.length > 0 ? (
         posts.map((eachPost) => {
-          return <EachPost key={eachPost.id} post={eachPost} />;
+          return <EachPost key={eachPost._id} post={eachPost} />;
         })
       ) : (
         <div className="w-full p-4 bg-indigo-100 flex text-center items-center gap-2 rounded-2xl">
