@@ -1,16 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getPost } from "../../Redux/Actions";
 import moment from "moment";
+import Picker from "emoji-picker-react";
 export function Post() {
   const dispatch = useDispatch();
+  const [showEmoji, setShowEmoji] = useState(false);
+  const [comment, setComment] = useState("");
   const { user } = useSelector((state) => state.auth);
   const { postId } = useParams();
   const { data, loading, error, success } = useSelector((state) => state.post);
   const post = data ? data.post : null;
   const likeData = data ? data.likes : null;
+  const handleTyping = (e) => {
+    setComment(e.target.value);
+  };
 
+  const handleEmojiClick = (e, emojiObject) => {
+    setShowEmoji(!showEmoji);
+    setComment(comment + emojiObject.emoji);
+  };
   useEffect(() => {
     dispatch(getPost(postId));
   }, []);
@@ -36,7 +46,7 @@ export function Post() {
     !loading &&
     success && (
       <div className="w-2/3 bg-white block mobile:w-full mobile:py-0">
-        <div className="flex bg-white shadow-md rounded-lg overflow-hidden mx-auto">
+        <div className="flex bg-white shadow-md rounded-lg mx-auto">
           <div className="flex items-center w-full">
             <div className="w-full">
               <div className="flex flex-row mt-2 px-2 py-3 mx-3">
@@ -140,7 +150,7 @@ export function Post() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                        d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
                       />
                     </svg>
                   </span>
@@ -170,7 +180,7 @@ export function Post() {
                   </div>
                 </div>
               </div>
-              <div className="relative flex items-center self-center w-full p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
+              <div className="relative flex items-center self-center w-full p-4 text-gray-600 focus-within:text-gray-400">
                 <img
                   className="w-10 h-10 object-cover rounded-full shadow mr-2 cursor-pointer"
                   alt="User avatar"
@@ -187,6 +197,7 @@ export function Post() {
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      onClick={() => setShowEmoji(!showEmoji)}
                     >
                       <path
                         strokeLinecap="round"
@@ -202,7 +213,14 @@ export function Post() {
                   className="w-full rounded-3xl py-2 pl-4 pr-10 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg placeholder-gray-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:text-gray-900 focus:shadow-outline-blue"
                   placeholder="Post a comment..."
                   autoComplete="off"
+                  onChange={handleTyping}
+                  value={comment}
                 />
+                {showEmoji && (
+                  <div className="absolute right-0 top-0 pr-6">
+                    <Picker onEmojiClick={handleEmojiClick} />
+                  </div>
+                )}
               </div>
             </div>
           </div>
