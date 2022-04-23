@@ -25,10 +25,10 @@ export function ProfileButton(props) {
       id: props.user._id,
       ...props.user,
     };
-    // dispatch({
-    //   type: "MESSAGE_SELECT",
-    //   payload: transfromData,
-    // });
+    dispatch({
+      type: "MESSAGE_SELECT",
+      payload: transfromData,
+    });
     navigate("/messages");
   };
   return (

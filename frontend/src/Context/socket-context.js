@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 const SocketContext = createContext();
@@ -17,28 +11,49 @@ const connectSocketReducer = (state, action) => {
         ...state,
         socket: action.payload,
       };
+    case "SET_ONLINE_FRIENDS":
+      return {
+        ...state,
+        onlineFriends: action.payload,
+      };
+
     default:
       return state;
   }
 };
 
 const SocketContextProvider = ({ children }) => {
-  const { isAuthenticated, loading } = useSelector((state) => state.auth);
+  const ENDPOINT = process.env.REACT_APP_SOCKET_URL;
   const [state, dispatch] = useReducer(connectSocketReducer, {
     socket: null,
+    onlineFriends: [],
   });
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   useEffect(() => {
+    //  Dispatching Socket Connection when user is authenticated
     if (isAuthenticated) {
-      Promise.resolve(io("http://localhost:4000")).then((socket) => {
+      const socket = io(ENDPOINT);
+      socket.emit("new-user", user.id);
+      dispatch({
+        type: "CONNECT_SOCKET",
+        payload: socket,
+      });
+    }
+  }, [user]);
+  useEffect(() => {
+    if (state.socket) {
+      state.socket.on("connectedUsers", (users) => {
         dispatch({
-          type: "CONNECT_SOCKET",
-          payload: socket,
+          type: "SET_ONLINE_FRIENDS",
+          payload: users,
         });
       });
     }
-  }, [isAuthenticated]);
+  });
   return (
-    <SocketContext.Provider value={{ socket: state.socket }}>
+    <SocketContext.Provider
+      value={{ socket: state.socket, onlineFriends: state.onlineFriends }}
+    >
       {children}
     </SocketContext.Provider>
   );

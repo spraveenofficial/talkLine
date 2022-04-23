@@ -9,8 +9,9 @@ import {
   isSameSenderMargin,
   isSameUser,
 } from "./renderlogin";
-
-export const ChatScreen = ({ socket, onLineFriends }) => {
+import { useSocket } from "../../Context/socket-context";
+export const ChatScreen = () => {
+  const { socket, onlineFriends } = useSocket();
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -22,14 +23,14 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
   const { selectedId, loading, chats } = useSelector((state) => state.message);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const isThisUserOnline = onLineFriends.some(
+  const isThisUserOnline = onlineFriends.some(
     (eachUser) => eachUser.userId === selectedId.id
   );
 
   useEffect(() => {
     dispatch(fetchChat(selectedId.id));
-    socket.current.on("typing", () => setIsTyping(true));
-    socket.current.on("stop typing", () => setIsTyping(false));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
   }, [selectedId]);
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
   }, [chats, isTyping]);
 
   useEffect(() => {
-    socket.current.on("receiveMessage", (data) => {
+    socket.on("receiveMessage", (data) => {
       const checkIfThisExists = chats.find((chat) => chat.id !== data.id);
       if (!checkIfThisExists) {
         dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
@@ -51,7 +52,7 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
     const data = await dispatch(
       sendMessage({ message: userMessage, receiverId: selectedId.id })
     );
-    socket.current.emit("send-message", data);
+    socket.emit("send-message", data);
     setUserMessage("");
   };
 
@@ -60,7 +61,7 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
     setUserMessage(e.target.value);
     if (!typing) {
       setTyping(true);
-      socket.current.emit("typing", selectedId.id);
+      socket.emit("typing", selectedId.id);
     }
     let lastTypingTime = new Date().getTime();
     var timerLength = 3000;
@@ -68,7 +69,7 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
       var timeNow = new Date().getTime();
       var timeDiff = timeNow - lastTypingTime;
       if (timeDiff >= timerLength && typing) {
-        socket.current.emit("stop typing", selectedId.id);
+        socket.emit("stop typing", selectedId.id);
         setTyping(false);
       }
     }, timerLength);

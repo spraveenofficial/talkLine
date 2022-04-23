@@ -8,27 +8,17 @@ import { debounce } from "../../Utils/debounce";
 
 export function Message() {
   const dispatch = useDispatch();
-  const data = useSocket();
-  const ENDPOINT = process.env.REACT_APP_SOCKET_URL;
+  const { onlineFriends } = useSocket();
   const { user } = useSelector((state) => state.auth);
   const { selectedId } = useSelector((state) => state.message);
   const { friends } = user;
-  const [activeUsers, setActiveUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-  let socket = useRef();
   useEffect(() => {
-    socket.current = io(ENDPOINT);
-    socket.current.emit("new-user", user.id);
     return () => {
       dispatch({ type: "MESSAGE_CLEAR" });
     };
   }, []);
-  useEffect(() => {
-    socket.current.on("connectedUsers", (users) => {
-      setActiveUsers(users);
-    });
-  }, [user]);
   const handleSelectToChat = (user) => {
     if (searchResult.length > 0) {
       setSearch("");
@@ -41,7 +31,9 @@ export function Message() {
   };
   const handleSearchFriends = (e) => {
     const { value } = e.target;
-    // setSearch(value);
+    if (value === "") {
+      return setSearchResult([]);
+    }
     const result = user.friends.filter((user) =>
       user.name.toLowerCase().includes(value.toLowerCase())
     );
@@ -98,14 +90,14 @@ export function Message() {
       </div>
       <div className="w-full mt-2">
         <h1 className="font-black font-semibold text-md mb-2">Your Friends</h1>
-        <div className="activeContainer drop-shadow-md px-2 rounded-xl border-black border w-full h-20 flex items-center gap-5 flex-nowrap">
+        <div className="activeContainer rounded-xl border-2 border-gray-200 px-2 rounded-xl w-full h-20 flex items-center gap-5 flex-nowrap">
           {friends.length === 0 ? (
             <h1 className="text-center flex w-full font-bold text-black justify-center">
               No friends, connect to users first.
             </h1>
           ) : (
             friends.map((eachFriend) => {
-              const isOnline = activeUsers.some(
+              const isOnline = onlineFriends.some(
                 (eachUser) => eachUser.userId === eachFriend.id
               );
               return (
@@ -131,7 +123,7 @@ export function Message() {
         </div>
       </div>
       {selectedId?.id ? (
-        <ChatScreen socket={socket} onLineFriends={activeUsers} />
+        <ChatScreen />
       ) : (
         <div className="w-full h-72 flex justify-center items-center">
           <h1 className="text-center text-2xl font-bold">
