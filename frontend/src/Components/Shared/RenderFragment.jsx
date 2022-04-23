@@ -7,6 +7,7 @@ import {
   Notification,
   Profile,
   UserProfile,
+  Post,
 } from "../../Pages";
 const HomeComponent = () => (
   <div className="flex relative h-full mobile:flex-col">
@@ -56,6 +57,14 @@ const MessageComponent = () => (
   </div>
 );
 
+const PostComponent = () => (
+  <div className="flex relative h-full mobile:flex-col">
+    <Sidebar />
+    <Post />
+    <Home />
+  </div>
+);
+
 export {
   HomeComponent,
   ProfileComponent,
@@ -63,4 +72,5 @@ export {
   NotificationComponent,
   ExploreComponent,
   MessageComponent,
+  PostComponent,
 };

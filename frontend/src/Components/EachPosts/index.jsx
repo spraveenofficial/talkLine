@@ -6,6 +6,9 @@ export function EachPost(props) {
   const navigateToUserProfile = () => {
     navigate(`/user/${postData.userId}`);
   };
+  const navigateToPost = () => {
+    navigate(`/post/${postData._id}`);
+  };
   return (
     <div className="container w-full b">
       <div className="flex items-center space-x-2 pt-4 p-4">
@@ -26,7 +29,7 @@ export function EachPost(props) {
           </p>
         </div>
       </div>
-      <div className="p-4">
+      <div onClick={navigateToPost} className="p-4">
         <p className="text-l font-bold text-gray-800 cursor-pointer">
           {postData.caption}
         </p>
@@ -49,9 +52,9 @@ export function EachPost(props) {
                 fill="currentColor"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                 />
               </svg>
             </span>
@@ -67,9 +70,9 @@ export function EachPost(props) {
                 stroke="currentColor"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                 />
               </svg>

@@ -1,6 +1,6 @@
 import Post from "../models/Post.js";
 import imageService from "../services/image-services.js";
-import User from "../models/User.js";
+import Like from "../models/Like.js";
 import FriendRequest from "../models/Friend-request.js";
 // @desc    Create Post
 // @route   POST /api/v1/post/create-post
@@ -123,4 +123,31 @@ const getPosts = async (req, res) => {
   });
 };
 
-export { createPost, getPostsOfEachUser, getPosts };
+const getEachPost = async (req, res) => {
+  const { id } = req.data;
+  const { postId } = req.params;
+  const post = await Post.findById(postId).populate("userId", "name avatar");
+  const likes = await Like.find({ postId: postId });
+  const isLiked = likes.some((like) => like.userId.toString() === id);
+  if (!post) {
+    return res.status(400).json({
+      success: false,
+      message: "Post not found",
+    });
+  }
+  res.status(200).json({
+    success: true,
+    message: "Post fetched successfully",
+    post: {
+      ...post._doc,
+      userId: post.userId._id,
+      userName: post.userId.name,
+      userAvatar: post.userId.avatar,
+    },
+    likeData: {
+      likes: likes.length,
+      isLiked,
+    },
+  });
+};
+export { createPost, getPostsOfEachUser, getPosts, getEachPost };

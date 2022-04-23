@@ -7,6 +7,9 @@ import {
   FEED_FETCH_REQUEST,
   FEED_FETCH_SUCCESS,
   FEED_FETCH_FAILURE,
+  POST_FETCH_REQUEST,
+  POST_FETCH_SUCCESS,
+  POST_FETCH_FAILURE,
 } from "../Constants/post-constants";
 export const createNewPost = (post) => async (dispatch) => {
   try {
@@ -56,6 +59,37 @@ export const getFeed = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: FEED_FETCH_FAILURE,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getPost = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: POST_FETCH_REQUEST,
+    });
+    const { data } = await axios({
+      method: "GET",
+      url: `${baseUrl}/post/${id}`,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    const dataToSend = {
+      post: data.post,
+      likes: data.likeData,
+    };
+    dispatch({
+      type: POST_FETCH_SUCCESS,
+      payload: dataToSend,
+    });
+  } catch (error) {
+    dispatch({
+      type: POST_FETCH_FAILURE,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
