@@ -30,7 +30,6 @@ const SocketContextProvider = ({ children }) => {
   });
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   useEffect(() => {
-    //  Dispatching Socket Connection when user is authenticated
     if (isAuthenticated) {
       const socket = io(ENDPOINT);
       socket.emit("new-user", user.id);
