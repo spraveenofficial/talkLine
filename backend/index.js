@@ -10,6 +10,7 @@ import ProfileRoutes from "./routes/profile-routes.js";
 import RequestRoutes from "./routes/request-routes.js";
 import NotificationRoutes from "./routes/notification-routes.js";
 import MessageRoutes from "./routes/message-routes.js";
+import LikeRoutes from "./routes/like-routes.js";
 import { Server } from "socket.io";
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use("/v1/api/profile/", ProfileRoutes);
 app.use("/v1/api/friend/", RequestRoutes);
 app.use("/v1/api/notification/", NotificationRoutes);
 app.use("/v1/api/message/", MessageRoutes);
+app.use("/v1/api/like/", LikeRoutes);
 
 // Server initialize
 const serverRunning = app.listen(PORT, () =>
@@ -50,6 +52,8 @@ const io = new Server(serverRunning, {
     credentials: true,
   },
 });
+
+// Socket connnected Users List
 let users = [];
 
 const addUser = (userId, socketId) => {
