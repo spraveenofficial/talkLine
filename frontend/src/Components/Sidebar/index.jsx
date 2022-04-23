@@ -135,11 +135,10 @@ export function Sidebar() {
                 </p>
                 <p className="flex-wrap text-sm inline-block leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
                   <span
-                    // onClick={handleLogout}
                     onClick={() => setIsSelectedLogout(!isSelectedLogout)}
                     className="pointer text-black hover:text-gray-400"
                   >
-                    Logout?
+                    Logout
                   </span>
                 </p>
               </div>

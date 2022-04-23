@@ -8,6 +8,7 @@ import {
   Profile,
   UserProfile,
   Post,
+  Setting,
 } from "../../Pages";
 const HomeComponent = () => (
   <div className="flex relative h-full mobile:flex-col">
@@ -65,6 +66,13 @@ const PostComponent = () => (
   </div>
 );
 
+const SettingComponent = () => (
+  <div className="flex relative h-full mobile:flex-col">
+    <Sidebar />
+    <Setting />
+    <Home />
+  </div>
+);
 export {
   HomeComponent,
   ProfileComponent,
@@ -73,4 +81,5 @@ export {
   ExploreComponent,
   MessageComponent,
   PostComponent,
+  SettingComponent,
 };

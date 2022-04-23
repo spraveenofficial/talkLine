@@ -1,5 +1,10 @@
 import { SearchBarforSideBar } from "./searchBar";
+import { useNavigate } from "react-router-dom";
 export function RightSidebar() {
+  const navigate = useNavigate();
+  const navigateToExplore = () => {
+    navigate("/explore");
+  };
   return (
     <div className="sticky left-0 top-0 w-2/6 text-white flex flex-col h-screen mobile:w-full">
       <div className="pr-3 h-full flex flex-col">
@@ -69,7 +74,10 @@ export function RightSidebar() {
           <hr className="border-gray-800" />
           <div className="flex">
             <div className="flex-1 p-4">
-              <h2 className="px-4 ml-2 w-48 font-bold text-blue-400">
+              <h2
+                onClick={() => navigateToExplore()}
+                className="px-4 ml-2 font-bold text-blue-400 cursor-pointer"
+              >
                 Show more
               </h2>
             </div>

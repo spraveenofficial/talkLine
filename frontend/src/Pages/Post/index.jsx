@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getPost } from "../../Redux/Actions";
 import moment from "moment";
 import Picker from "emoji-picker-react";
 export function Post() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showEmoji, setShowEmoji] = useState(false);
   const [comment, setComment] = useState("");
@@ -20,6 +21,13 @@ export function Post() {
   const handleEmojiClick = (e, emojiObject) => {
     setShowEmoji(!showEmoji);
     setComment(comment + emojiObject.emoji);
+  };
+
+  const handleNavigateToProfile = () => {
+    if (user.id === post.userId) {
+      return navigate("/profile");
+    }
+    navigate(`/profile/${post.userId}`);
   };
   useEffect(() => {
     dispatch(getPost(postId));
@@ -58,7 +66,10 @@ export function Post() {
                   />
                 </div>
                 <div className="flex flex-col mb-2 ml-4 mt-1">
-                  <div className="text-gray-600 text-sm font-semibold">
+                  <div
+                    onClick={handleNavigateToProfile}
+                    className="text-gray-600 text-sm font-semibold cursor-pointer"
+                  >
                     {post.userName}
                   </div>
                   <div className="flex w-full mt-1">

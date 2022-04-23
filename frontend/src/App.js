@@ -10,9 +10,10 @@ import {
   ExploreComponent,
   MessageComponent,
   PostComponent,
+  SettingComponent,
 } from "./Components";
 import { GuestRoutes, ProtectedRoutes } from "./Utils/routes";
-import { verifyUser, nullUser } from "./Redux/Actions";
+import { verifyUser } from "./Redux/Actions";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 function App() {
@@ -49,6 +50,7 @@ function App() {
           <Route path="explore" element={<ExploreComponent />} />
           <Route path="messages" element={<MessageComponent />} />
           <Route path="post/:postId" element={<PostComponent />} />
+          <Route path="setting" element={<SettingComponent />} />
         </Route>
         <Route element={<GuestRoutes />}>
           <Route path="signup" element={<Signup />} />

@@ -171,7 +171,6 @@ export function CreatePost() {
                 </svg>
               </p>
             </div>
-
             <div
               onClick={() => setIsEmojiOpen(!isEmojiOpen)}
               className="flex-1 text-center py-2 m-2"
