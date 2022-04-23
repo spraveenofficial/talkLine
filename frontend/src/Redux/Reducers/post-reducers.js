@@ -70,7 +70,7 @@ export const feed = (
 };
 
 export const post = (
-  state = { loading: false, success: false, data: [], error: null },
+  state = { loading: true, success: false, data: [], error: null },
   action
 ) => {
   switch (action.type) {

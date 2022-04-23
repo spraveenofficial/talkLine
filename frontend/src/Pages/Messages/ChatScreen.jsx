@@ -26,7 +26,6 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
     (eachUser) => eachUser.userId === selectedId.id
   );
 
-
   useEffect(() => {
     dispatch(fetchChat(selectedId.id));
     socket.current.on("typing", () => setIsTyping(true));
@@ -37,11 +36,10 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
     scrollToBottom();
   }, [chats, isTyping]);
 
-
   useEffect(() => {
     socket.current.on("receiveMessage", (data) => {
       const checkIfThisExists = chats.find((chat) => chat.id !== data.id);
-      if (checkIfThisExists) {
+      if (!checkIfThisExists) {
         dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
       }
     });
@@ -83,7 +81,7 @@ export const ChatScreen = ({ socket, onLineFriends }) => {
         className="w-8 h-8 rounded-full mt-2 mr-1 cursor-pointer"
       />
       <div
-        class="flex flex-col space-y-2 text-xs border-1 items-start px-4 rounded-lg inline-block
+        className="flex flex-col space-y-2 text-xs border-1 items-start px-4 rounded-lg inline-block
 bg-gray-300 text-gray-600 rounded-bl-none justify-center"
       >
         <TypingIcon />

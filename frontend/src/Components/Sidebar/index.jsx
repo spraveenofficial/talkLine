@@ -116,7 +116,7 @@ export function Sidebar() {
 
           <div className="w-full flex p-4 mt-12">
             <div className="flex items-center w-full">
-              <div className="max-w-14 relative max-h-14 min-w-max">
+              <div className="relative max-h-14 min-w-max">
                 <img
                   className="h-14 w-14 rounded-full"
                   src={user.avatar}

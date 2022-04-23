@@ -22,8 +22,6 @@ function App() {
   useEffect(() => {
     if (token && !isAuthenticated) {
       dispatch(verifyUser());
-    } else {
-      dispatch(nullUser());
     }
   }, [dispatch, token]);
   if (loading) {

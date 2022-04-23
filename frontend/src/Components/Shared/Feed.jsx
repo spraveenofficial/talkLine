@@ -24,8 +24,8 @@ export function Feed() {
           return <EachPost key={eachPost._id} post={eachPost} />;
         })
       ) : (
-        <div className="w-full p-4 bg-indigo-100 flex text-center items-center gap-2 rounded-2xl">
-          <h2 className="text-2xl font-bold">Posts</h2>
+        <div className="w-full p-4 h-72 flex text-center items-center justify-center">
+          <h2 className="font-bold">No Posts found. Explore Friends first.</h2>
         </div>
       )}
     </div>

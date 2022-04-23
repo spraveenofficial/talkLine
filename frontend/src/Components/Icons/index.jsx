@@ -254,7 +254,7 @@ const SearchIcon = (props) => (
 );
 
 const TypingIcon = (props) => (
-  <svg {...props} class="w-5 h-4" viewBox="0 0 15 3">
+  <svg {...props} className="w-5 h-4" viewBox="0 0 15 3">
     <circle cx="1.5" cy="1.5" r="1.5">
       <animate
         attributeName="opacity"
