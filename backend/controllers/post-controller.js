@@ -18,10 +18,20 @@ const createPost = async (req, res) => {
     });
     try {
       const savedPost = await post.save();
+      const populatedPost = await Post.findById(savedPost._id).populate(
+        "userId",
+        "name avatar"
+      );
       res.status(200).json({
         success: true,
         message: "Post created successfully",
-        post: savedPost,
+        post: {
+          ...savedPost._doc,
+          userId: populatedPost.userId._id,
+          userName: populatedPost.userId.name,
+          userAvatar: populatedPost.userId.avatar,
+          isLiked: false,
+        },
       });
     } catch (error) {
       console.log(error);
@@ -45,10 +55,20 @@ const createPost = async (req, res) => {
     });
     try {
       const savedPost = await post.save();
+      const populatedPost = await Post.findById(savedPost._id).populate(
+        "userId",
+        "name avatar"
+      );
       res.status(200).json({
         success: true,
         message: "Post created successfully",
-        post: savedPost,
+        post: {
+          ...savedPost._doc,
+          userId: populatedPost.userId._id,
+          userName: populatedPost.userId.name,
+          userAvatar: populatedPost.userId.avatar,
+          isLiked: false,
+        },
       });
     } catch (error) {
       res.status(400).json({

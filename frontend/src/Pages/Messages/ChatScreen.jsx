@@ -118,7 +118,7 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
       </div>
       <div className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
         {loading ? (
-          <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center bg-slate-50">
+          <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center">
             <div
               className="w-10 mb-10 h-10 rounded-full animate-spin
                     border-2 border-dashed border-black-600 border-t-black mr-1"
@@ -126,7 +126,7 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
             <p>Loading.</p>
           </div>
         ) : !loading && chats.length == 0 ? (
-          <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center bg-slate-50">
+          <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center">
             <p>No Earlier Chats.</p>
           </div>
         ) : (

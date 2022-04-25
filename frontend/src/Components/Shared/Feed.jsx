@@ -12,7 +12,7 @@ export function Feed() {
   return (
     <div className="w-full bg-white block">
       {loading ? (
-        <div className="text-black flex-col w-full mt-5 flex justify-center align-center texts-center bg-slate-50">
+        <div className="text-black flex-col w-full mt-5 flex align-center texts-center min-h-screen">
           <div
             className="w-10 mb-10 h-10 rounded-full animate-spin
                   border-2 border-dashed border-black-600 border-t-black mr-1"

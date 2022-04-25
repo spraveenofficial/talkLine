@@ -8,6 +8,7 @@ import {
   POST_FETCH_REQUEST,
   POST_FETCH_SUCCESS,
   POST_FETCH_FAILURE,
+  ADD_POST_TO_FEED,
 } from "../Constants/post-constants";
 
 export const newPost = (
@@ -63,6 +64,11 @@ export const feed = (
         loading: false,
         success: false,
         error: action.payload,
+      };
+    case ADD_POST_TO_FEED:
+      return {
+        ...state,
+        posts: [action.payload, ...state.posts],
       };
     default:
       return state;

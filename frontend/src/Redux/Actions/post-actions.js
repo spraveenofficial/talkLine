@@ -10,6 +10,7 @@ import {
   POST_FETCH_REQUEST,
   POST_FETCH_SUCCESS,
   POST_FETCH_FAILURE,
+  ADD_POST_TO_FEED,
 } from "../Constants/post-constants";
 export const createNewPost = (post) => async (dispatch) => {
   try {
@@ -26,7 +27,11 @@ export const createNewPost = (post) => async (dispatch) => {
     });
     dispatch({
       type: NEW_POST_SUCCESS,
-      payload: data.data,
+      payload: data.post,
+    });
+    dispatch({
+      type: ADD_POST_TO_FEED,
+      payload: data.post,
     });
   } catch (error) {
     dispatch({
