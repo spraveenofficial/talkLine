@@ -210,3 +210,10 @@ input::-webkit-inner-spin-button {
   display: none;
 }
 
+.toggle-checkbox:checked {
+  right: 0;
+  border-color: var(--primary-color);
+}
+.toggle-checkbox:checked + .toggle-label {
+  background-color: var(--primary-color);
+}

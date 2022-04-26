@@ -11,34 +11,37 @@ export function EachPost(props) {
   };
   return (
     <div className="container w-full b">
-      <div className="flex items-center space-x-2 pt-4 p-4">
-        <img
-          className="w-12 h-12 rounded-full"
-          src={postData.userAvatar}
-          alt="sara"
-        />
-        <div>
-          <h2
-            onClick={navigateToUserProfile}
-            className="text-gray-800 font-bold cursor-pointer"
-          >
+      <div className="flex flex-row mt-2 px-2 py-3 mx-3">
+        <div className="w-auto h-auto rounded-full border-2 border-indigo-600">
+          <img
+            className="w-12 h-12 object-cover rounded-full shadow cursor-pointer"
+            alt="User avatar"
+            src={postData.userAvatar}
+          />
+        </div>
+        <div className="flex flex-col mb-2 ml-4 mt-1">
+          <div className="text-gray-600 text-sm font-semibold cursor-pointer">
             {postData.userName}
-          </h2>
-          <p className="text-sm font-semibold">
-            {moment(postData.createdAt).fromNow()}
-          </p>
+          </div>
+          <div className="flex w-full mt-1">
+            <div className="text-gray-400 font-thin text-xs">
+              {moment(postData.createdAt).fromNow()}
+            </div>
+          </div>
         </div>
       </div>
-      <div onClick={navigateToPost} className="p-4">
-        <p className="text-l font-bold text-gray-800 cursor-pointer">
+      <div className="border-b border-gray-100" />
+      <div onClick={navigateToPost} className="mt-5">
+        <div className="text-black font-medium text-sm mb-6 mx-3 px-2 cursor-pointer">
           {postData.caption}
-        </p>
+        </div>
       </div>
       {postData.isPhoto && (
         <img
           className="w-full h-80 cursor-pointer p-4 bg-no-repeat bg-center bg-cover"
           src={postData.photoUrl}
-          alt=""
+          alt={postData.caption}
+          onClick={navigateToPost}
         />
       )}
       <div className="flex p-4 justify-between">

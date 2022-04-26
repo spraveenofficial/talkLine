@@ -9,6 +9,8 @@ import {
   POST_FETCH_SUCCESS,
   POST_FETCH_FAILURE,
   ADD_POST_TO_FEED,
+  LIKE_UPDATE_REQUEST,
+  UNLIKE_UPDATE_REQUEST,
 } from "../Constants/post-constants";
 
 export const newPost = (
@@ -95,6 +97,28 @@ export const post = (
         loading: false,
         success: false,
         error: action.payload,
+      };
+    case LIKE_UPDATE_REQUEST:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          likes: {
+            likes: state.data.likes.likes + 1,
+            isLiked: true,
+          },
+        },
+      };
+    case UNLIKE_UPDATE_REQUEST:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          likes: {
+            likes: state.data.likes.likes - 1,
+            isLiked: false,
+          },
+        },
       };
     default:
       return state;

@@ -5,8 +5,10 @@ const createLike = async (req, res) => {
   const { postId } = req.body;
   const like = await Like.findOne({ userId: id, postId });
   if (like) {
-    return res.status(400).json({
-      message: "You already liked this post",
+    await Like.findByIdAndDelete(like._id);
+    return res.status(200).json({
+      success: false,
+      message: "Unliked success",
     });
   }
   const newLike = new Like({
@@ -15,7 +17,8 @@ const createLike = async (req, res) => {
   });
   await newLike.save();
   return res.status(200).json({
-    message: "Post liked",
+    success: true,
+    message: "Liked success",
   });
 };
 

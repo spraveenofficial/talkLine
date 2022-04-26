@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPost } from "../../Redux/Actions";
+import { getPost, likePost } from "../../Redux/Actions";
+import { LikeIcon, Toast } from "../../Components";
 import moment from "moment";
 import Picker from "emoji-picker-react";
 export function Post() {
   const navigate = useNavigate();
+  const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const [showEmoji, setShowEmoji] = useState(false);
   const [comment, setComment] = useState("");
@@ -32,6 +34,15 @@ export function Post() {
   useEffect(() => {
     dispatch(getPost(postId));
   }, []);
+
+  const handleLike = async () => {
+    setMessage("");
+    const response = await dispatch(likePost(postId));
+    if (response) {
+      return setMessage("You liked this post");
+    }
+    return setMessage("You unliked this post");
+  };
   if (!loading && error && !success) {
     return (
       <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center bg-slate-50">
@@ -41,7 +52,7 @@ export function Post() {
   }
   if (loading) {
     return (
-      <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center bg-slate-50">
+      <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center">
         <div
           className="w-10 mb-10 h-10 rounded-full animate-spin
                 border-2 border-dashed border-black-600 border-t-black mr-1"
@@ -53,7 +64,7 @@ export function Post() {
   return (
     !loading &&
     success && (
-      <div className="w-2/3 bg-white block mobile:w-full mobile:py-0">
+      <div className="w-2/3 bg-white block mobile:w-full mobile:py-0 min-h-full">
         <div className="flex bg-white shadow-md rounded-lg mx-auto">
           <div className="flex items-center w-full">
             <div className="w-full">
@@ -81,7 +92,7 @@ export function Post() {
               </div>
               <div className="border-b border-gray-100" />
               <div className="mt-5">
-                <div className="text-gray-500 font-thin text-sm mb-6 mx-3 px-2">
+                <div className="text-black font-medium text-sm mb-6 mx-3 px-2">
                   {post.caption}
                 </div>
               </div>
@@ -95,21 +106,15 @@ export function Post() {
               )}
               <div className="flex justify-start mb-4 border-t border-gray-100">
                 <div className="flex w-full mt-1 pt-2 pl-5">
-                  <span className="bg-white transition ease-out duration-300 hover:text-red-500 border w-8 h-8 px-2 pt-2 text-center rounded-full text-gray-400 cursor-pointer mr-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      width="14px"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                      />
-                    </svg>
+                  <span
+                    onClick={handleLike}
+                    className={`transition ease-out duration-300 hover:text-red-500 border w-8 h-8 px-2 pt-2 text-center rounded-full text-gray-400 cursor-pointer mr-2 ${
+                      likeData.isLiked ? "bg-blue-600" : "bg-white"
+                    }`}
+                  >
+                    <LikeIcon
+                      className={`${likeData.isLiked && "fill-white"}`}
+                    />
                   </span>
                   <img
                     className="inline-block object-cover w-8 h-8 text-white border-2 border-white rounded-full shadow-sm cursor-pointer"
@@ -236,6 +241,7 @@ export function Post() {
             </div>
           </div>
         </div>
+        {message && <Toast message={message} success={true} />}
       </div>
     )
   );

@@ -6,7 +6,7 @@ export function RightSidebar() {
     navigate("/explore");
   };
   return (
-    <div className="sticky left-0 top-0 w-2/6 text-white flex flex-col h-screen mobile:w-full">
+    <div className="sticky left-0 top-0 w-2/6 text-white flex flex-col h-screen mobile:w-full mobile:h-full">
       <div className="pr-3 h-full flex flex-col">
         <SearchBarforSideBar />
         <div className="max-w-full rounded-lg  bg-dim-700 overflow-hidden shadow-lg m-4">

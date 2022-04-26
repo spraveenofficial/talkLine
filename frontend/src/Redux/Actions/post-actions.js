@@ -11,6 +11,8 @@ import {
   POST_FETCH_SUCCESS,
   POST_FETCH_FAILURE,
   ADD_POST_TO_FEED,
+  LIKE_UPDATE_REQUEST,
+  UNLIKE_UPDATE_REQUEST,
 } from "../Constants/post-constants";
 export const createNewPost = (post) => async (dispatch) => {
   try {
@@ -100,5 +102,31 @@ export const getPost = (id) => async (dispatch) => {
           ? error.response.data.message
           : error.message,
     });
+  }
+};
+
+export const likePost = (id) => async (dispatch) => {
+  try {
+    const { data } = await axios({
+      method: "POST",
+      url: `${baseUrl}/like`,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+      data: {
+        postId: id,
+      },
+    });
+    if (data.success) {
+      return dispatch({
+        type: LIKE_UPDATE_REQUEST,
+      });
+    }
+    dispatch({
+      type: UNLIKE_UPDATE_REQUEST,
+    });
+    return data.success ? true : false;
+  } catch (error) {
+    return false;
   }
 };
