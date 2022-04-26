@@ -38,7 +38,7 @@ const SocketContextProvider = ({ children }) => {
         payload: socket,
       });
     }
-  }, [user]);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (state.socket) {
@@ -48,8 +48,9 @@ const SocketContextProvider = ({ children }) => {
           payload: users,
         });
       });
+      console.log("connected", state.onlineFriends);
     }
-  }, [user]);
+  }, [state.socket]);
   return (
     <SocketContext.Provider
       value={{ socket: state.socket, onlineFriends: state.onlineFriends }}
