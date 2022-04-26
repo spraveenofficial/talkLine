@@ -2,8 +2,12 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal, PencilIcon } from "../../Components";
 import { updateBio } from "../../Redux/Actions";
+import { AnimatePresence, motion } from "framer-motion";
+import { initialTabs as tabs } from "../../Components/Shared/Profile-tabs";
+import { CreatePostProfile } from "../../Components/Shared/Create-post-profile";
 export function Profile() {
   const dispatch = useDispatch();
+  const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const { user } = useSelector((state) => state.auth);
   const [isOpenToChangeBio, setIsOpenToChangeBio] = useState(false);
 
@@ -42,7 +46,7 @@ export function Profile() {
     );
   };
   return (
-    <div className="w-2/3 bg-white block py-10 mobile:w-full">
+    <div className="w-2/3 bg-white blockW mobile:w-full">
       <ModalToUpdateBio />
       <div className="mx-auto">
         <div className="w-full">
@@ -72,27 +76,34 @@ export function Profile() {
           <button className="bg-red-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-red-800">
             Deactivate account
           </button>
-          <div className="pt-8 flex gap-8">
-            <div className="flex flex-col">
-              <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-20"></div>
-              <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-20"></div>
+          <CreatePostProfile />
+          <div className="window">
+            <div>
+              <ul className="flex">
+                {tabs.map((item) => (
+                  <li
+                    key={item.label}
+                    className={item === selectedTab ? "selected flex" : "flex"}
+                    onClick={() => setSelectedTab(item)}
+                  >
+                    {`${item.icon} ${item.label}`}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="flex flex-col">
-              <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-20"></div>
-              <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-20"></div>
-            </div>
-            <div className="flex flex-col">
-              <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-20"></div>
-              <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-20"></div>
-            </div>
-            <div className="flex flex-col">
-              <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-20"></div>
-              <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-20"></div>
-            </div>
-          </div>
-          <div className="py-5 break-all bbcode">
-            <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-44"></div>
-            <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-full h-40"></div>
+            <main>
+              <AnimatePresence exitBeforeEnter>
+                <motion.div
+                  key={selectedTab ? selectedTab.label : "empty"}
+                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  {selectedTab ? selectedTab.component : "😋"}
+                </motion.div>
+              </AnimatePresence>
+            </main>
           </div>
         </div>
       </div>

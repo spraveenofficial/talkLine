@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Modal, Promotion, Feed } from "..";
+import { Modal } from "..";
 import { createNewPost } from "../../Redux/Actions";
 import Picker from "emoji-picker-react";
-export function CreatePost() {
+export function CreatePostProfile() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const state = useSelector((state) => state.newPost);
@@ -83,10 +83,8 @@ export function CreatePost() {
   );
 
   return (
-    <div className="w-2/3 border mb-4 border-gray-600 h-auto border-t-1 mobile:w-full">
-      <Promotion />
+    <div className="w-full mt-4 border border-gray-600 h-auto mobile:w-full">
       <ModalToUploadPhoto />
-      <hr className="border-gray-600" />
       <div className="flex">
         <div className="w-auto h-fit m-2 rounded-full border-2 border-indigo-600">
           <img
@@ -207,9 +205,6 @@ export function CreatePost() {
           </button>
         </div>
       </div>
-
-      <hr className="border-indigo-600 border-1" />
-      <Feed />
     </div>
   );
 }

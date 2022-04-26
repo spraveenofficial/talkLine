@@ -125,9 +125,9 @@ const verifyUser = async (req, res) => {
         return friend.senderId;
       }
     });
-    const friendsList = await User.find({ _id: { $in: friends } }).select(
-      "id name avatar bio"
-    );
+    const friendsList = await User.find({ _id: { $in: friends } })
+      .select("id name avatar bio")
+      .sort({ updatedAt: -1 });
     res.json({
       message: "User verified successfully",
       success: true,
