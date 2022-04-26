@@ -99,7 +99,7 @@ export function Post() {
               {post.isPhoto && (
                 <div className="text-gray-400 font-medium text-sm mb-7 mt-6 mx-3 px-2">
                   <img
-                    className="object-cover rounded w-full h-80 bg-no-repeat"
+                    className="object-cover rounded w-full h-80 bg-dunes bg-cover bg-center object-cover"
                     src={post.photoUrl}
                   />
                 </div>

@@ -25,6 +25,18 @@ export function CreatePost() {
     setCaption(caption + emojiObject.emoji);
     setIsEmojiOpen(false);
   };
+  const handleNewPost = () => {
+    if (caption === "") return;
+    dispatch(
+      createNewPost({
+        caption,
+        isPhoto: selectedImage !== null ? true : false,
+        photoUrl: selectedImage,
+      })
+    );
+    setCaption("");
+    setSelectedImage(null);
+  };
   const ModalToUploadPhoto = () => (
     <Modal isOpen={isFileUploadOpen}>
       <div className="extraOutline mb-5 justify-center p-4 bg-white w-max bg-whtie m-auto rounded-lg">
@@ -48,6 +60,7 @@ export function CreatePost() {
               <input
                 className="text-sm cursor-pointer w-36 hidden"
                 type="file"
+                accept="image/png, image/gif, image/jpeg"
                 onChange={handleSelectImage}
               />
               <div className="text bg-indigo-600 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-indigo-500">
@@ -68,18 +81,6 @@ export function CreatePost() {
       </div>
     </Modal>
   );
-
-  const handleNewPost = () => {
-    dispatch(
-      createNewPost({
-        caption,
-        isPhoto: selectedImage !== null ? true : false,
-        photoUrl: selectedImage,
-      })
-    );
-    setCaption("");
-    setSelectedImage(null);
-  };
 
   return (
     <div className="w-2/3 border mb-4 border-gray-600 h-auto border-t-1 mobile:w-full">

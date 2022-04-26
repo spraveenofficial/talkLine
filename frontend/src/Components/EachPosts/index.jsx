@@ -1,10 +1,15 @@
 import moment from "moment";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 export function EachPost(props) {
+  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const postData = props.post;
   const navigateToUserProfile = () => {
-    navigate(`/user/${postData.userId}`);
+    if (user.id !== postData.userId) {
+      return navigate(`/user/${postData.userId}`);
+    }
+    return navigate("/profile");
   };
   const navigateToPost = () => {
     navigate(`/post/${postData._id}`);
@@ -20,7 +25,10 @@ export function EachPost(props) {
           />
         </div>
         <div className="flex flex-col mb-2 ml-4 mt-1">
-          <div className="text-gray-600 text-sm font-semibold cursor-pointer">
+          <div
+            onClick={navigateToUserProfile}
+            className="text-gray-600 text-sm font-semibold cursor-pointer hover:text-black"
+          >
             {postData.userName}
           </div>
           <div className="flex w-full mt-1">
