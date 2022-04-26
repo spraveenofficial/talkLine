@@ -29,7 +29,7 @@ export function Post() {
     if (user.id === post.userId) {
       return navigate("/profile");
     }
-    navigate(`/profile/${post.userId}`);
+    navigate(`/user/${post.userId}`);
   };
   useEffect(() => {
     dispatch(getPost(postId));
