@@ -10,7 +10,9 @@ import {
   EXPLORE_PERSONS_SUCCESS,
   EXPLORE_PERSONS_FAILURE,
   SEND_REQUEST_FROM_EXPLORE,
+  SET_USER_POSTS,
 } from "../Constants/profile-constants";
+
 export const profile = (
   state = {
     error: false,
@@ -18,6 +20,7 @@ export const profile = (
     success: false,
     user: {},
     message: "",
+    posts: [],
   },
   action
 ) => {
@@ -81,6 +84,11 @@ export const profile = (
             haveToAccept: false,
           },
         },
+      };
+    case SET_USER_POSTS:
+      return {
+        ...state,
+        posts: action.payload,
       };
     default:
       return state;
