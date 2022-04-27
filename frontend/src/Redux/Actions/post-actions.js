@@ -11,8 +11,6 @@ import {
   POST_FETCH_SUCCESS,
   POST_FETCH_FAILURE,
   ADD_POST_TO_FEED,
-  LIKE_UPDATE_REQUEST,
-  UNLIKE_UPDATE_REQUEST,
 } from "../Constants/post-constants";
 export const createNewPost = (post) => async (dispatch) => {
   try {
@@ -117,15 +115,7 @@ export const likePost = (id) => async (dispatch) => {
         postId: id,
       },
     });
-    if (data.success) {
-      return dispatch({
-        type: LIKE_UPDATE_REQUEST,
-      });
-    }
-    dispatch({
-      type: UNLIKE_UPDATE_REQUEST,
-    });
-    return data.success ? true : false;
+    return data.success;
   } catch (error) {
     return false;
   }

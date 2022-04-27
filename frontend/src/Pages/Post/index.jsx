@@ -39,8 +39,14 @@ export function Post() {
     setMessage("");
     const response = await dispatch(likePost(postId));
     if (response) {
+      dispatch({
+        type: "LIKE_UPDATE_REQUEST",
+      });
       return setMessage("You liked this post");
     }
+    dispatch({
+      type: "UNLIKE_UPDATE_REQUEST",
+    });
     return setMessage("You unliked this post");
   };
   if (!loading && error && !success) {

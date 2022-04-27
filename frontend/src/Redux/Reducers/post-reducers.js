@@ -11,6 +11,8 @@ import {
   ADD_POST_TO_FEED,
   LIKE_UPDATE_REQUEST,
   UNLIKE_UPDATE_REQUEST,
+  UPDATE_LIKE_FEED,
+  UPDATE_UNLIKE_FEED,
 } from "../Constants/post-constants";
 
 export const newPost = (
@@ -71,6 +73,38 @@ export const feed = (
       return {
         ...state,
         posts: [action.payload, ...state.posts],
+      };
+    case UPDATE_LIKE_FEED:
+      return {
+        ...state,
+        posts: state.posts.map((post) => {
+          if (post._id === action.payload) {
+            return {
+              ...post,
+              likes: {
+                count: post.likes.count + 1,
+                isLiked: true,
+              },
+            };
+          }
+          return post;
+        }),
+      };
+    case UPDATE_UNLIKE_FEED:
+      return {
+        ...state,
+        posts: state.posts.map((post) => {
+          if (post._id === action.payload) {
+            return {
+              ...post,
+              likes: {
+                count: post.likes.count - 1,
+                isLiked: false,
+              },
+            };
+          }
+          return post;
+        }),
       };
     default:
       return state;

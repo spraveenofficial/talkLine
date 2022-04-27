@@ -3,7 +3,6 @@ import imageService from "../services/image-services.js";
 import Like from "../models/Like.js";
 import FriendRequest from "../models/Friend-request.js";
 
-
 // @desc    Create Post
 // @route   POST /api/v1/post/create-post
 // @access  Private
@@ -81,7 +80,6 @@ const createPost = async (req, res) => {
   }
 };
 
-
 // @desc    Get Post of a user
 // @route   GET /api/v1/post
 // @access  Private
@@ -103,7 +101,6 @@ const getPostsOfEachUser = async (req, res) => {
   }
 };
 
-
 // @desc    Get Posts for Home Page of friends and me
 // @route   GET /api/v1/post/feed
 // @access  Private
@@ -117,7 +114,6 @@ const getPosts = async (req, res) => {
       { receiverId: id, status: "accepted" },
     ],
   }).select();
-  // Get Posts of my and my friends who's status is accepted
   const friends = acceptedFriends.map((friend) => {
     if (friend.senderId.toString() === id) {
       return friend.receiverId.toString();
@@ -137,6 +133,9 @@ const getPosts = async (req, res) => {
       posts,
     });
   }
+  const likes = await Like.find({
+    postId: { $in: posts.map((post) => post._id.toString()) },
+  });
   res.status(200).json({
     success: true,
     message: "Posts fetched successfully",
@@ -146,11 +145,23 @@ const getPosts = async (req, res) => {
         userId: post.userId._id,
         userName: post.userId.name,
         userAvatar: post.userId.avatar,
+        likes: {
+          count: likes.filter(
+            (like) => like.postId.toString() === post._id.toString()
+          ).length,
+          isLiked: likes.some((like) => {
+            return (
+              like.postId.toString() === post._id.toString() &&
+              like.userId.toString() === id
+            );
+          })
+            ? true
+            : false,
+        },
       };
     }),
   });
 };
-
 
 // @desc    Get each post
 // @route   GET /api/v1/post/:postId

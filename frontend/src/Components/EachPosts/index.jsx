@@ -1,11 +1,16 @@
 import moment from "moment";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { LikeIcon } from "../Icons";
+import { likePost } from "../../Redux/Actions";
+import { LikeIcon, Toast } from "..";
+import { useState } from "react";
 export function EachPost(props) {
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const post = props.post;
+  const like = props.post.likes;
+  const [message, setMessage] = useState("");
   const navigateToUserProfile = () => {
     if (user.id !== post.userId) {
       return navigate(`/user/${post.userId}`);
@@ -14,6 +19,23 @@ export function EachPost(props) {
   };
   const navigateToPost = () => {
     navigate(`/post/${post._id}`);
+  };
+  const handleLike = async () => {
+    setMessage("");
+    const response = await dispatch(likePost(post._id));
+    if (response) {
+      dispatch({
+        type: "UPDATE_LIKE_FEED",
+        payload: post._id,
+      });
+      return setMessage("You liked this post");
+    } else {
+      dispatch({
+        type: "UPDATE_UNLIKE_FEED",
+        payload: post._id,
+      });
+      return setMessage("You unliked this post");
+    }
   };
   return (
     <div className="container w-full b">
@@ -53,35 +75,21 @@ export function EachPost(props) {
           onClick={navigateToPost}
         />
       )}
-      <div className="flex justify-start mb-4 border-t border-gray-100">
+      <div className="flex justify-start mb-4 border-t border-gray-100 texts-center item-center">
         <div className="flex w-full mt-1 pt-2 pl-5">
           <span
-            className={`transition ease-out duration-300 hover:text-red-500 border w-8 h-8 px-2 pt-2 text-center rounded-full text-gray-400 cursor-pointer mr-2
-                     "bg-blue-600  bg-white
-                    }`}
+            className={`transition ease-out duration-300 hover:text-red-500 border w-8 h-8 px-2 pt-2 text-center rounded-full text-gray-400 cursor-pointer mr-2 ${
+              like.isLiked ? "bg-blue-600" : "bg-white"
+            }`}
+            onClick={handleLike}
           >
-            <LikeIcon />
+            <LikeIcon className={`${like.isLiked && "fill-white"}`} />
           </span>
-          <img
-            className="inline-block object-cover w-8 h-8 text-white border-2 border-white rounded-full shadow-sm cursor-pointer"
-            src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt=""
-          />
-          <img
-            className="inline-block object-cover w-8 h-8 -ml-2 text-white border-2 border-white rounded-full shadow-sm cursor-pointer"
-            src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt=""
-          />
-          <img
-            className="inline-block object-cover w-8 h-8 -ml-2 text-white border-2 border-white rounded-full shadow-sm cursor-pointer"
-            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80"
-            alt=""
-          />
-          <img
-            className="inline-block object-cover w-8 h-8 -ml-2 text-white border-2 border-white rounded-full shadow-sm cursor-pointer"
-            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-            alt=""
-          />
+          <p className="mt-2 text-gray-600 text-sm">{`${
+            like.isLiked
+              ? `You ${like.count > 1 ? `and ${like.count - 1} other` : ""}`
+              : like.count
+          }`}</p>
         </div>
         <div className="flex justify-end w-full mt-1 pt-2 pr-5">
           <span className="transition ease-out duration-300 hover:bg-blue-50 bg-blue-100 h-8 px-2 py-2 text-center rounded-full text-blue-400 cursor-pointer mr-2">
@@ -118,6 +126,7 @@ export function EachPost(props) {
           </span>
         </div>
       </div>
+      {message && <Toast message={message} success={true} />}
       <hr className="border-gray-600" />
     </div>
   );
