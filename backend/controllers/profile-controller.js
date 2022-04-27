@@ -1,5 +1,7 @@
 import User from "../models/User.js";
 import FriendRequest from "../models/Friend-request.js";
+
+
 // @desc    Get User Profile
 // @route   GET /api/v1/friend
 // @access  Private

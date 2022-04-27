@@ -6,6 +6,7 @@ import userService from "../services/user-services.js";
 import Email from "../services/email-services.js";
 import imageServices from "../services/image-services.js";
 import FriendRequest from "../models/Friend-request.js";
+
 // @desc    Send OTP
 // @route   POST /api/v1/auth/send-otp
 // @access  Public
@@ -18,14 +19,25 @@ const sendOtp = async (req, res) => {
   const hash = hashServices.hashOtp(data);
   const user = new User({ name, email, password });
   try {
-    const saveUser = await user.save();
-    const sendEmailWithOtp = await Email.sendSignupOtp(email, otp);
-    res.status(200).json({
-      success: true,
-      message: "User created successfully",
-      hash: `${hash}.${expires}`,
-      otp: otp,
-    });
+    const checkIFUserExists = await User.findOne({ email });
+    if (checkIFUserExists && !checkIFUserExists.isActivated) {
+      const sendEmailWithOtp = await Email.sendSignupOtp(email, otp);
+      return res.status(200).json({
+        success: true,
+        message: "User created successfully",
+        hash: `${hash}.${expires}`,
+        otp: otp,
+      });
+    } else {
+      const sendEmailWithOtp = await Email.sendSignupOtp(email, otp);
+      await user.save();
+      res.status(200).json({
+        success: true,
+        message: "User created successfully",
+        hash: `${hash}.${expires}`,
+        otp: otp,
+      });
+    }
   } catch (error) {
     if (error.code === 11000) {
       res.status(400).json({
@@ -140,6 +152,10 @@ const verifyUser = async (req, res) => {
   }
 };
 
+// @desc    Login User with Email and Password and the user is activated
+// @route   POST /api/v1/auth/login
+// @access  Public
+
 const loginUsingOtp = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -149,7 +165,7 @@ const loginUsingOtp = async (req, res) => {
         .status(404)
         .json({ success: false, message: "User not found!" });
     }
-    if (user && (await user.matchPassword(password))) {
+    if (user && user.isActivated && (await user.matchPassword(password))) {
       const otp = await otpServices.generateOtp();
       const ttl = 1000 * 60 * 2; // 2 min
       const expires = Date.now() + ttl;
@@ -165,20 +181,19 @@ const loginUsingOtp = async (req, res) => {
         otp: otp,
       });
     } else if (!user) {
-      return res.json({
+      return res.status(400).json({
         message: "User Not Found, Signup Now",
         statusCode: 500,
         success: false,
       });
     } else {
-      return res.json({
+      return res.status(501).json({
         message: "Invalid Password",
         statusCode: 500,
         success: false,
       });
     }
   } catch (err) {
-    console.log(err);
     return res
       .status(500)
       .json({ success: false, message: "Something went wrong!" });

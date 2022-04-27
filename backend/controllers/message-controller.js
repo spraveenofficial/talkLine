@@ -9,7 +9,6 @@ const accessChats = async (req, res) => {
   const { id } = req.data;
   const { userId } = req.body;
   try {
-    // Find chats between two users and populate sender and receiver
     let chats = await Message.find({
       $or: [
         { sender: userId, receiver: id },
@@ -38,6 +37,10 @@ const accessChats = async (req, res) => {
     });
   }
 };
+
+// @desc    Send Message to a user
+// @route   POST /api/v1/chats/send
+// @access  Private
 
 const sendMessage = async (req, res) => {
   const { id } = req.data;

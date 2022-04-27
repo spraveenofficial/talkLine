@@ -1,5 +1,9 @@
 import Like from "../models/Like.js";
 
+// @desc    Like and dislike a post
+// @route   POST /api/v1/like
+// @access  Private
+
 const createLike = async (req, res) => {
   const { id } = req.data;
   const { postId } = req.body;

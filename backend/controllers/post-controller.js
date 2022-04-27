@@ -2,6 +2,8 @@ import Post from "../models/Post.js";
 import imageService from "../services/image-services.js";
 import Like from "../models/Like.js";
 import FriendRequest from "../models/Friend-request.js";
+
+
 // @desc    Create Post
 // @route   POST /api/v1/post/create-post
 // @access  Private
@@ -79,8 +81,9 @@ const createPost = async (req, res) => {
   }
 };
 
+
 // @desc    Get Post of a user
-// @route   POST /api/v1/post
+// @route   GET /api/v1/post
 // @access  Private
 
 const getPostsOfEachUser = async (req, res) => {
@@ -99,6 +102,11 @@ const getPostsOfEachUser = async (req, res) => {
     });
   }
 };
+
+
+// @desc    Get Posts for Home Page of friends and me
+// @route   GET /api/v1/post/feed
+// @access  Private
 
 const getPosts = async (req, res) => {
   // Get Posts of my and my friends who's status is accepted
@@ -143,6 +151,11 @@ const getPosts = async (req, res) => {
   });
 };
 
+
+// @desc    Get each post
+// @route   GET /api/v1/post/:postId
+// @access  Private
+
 const getEachPost = async (req, res) => {
   const { id } = req.data;
   const { postId } = req.params;
@@ -170,4 +183,6 @@ const getEachPost = async (req, res) => {
     },
   });
 };
+
+// Export all the functions
 export { createPost, getPostsOfEachUser, getPosts, getEachPost };
