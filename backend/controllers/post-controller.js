@@ -2,7 +2,7 @@ import Post from "../models/Post.js";
 import imageService from "../services/image-services.js";
 import Like from "../models/Like.js";
 import FriendRequest from "../models/Friend-request.js";
-
+import Bookmark from "../models/Bookmark.js";
 // @desc    Create Post
 // @route   POST /api/v1/post/create-post
 // @access  Private
@@ -136,6 +136,9 @@ const getPosts = async (req, res) => {
   const likes = await Like.find({
     postId: { $in: posts.map((post) => post._id.toString()) },
   });
+  const checkIfBookmarked = await Bookmark.find({
+    postId: { $in: posts.map((post) => post._id.toString()) },
+  });
   res.status(200).json({
     success: true,
     message: "Posts fetched successfully",
@@ -145,6 +148,9 @@ const getPosts = async (req, res) => {
         userId: post.userId._id,
         userName: post.userId.name,
         userAvatar: post.userId.avatar,
+        isBookmarked: checkIfBookmarked.some(
+          (bookmark) => bookmark.postId.toString() === post._id.toString()
+        ),
         likes: {
           count: likes.filter(
             (like) => like.postId.toString() === post._id.toString()
@@ -179,6 +185,10 @@ const getEachPost = async (req, res) => {
       message: "Post not found",
     });
   }
+  const checkIfBookmarked = await Bookmark.find({
+    postId,
+    userId: id,
+  });
   res.status(200).json({
     success: true,
     message: "Post fetched successfully",
@@ -187,6 +197,7 @@ const getEachPost = async (req, res) => {
       userId: post.userId._id,
       userName: post.userId.name,
       userAvatar: post.userId.avatar,
+      isBookmarked: checkIfBookmarked.length > 0 ? true : false,
     },
     likeData: {
       likes: likes.length,

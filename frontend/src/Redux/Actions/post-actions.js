@@ -120,3 +120,21 @@ export const likePost = (id) => async (dispatch) => {
     return false;
   }
 };
+
+export const bookmark = (id) => async (dispatch) => {
+  try {
+    const { data } = await axios({
+      method: "POST",
+      url: `${baseUrl}/bookmark`,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+      data: {
+        postId: id,
+      },
+    });
+    return data.success;
+  } catch (error) {
+    return false;
+  }
+};

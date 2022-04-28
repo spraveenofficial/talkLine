@@ -1,8 +1,8 @@
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { likePost } from "../../Redux/Actions";
-import { LikeIcon, Toast } from "..";
+import { bookmark, likePost } from "../../Redux/Actions";
+import { LikeIcon, Toast, BookMarkIcon } from "..";
 import { useState } from "react";
 export function EachPost(props) {
   const { user } = useSelector((state) => state.auth);
@@ -35,6 +35,24 @@ export function EachPost(props) {
         payload: post._id,
       });
       return setMessage("You unliked this post");
+    }
+  };
+
+  const handleBookmark = async () => {
+    setMessage("");
+    const response = await dispatch(bookmark(post._id));
+    if (response) {
+      dispatch({
+        type: "UPDATE_BOOKMARK_FEED",
+        payload: { id: post._id, status: true },
+      });
+      return setMessage("Bookmarked this post");
+    } else {
+      dispatch({
+        type: "UPDATE_BOOKMARK_FEED",
+        payload: { id: post._id, status: false },
+      });
+      return setMessage("Unbookmarked this post");
     }
   };
   return (
@@ -108,21 +126,13 @@ export function EachPost(props) {
               />
             </svg>
           </span>
-          <span className="transition ease-out duration-300 hover:bg-blue-500 bg-blue-600 h-8 px-2 py-2 text-center rounded-full text-gray-100 cursor-pointer">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              width="14px"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-              />
-            </svg>
+          <span
+            onClick={handleBookmark}
+            className={`transition ease-out duration-300 border w-8 h-8 px-2 pt-2 text-center rounded-full cursor-pointer mr-2 ${
+              post.isBookmarked ? "bg-blue-600 text-white" : "bg-white-100"
+            }`}
+          >
+            <BookMarkIcon className={`h-4 w-4 top-0`} />
           </span>
         </div>
       </div>

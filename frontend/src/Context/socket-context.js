@@ -48,7 +48,6 @@ const SocketContextProvider = ({ children }) => {
           payload: users,
         });
       });
-      console.log("connected", state.onlineFriends);
     }
   }, [state.socket]);
   return (

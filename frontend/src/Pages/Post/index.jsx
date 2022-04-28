@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPost, likePost } from "../../Redux/Actions";
-import { LikeIcon, Toast } from "../../Components";
+import { getPost, likePost, bookmark } from "../../Redux/Actions";
+import { LikeIcon, Toast, BookMarkIcon } from "../../Components";
 import moment from "moment";
 import Picker from "emoji-picker-react";
 export function Post() {
@@ -48,6 +48,23 @@ export function Post() {
       type: "UNLIKE_UPDATE_REQUEST",
     });
     return setMessage("You unliked this post");
+  };
+
+  const handleBookMark = async () => {
+    setMessage("");
+    const response = await dispatch(bookmark(postId));
+    if (response) {
+      dispatch({
+        type: "BOOKMARK_UPDATE_REQUEST",
+        payload: true,
+      });
+      return setMessage("You bookmarked this post");
+    }
+    dispatch({
+      type: "BOOKMARK_UPDATE_REQUEST",
+      payload: false,
+    });
+    return setMessage("You unbookmarked this post");
   };
   if (!loading && error && !success) {
     return (
@@ -122,26 +139,15 @@ export function Post() {
                       className={`${likeData.isLiked && "fill-white"}`}
                     />
                   </span>
-                  <img
-                    className="inline-block object-cover w-8 h-8 text-white border-2 border-white rounded-full shadow-sm cursor-pointer"
-                    src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
-                  <img
-                    className="inline-block object-cover w-8 h-8 -ml-2 text-white border-2 border-white rounded-full shadow-sm cursor-pointer"
-                    src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
-                  <img
-                    className="inline-block object-cover w-8 h-8 -ml-2 text-white border-2 border-white rounded-full shadow-sm cursor-pointer"
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80"
-                    alt=""
-                  />
-                  <img
-                    className="inline-block object-cover w-8 h-8 -ml-2 text-white border-2 border-white rounded-full shadow-sm cursor-pointer"
-                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                    alt=""
-                  />
+                  <p className="mt-2 text-gray-600 text-sm">{`${
+                    likeData.isLiked
+                      ? `You ${
+                          likeData.likes > 1
+                            ? `and ${likeData.likes - 1} other`
+                            : ""
+                        }`
+                      : likeData.likes
+                  }`}</p>
                 </div>
                 <div className="flex justify-end w-full mt-1 pt-2 pr-5">
                   <span className="transition ease-out duration-300 hover:bg-blue-50 bg-blue-100 h-8 px-2 py-2 text-center rounded-full text-blue-400 cursor-pointer mr-2">
@@ -160,32 +166,20 @@ export function Post() {
                       />
                     </svg>
                   </span>
-                  <span className="transition ease-out duration-300 hover:bg-blue-500 bg-blue-600 h-8 px-2 py-2 text-center rounded-full text-gray-100 cursor-pointer">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      width="14px"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                      />
-                    </svg>
+                  <span
+                    onClick={handleBookMark}
+                    className={`transition ease-out duration-300 border w-8 h-8 px-2 pt-2 text-center rounded-full cursor-pointer mr-2 ${
+                      post.isBookmarked
+                        ? "bg-blue-600 text-white"
+                        : "bg-white-100"
+                    }`}
+                  >
+                    <BookMarkIcon className={`h-4 w-4`} />
                   </span>
                 </div>
               </div>
               <div className="flex w-full border-t border-gray-100">
                 <div className="mt-3 mx-5 flex flex-row">
-                  <div className="flex text-gray-700 font-normal text-sm rounded-md mb-2 mr-4 items-center">
-                    Likes:
-                    <div className="ml-1 text-gray-400 font-thin text-ms">
-                      {likeData.likes}
-                    </div>
-                  </div>
                   <div className="flex text-gray-700 font-normal text-sm rounded-md mb-2 mr-4 items-center">
                     Comments:
                     <div className="ml-1 text-gray-400 font-thin text-ms">

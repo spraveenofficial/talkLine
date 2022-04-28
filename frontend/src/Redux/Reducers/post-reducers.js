@@ -13,6 +13,8 @@ import {
   UNLIKE_UPDATE_REQUEST,
   UPDATE_LIKE_FEED,
   UPDATE_UNLIKE_FEED,
+  BOOKMARK_UPDATE_REQUEST,
+  UPDATE_BOOKMARK_FEED,
 } from "../Constants/post-constants";
 
 export const newPost = (
@@ -106,6 +108,19 @@ export const feed = (
           return post;
         }),
       };
+    case UPDATE_BOOKMARK_FEED:
+      return {
+        ...state,
+        posts: state.posts.map((post) => {
+          if (post._id === action.payload.id) {
+            return {
+              ...post,
+              isBookmarked: action.payload.status,
+            };
+          }
+          return post;
+        }),
+      };
     default:
       return state;
   }
@@ -151,6 +166,17 @@ export const post = (
           likes: {
             likes: state.data.likes.likes - 1,
             isLiked: false,
+          },
+        },
+      };
+    case BOOKMARK_UPDATE_REQUEST:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          post: {
+            ...state.data.post,
+            isBookmarked: action.payload,
           },
         },
       };

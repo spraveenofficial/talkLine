@@ -11,6 +11,7 @@ import RequestRoutes from "./routes/request-routes.js";
 import NotificationRoutes from "./routes/notification-routes.js";
 import MessageRoutes from "./routes/message-routes.js";
 import LikeRoutes from "./routes/like-routes.js";
+import BookMarkRoutes from "./routes/bookmark-routes.js";
 import { Server } from "socket.io";
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use("/v1/api/friend/", RequestRoutes);
 app.use("/v1/api/notification/", NotificationRoutes);
 app.use("/v1/api/message/", MessageRoutes);
 app.use("/v1/api/like/", LikeRoutes);
+app.use("/v1/api/bookmark/", BookMarkRoutes);
 
 // Server initialize
 const serverRunning = app.listen(PORT, () =>
