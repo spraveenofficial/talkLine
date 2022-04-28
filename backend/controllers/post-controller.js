@@ -31,7 +31,11 @@ const createPost = async (req, res) => {
           userId: populatedPost.userId._id,
           userName: populatedPost.userId.name,
           userAvatar: populatedPost.userId.avatar,
-          isLiked: false,
+          isBookmarked: false,
+          likes: {
+            count: 0,
+            isLiked: false,
+          },
         },
       });
     } catch (error) {
@@ -68,7 +72,11 @@ const createPost = async (req, res) => {
           userId: populatedPost.userId._id,
           userName: populatedPost.userId.name,
           userAvatar: populatedPost.userId.avatar,
-          isLiked: false,
+          isBookmarked: false,
+          likes: {
+            count: 0,
+            isLiked: false,
+          },
         },
       });
     } catch (error) {

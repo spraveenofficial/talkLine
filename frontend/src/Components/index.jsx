@@ -45,6 +45,7 @@ export {
   MessageComponent,
   PostComponent,
   SettingComponent,
+  BookMarkComponent,
 } from "./Shared/RenderFragment";
 
 export { ProfileButton } from "./Shared/User-Profile";

@@ -15,6 +15,9 @@ import {
   UPDATE_UNLIKE_FEED,
   BOOKMARK_UPDATE_REQUEST,
   UPDATE_BOOKMARK_FEED,
+  BOOKMARK_FETCH_REQUEST,
+  BOOKMARK_FETCH_SUCCESS,
+  BOOKMARK_FETCH_FAILURE,
 } from "../Constants/post-constants";
 
 export const newPost = (
@@ -179,6 +182,32 @@ export const post = (
             isBookmarked: action.payload,
           },
         },
+      };
+    default:
+      return state;
+  }
+};
+
+export const bookmark = (
+  state = { loading: false, success: false, data: [], error: null },
+  action
+) => {
+  switch (action.type) {
+    case BOOKMARK_FETCH_REQUEST:
+      return { ...state, loading: true };
+    case BOOKMARK_FETCH_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        data: action.payload,
+      };
+    case BOOKMARK_FETCH_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        error: action.payload,
       };
     default:
       return state;

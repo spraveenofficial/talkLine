@@ -1,6 +1,6 @@
 import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Signup, Login, Error } from "./Pages/index";
+import { Signup, Login, Error } from "./Pages";
 import {
   Navbar,
   HomeComponent,
@@ -11,6 +11,7 @@ import {
   MessageComponent,
   PostComponent,
   SettingComponent,
+  BookMarkComponent,
 } from "./Components";
 import { GuestRoutes, ProtectedRoutes } from "./Utils/routes";
 import { verifyUser } from "./Redux/Actions";
@@ -51,6 +52,7 @@ function App() {
           <Route path="messages" element={<MessageComponent />} />
           <Route path="post/:postId" element={<PostComponent />} />
           <Route path="setting" element={<SettingComponent />} />
+          <Route path="bookmarks" element={<BookMarkComponent />} />
         </Route>
         <Route element={<GuestRoutes />}>
           <Route path="signup" element={<Signup />} />

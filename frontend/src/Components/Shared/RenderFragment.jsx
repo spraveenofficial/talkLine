@@ -1,5 +1,5 @@
 import { Sidebar } from "..";
-import { CreatePost } from "../CreatePost";
+import { CreatePost, RightSidebar } from "..";
 import {
   Explore,
   Home,
@@ -9,12 +9,13 @@ import {
   UserProfile,
   Post,
   Setting,
+  Bookmark,
 } from "../../Pages";
 const HomeComponent = () => (
   <div className="flex relative h-full mobile:flex-col">
     <Sidebar />
     <CreatePost />
-    <Home />
+    <RightSidebar />
   </div>
 );
 
@@ -22,7 +23,7 @@ const ProfileComponent = () => (
   <div className="flex relative h-full mobile:flex-col">
     <Sidebar />
     <Profile />
-    <Home />
+    <RightSidebar />
   </div>
 );
 
@@ -30,7 +31,7 @@ const UserProfileComponent = () => (
   <div className="flex relative h-full mobile:flex-col">
     <Sidebar />
     <UserProfile />
-    <Home />
+    <RightSidebar />
   </div>
 );
 
@@ -38,7 +39,7 @@ const NotificationComponent = () => (
   <div className="flex relative h-full mobile:flex-col">
     <Sidebar />
     <Notification />
-    <Home />
+    <RightSidebar />
   </div>
 );
 
@@ -46,7 +47,7 @@ const ExploreComponent = () => (
   <div className="flex relative h-full mobile:flex-col">
     <Sidebar />
     <Explore />
-    <Home />
+    <RightSidebar />
   </div>
 );
 
@@ -54,7 +55,7 @@ const MessageComponent = () => (
   <div className="flex relative h-full mobile:flex-col">
     <Sidebar />
     <Message />
-    <Home />
+    <RightSidebar />
   </div>
 );
 
@@ -62,7 +63,7 @@ const PostComponent = () => (
   <div className="flex relative h-full mobile:flex-col">
     <Sidebar />
     <Post />
-    <Home />
+    <RightSidebar />
   </div>
 );
 
@@ -70,7 +71,15 @@ const SettingComponent = () => (
   <div className="flex relative h-full mobile:flex-col">
     <Sidebar />
     <Setting />
-    <Home />
+    <RightSidebar />
+  </div>
+);
+
+const BookMarkComponent = () => (
+  <div className="flex relative h-full mobile:flex-col">
+    <Sidebar />
+    <Bookmark />
+    <RightSidebar />
   </div>
 );
 export {
@@ -82,4 +91,5 @@ export {
   MessageComponent,
   PostComponent,
   SettingComponent,
+  BookMarkComponent,
 };

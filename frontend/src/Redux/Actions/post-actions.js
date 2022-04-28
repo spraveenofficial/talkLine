@@ -11,6 +11,9 @@ import {
   POST_FETCH_SUCCESS,
   POST_FETCH_FAILURE,
   ADD_POST_TO_FEED,
+  BOOKMARK_FETCH_REQUEST,
+  BOOKMARK_FETCH_SUCCESS,
+  BOOKMARK_FETCH_FAILURE,
 } from "../Constants/post-constants";
 export const createNewPost = (post) => async (dispatch) => {
   try {
@@ -103,7 +106,7 @@ export const getPost = (id) => async (dispatch) => {
   }
 };
 
-export const likePost = (id) => async (dispatch) => {
+export const likePost = (id) => async () => {
   try {
     const { data } = await axios({
       method: "POST",
@@ -121,7 +124,7 @@ export const likePost = (id) => async (dispatch) => {
   }
 };
 
-export const bookmark = (id) => async (dispatch) => {
+export const bookmark = (id) => async () => {
   try {
     const { data } = await axios({
       method: "POST",
@@ -136,5 +139,32 @@ export const bookmark = (id) => async (dispatch) => {
     return data.success;
   } catch (error) {
     return false;
+  }
+};
+
+export const getBookmarks = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: BOOKMARK_FETCH_REQUEST,
+    });
+    const { data } = await axios({
+      method: "GET",
+      url: `${baseUrl}/bookmark`,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    dispatch({
+      type: BOOKMARK_FETCH_SUCCESS,
+      payload: data.bookmarks,
+    });
+  } catch (error) {
+    dispatch({
+      type: BOOKMARK_FETCH_FAILURE,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
   }
 };

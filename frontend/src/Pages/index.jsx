@@ -9,3 +9,4 @@ export { Explore } from "./Explore";
 export { Message } from "./Messages";
 export { Post } from "./Post";
 export { Setting } from "./Settings";
+export { Bookmark } from "./Bookmarks";

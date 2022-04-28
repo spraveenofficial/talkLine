@@ -23,6 +23,7 @@ export {
   getPost,
   likePost,
   bookmark,
+  getBookmarks,
 } from "./post-actions";
 
 export { fetchNotification, markAsSeen } from "./notification-actions";

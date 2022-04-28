@@ -124,6 +124,25 @@ const verifyUser = async (req, res) => {
         .status(404)
         .json({ success: false, message: "User not found!" });
     }
+    const checkIfInFriendSchema = await FriendRequest.find({
+      $or: [
+        { senderId: id, receiverId: { $ne: id } },
+        { senderId: { $ne: id }, receiverId: id },
+      ],
+    })
+      .select("senderId receiverId")
+      .lean();
+    const users = await User.find({
+      _id: {
+        $nin: [
+          id,
+          ...checkIfInFriendSchema.map((user) => user.receiverId),
+          ...checkIfInFriendSchema.map((user) => user.senderId),
+        ],
+      },
+    })
+      .select("id name bio avatar")
+      .limit(2);
     const acceptedFriends = await FriendRequest.find({
       $or: [
         { senderId: id, status: "accepted" },
@@ -145,6 +164,12 @@ const verifyUser = async (req, res) => {
       success: true,
       user,
       friends: friendsList,
+      suggestedUsers: users.map((user) => {
+        return {
+          ...user._doc,
+          isRequested: false,
+        };
+      }),
     });
   } catch (err) {
     console.log(err);
