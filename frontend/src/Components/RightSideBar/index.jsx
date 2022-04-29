@@ -1,6 +1,7 @@
 import { SearchBarforSideBar } from "./searchBar";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Fragment } from "react";
 export function RightSidebar() {
   const navigate = useNavigate();
   const navigateToExplore = () => {
@@ -24,7 +25,7 @@ export function RightSidebar() {
           <hr className="border-gray-800" />
           {suggestions.map((eachUser) => {
             return (
-              <>
+              <Fragment key={eachUser._id}>
                 <div className="flex flex-shrink-0">
                   <div className="flex-1 ">
                     <div className="flex items-center w-48">
@@ -46,13 +47,13 @@ export function RightSidebar() {
                     </div>
                   </div>
                   <div className="flex-1 px-4 py-2 m-2">
-                    <button className="float-right bg-transparent hover:bg-gray-800 text-black font-semibold hover:text-black py-2 px-4 border border-white hover:border-transparent rounded-full">
-                      Follow
+                    <button className="float-right bg-indigo-600 hover:bg-indigo-800 text-white font-semibold py-2 px-4 border border-white hover:border-transparent rounded-full">
+                      Request
                     </button>
                   </div>
                 </div>
                 <hr className="border-gray-800" />
-              </>
+              </Fragment>
             );
           })}
           <div className="flex">

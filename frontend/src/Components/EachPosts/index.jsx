@@ -81,7 +81,11 @@ export function EachPost(props) {
       </div>
       <div className="border-b border-gray-100" />
       <div onClick={navigateToPost} className="mt-5">
-        <div className="text-black font-medium text-sm mb-6 mx-3 px-2 cursor-pointer">
+        <div
+          className={`text-black font-medium text-sm mx-3 px-2 cursor-pointer ${
+            post.isPhoto ? "mb-2" : "mb-6"
+          }`}
+        >
           {post.caption}
         </div>
       </div>
