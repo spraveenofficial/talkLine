@@ -9,7 +9,6 @@ export function RightSidebar() {
   };
   const { user } = useSelector((state) => state.auth);
   const suggestions = user.suggestions;
-  console.log(suggestions);
   return (
     <div className="sticky left-0 top-0 w-2/6 text-white flex flex-col h-screen mobile:w-full mobile:h-full">
       <div className="pr-3 h-full flex flex-col">

@@ -13,9 +13,6 @@ import { useSocket } from "../../Context/socket-context";
 export const ChatScreen = () => {
   const { socket, onlineFriends } = useSocket();
   const messagesEndRef = useRef(null);
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -37,6 +34,10 @@ export const ChatScreen = () => {
     scrollToBottom();
   }, [chats, isTyping]);
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
     socket.on("receiveMessage", (data) => {
       const checkIfThisExists = chats.find((chat) => chat.id !== data.id);
@@ -45,6 +46,13 @@ export const ChatScreen = () => {
       }
     });
   }, []);
+
+  // Detect if user is pressing enter key
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
 
   // Function to send message
   const handleSendMessage = async (e) => {
@@ -131,7 +139,7 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
           </div>
         ) : (
           chats.map((m, i) => (
-            <div className="flex" key={m.id}>
+            <div className="flex" ref={messagesEndRef} key={m.id}>
               {(isSameSender(chats, m, i, user.id) ||
                 isLastMessage(chats, i, user.id)) && (
                 <img
@@ -153,15 +161,12 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
                 }}
                 className="chat-message flex items-center justify-between"
               >
-                <div
-                  ref={messagesEndRef}
-                  className="flex items-end justify-end"
-                >
+                <div className="flex items-end justify-end">
                   <div className="flex flex-col space-y-2 text-xs max-w-xs border-1 items-end">
                     <span
                       className={`px-4 py-2 rounded-lg inline-block  ${
                         m.sender.id === user.id
-                          ? "bg-blue-600 text-white rounded-br-none"
+                          ? "bg-indigo-600 text-white rounded-br-none"
                           : "bg-gray-300 text-gray-600 rounded-bl-none "
                       }`}
                     >
@@ -175,7 +180,10 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
         )}
         {isTyping && <TypingComponent />}
       </div>
-      <div className="border-t-2 border-gray-200 pt-4 mb-2 sm:mb-0">
+      <div
+        onKeyDown={handleKeyPress}
+        className="border-t-2 border-gray-200 pt-4 mb-2 sm:mb-0"
+      >
         <div className="relative flex justify-between">
           <span className="absolute inset-y-0 flex items-center">
             <button

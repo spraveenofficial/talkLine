@@ -90,7 +90,7 @@ export function Message() {
       </div>
       <div className="w-full mt-2">
         <h1 className="font-black font-semibold text-md mb-2">Your Friends</h1>
-        <div className="activeContainer rounded-xl border-2 border-gray-200 px-2 rounded-xl w-full h-20 flex items-center gap-5 flex-nowrap">
+        <div className="activeContainer rounded-xl border-2 border-gray-200 p-2 rounded-xl w-full h-25 flex items-center gap-5 flex-nowrap">
           {friends.length === 0 ? (
             <h1 className="text-center flex w-full font-bold text-black justify-center">
               No friends, connect to users first.
@@ -104,15 +104,18 @@ export function Message() {
                 <div
                   key={eachFriend.id}
                   onClick={() => handleSelectToChat(eachFriend)}
-                  className="relative cursor-pointer min-w-fit"
+                  className="relative cursor-pointer w-16 flex items-center text-center justify-center flex-col"
                 >
                   <img
                     className="w-16 h-16 rounded-full"
                     src={eachFriend.avatar}
                     alt={eachFriend.name}
                   />
+                  <p className="whitespace-nowrap overflow-hidden w-full text-ellipsis font-bold text-sm mt-1">
+                    {eachFriend.name}
+                  </p>
                   <span
-                    className={`bottom-0 left-12 absolute w-4 h-4 border-2 border-white dark:border-gray-800 rounded-full ${
+                    className={`top-12 left-12 absolute w-4 h-4 border-2 border-white dark:border-gray-800 rounded-full ${
                       isOnline ? "bg-green-500" : "bg-red-500"
                     }`}
                   ></span>
@@ -127,7 +130,9 @@ export function Message() {
       ) : (
         <div className="w-full h-72 flex justify-center items-center">
           <h1 className="text-center text-2xl font-bold">
-            Select a user to chat
+            {friends.length === 0
+              ? "You have no friends, explore and make friends"
+              : "Select a friend to chat"}
           </h1>
         </div>
       )}
