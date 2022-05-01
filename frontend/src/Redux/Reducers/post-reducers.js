@@ -18,6 +18,8 @@ import {
   BOOKMARK_FETCH_REQUEST,
   BOOKMARK_FETCH_SUCCESS,
   BOOKMARK_FETCH_FAILURE,
+  UPDATE_BOOKMARK_LIKE,
+  REMOVE_FROM_BOOKMARK,
 } from "../Constants/post-constants";
 
 export const newPost = (
@@ -208,6 +210,30 @@ export const bookmark = (
         loading: false,
         success: false,
         error: action.payload,
+      };
+    case UPDATE_BOOKMARK_LIKE:
+      return {
+        ...state,
+        data: state.data.map((post) => {
+          if (post._id === action.payload.id) {
+            return {
+              ...post,
+              likes: {
+                count: action.payload.status
+                  ? post.likes.count + 1
+                  : post.likes.count - 1,
+                isLiked: action.payload.status,
+              },
+              isBookmarked: true,
+            };
+          }
+          return post;
+        }),
+      };
+    case REMOVE_FROM_BOOKMARK:
+      return {
+        ...state,
+        data: state.data.filter((post) => post._id !== action.payload),
       };
     default:
       return state;

@@ -70,7 +70,7 @@ export function RightSidebar() {
         <div className="flow-root m-6 inline">
           <div className="flex-2">
             <p className="text-sm leading-6 font-medium text-gray-600">
-              © 2022 Talkline, Inc.
+              © 2022 Talkline, Inc. All rights reserved.
             </p>
           </div>
         </div>

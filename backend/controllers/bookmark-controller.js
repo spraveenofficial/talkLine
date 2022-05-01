@@ -30,9 +30,9 @@ const createBookmark = async (req, res) => {
 
 const getBookmarks = async (req, res) => {
   const { id } = req.data;
-  const bookmarks = await Bookmark.find({ userId: id }).populate(
-    "postId userId"
-  );
+  const bookmarks = await Bookmark.find({ userId: id })
+    .populate("postId userId")
+    .sort({ createdAt: -1 });
   if (bookmarks.length === 0) {
     return res.status(400).json({
       success: true,

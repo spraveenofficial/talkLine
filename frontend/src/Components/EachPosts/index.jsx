@@ -1,16 +1,12 @@
 import moment from "moment";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { bookmark, likePost } from "../../Redux/Actions";
-import { LikeIcon, Toast, BookMarkIcon } from "..";
-import { useState } from "react";
+import { LikeIcon, BookMarkIcon } from "..";
 export function EachPost(props) {
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const post = props.post;
   const like = props.post.likes;
-  const [message, setMessage] = useState("");
   const navigateToUserProfile = () => {
     if (user.id !== post.userId) {
       return navigate(`/user/${post.userId}`);
@@ -19,41 +15,6 @@ export function EachPost(props) {
   };
   const navigateToPost = () => {
     navigate(`/post/${post._id}`);
-  };
-  const handleLike = async () => {
-    setMessage("");
-    const response = await dispatch(likePost(post._id));
-    if (response) {
-      dispatch({
-        type: "UPDATE_LIKE_FEED",
-        payload: post._id,
-      });
-      return setMessage("You liked this post");
-    } else {
-      dispatch({
-        type: "UPDATE_UNLIKE_FEED",
-        payload: post._id,
-      });
-      return setMessage("You unliked this post");
-    }
-  };
-
-  const handleBookmark = async () => {
-    setMessage("");
-    const response = await dispatch(bookmark(post._id));
-    if (response) {
-      dispatch({
-        type: "UPDATE_BOOKMARK_FEED",
-        payload: { id: post._id, status: true },
-      });
-      return setMessage("Bookmarked this post");
-    } else {
-      dispatch({
-        type: "UPDATE_BOOKMARK_FEED",
-        payload: { id: post._id, status: false },
-      });
-      return setMessage("Unbookmarked this post");
-    }
   };
   return (
     <div className="container w-full b">
@@ -103,7 +64,7 @@ export function EachPost(props) {
             className={`transition ease-out duration-300 hover:text-red-500 border w-8 h-8 px-2 pt-2 text-center rounded-full text-gray-400 cursor-pointer mr-2 ${
               like.isLiked ? "bg-blue-600" : "bg-white"
             }`}
-            onClick={handleLike}
+            onClick={() => props.handleLike(post._id)}
           >
             <LikeIcon className={`${like.isLiked && "fill-white"}`} />
           </span>
@@ -131,7 +92,7 @@ export function EachPost(props) {
             </svg>
           </span>
           <span
-            onClick={handleBookmark}
+            onClick={() => props.handleBookmark(post._id)}
             className={`transition ease-out duration-300 border w-8 h-8 px-2 pt-2 text-center rounded-full cursor-pointer mr-2 ${
               post.isBookmarked ? "bg-blue-600 text-white" : "bg-white-100"
             }`}
@@ -140,7 +101,6 @@ export function EachPost(props) {
           </span>
         </div>
       </div>
-      {message && <Toast message={message} success={true} />}
       <hr className="border-gray-600" />
     </div>
   );

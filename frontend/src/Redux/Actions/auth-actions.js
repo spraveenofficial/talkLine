@@ -92,7 +92,6 @@ export const verifyOtp = (payload) => async (dispatch) => {
 };
 
 export const setProfile = (payload) => async (dispatch) => {
-  console.log("fkwefoin");
   try {
     dispatch({
       type: USER_AVATAR_UPLOAD_REQUEST,
