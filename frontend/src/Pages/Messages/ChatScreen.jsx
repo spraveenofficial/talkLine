@@ -139,7 +139,7 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
           </div>
         ) : (
           chats.map((m, i) => (
-            <div className="flex" ref={messagesEndRef} key={m.id}>
+            <div className="flex" key={m.id}>
               {(isSameSender(chats, m, i, user.id) ||
                 isLastMessage(chats, i, user.id)) && (
                 <img
@@ -163,7 +163,7 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
               >
                 <div className="flex items-end justify-end">
                   <div className="flex flex-col space-y-2 text-xs max-w-xs border-1 items-end">
-                    <span
+                    <span ref={messagesEndRef}
                       className={`px-4 py-2 rounded-lg inline-block  ${
                         m.sender.id === user.id
                           ? "bg-indigo-600 text-white rounded-br-none"

@@ -1,26 +1,63 @@
 import User from "../models/User.js";
 import FriendRequest from "../models/Friend-request.js";
-
-
+import Posts from "../models/Post.js";
+import Bookmark from "../models/Bookmark.js";
+import Like from "../models/Like.js";
 // @desc    Get User Profile
 // @route   GET /api/v1/friend
 // @access  Private
 
 const getProfile = async (req, res) => {
   const { id } = req.data;
+  const user = await User.findOne({ _id: id }).select("id name email avatar");
+  if (!user) {
+    return res.status(404).json({ success: false, message: "User not found!" });
+  }
   try {
-    const user = await User.findOne({ _id: id }).select("id name email avatar");
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found!" });
-    } else {
-      return res.json({
-        message: "User fetched successfully",
-        success: true,
-        data: { ...user._doc, isMyProfile: true },
-      });
-    }
+    const myPosts = await Posts.find({ userId: id })
+      .sort({ createdAt: -1 })
+      .populate("userId", "name avatar");
+    const checkIfBookmarked = await Bookmark.find({
+      postId: { $in: myPosts.map((post) => post._id.toString()) },
+    });
+    const likes = await Like.find({
+      postId: { $in: myPosts.map((post) => post._id.toString()) },
+    });
+
+    return res.json({
+      message: "User fetched successfully",
+      success: true,
+      data: {
+        ...user._doc,
+        isMyProfile: true,
+        posts: myPosts.map((post) => {
+          return {
+            ...post._doc,
+            userId: post.userId._id,
+            userName: post.userId.name,
+            userAvatar: post.userId.avatar,
+            isBookmarked: checkIfBookmarked.find(
+              (bookmark) => bookmark.postId.toString() === post._id.toString()
+            )
+              ? true
+              : false,
+            likes: {
+              count: likes.filter(
+                (like) => like.postId.toString() === post._id.toString()
+              ).length,
+              isLiked: likes.some((like) => {
+                return (
+                  like.postId.toString() === post._id.toString() &&
+                  like.userId.toString() === id
+                );
+              })
+                ? true
+                : false,
+            },
+          };
+        }),
+      },
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, message: "Something went wrong!" });
@@ -162,6 +199,7 @@ const explorePersons = async (req, res) => {
           ...checkIfInFriendSchema.map((user) => user.senderId),
         ],
       },
+      isActivated: true,
     })
       .select("id name bio avatar")
       .limit(20);

@@ -10,6 +10,9 @@ import {
   EXPLORE_PERSONS_REQUEST,
   EXPLORE_PERSONS_SUCCESS,
   EXPLORE_PERSONS_FAILURE,
+  MY_PROFILE_REQUEST,
+  MY_PROFILE_SUCCESS,
+  MY_PROFILE_FAILURE,
 } from "../Constants/profile-constants";
 import { UPDATE_USER_BIO } from "../Constants/auth-constants";
 export const loadUserProfile = (id) => async (dispatch) => {
@@ -137,6 +140,34 @@ export const explorePersons = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: EXPLORE_PERSONS_FAILURE,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+    return false;
+  }
+};
+
+export const loadMyProfile = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: MY_PROFILE_REQUEST,
+    });
+    const { data } = await axios({
+      method: "GET",
+      url: `${baseUrl}/profile`,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    dispatch({
+      type: MY_PROFILE_SUCCESS,
+      payload: data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: MY_PROFILE_FAILURE,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

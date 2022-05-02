@@ -1,10 +1,39 @@
 import { AnimateSharedLayout, motion } from "framer-motion";
-const RecentQuiz = () => {
+import { useSelector } from "react-redux";
+import { EachPost } from "..";
+const MyPosts = () => {
+  const { user, loading, success } = useSelector((state) => state.myprofile);
+  if (loading) {
+    return (
+      <AnimateSharedLayout>
+        <div className="py-5 pulses break-all bbcode">
+          <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-44"></div>
+          <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-full h-40"></div>
+        </div>
+      </AnimateSharedLayout>
+    );
+  }
+  if (!loading && !success && user.posts.length === 0) {
+    return (
+      <div className="text-black flex-col w-full flex justify-center align-center texts-center">
+        <div className="text-3xl font-bold">No Posts Yet</div>
+      </div>
+    );
+  }
   return (
-    <div className="py-5 pulses break-all bbcode">
-      <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-44"></div>
-      <div className="mb-1 bg-gray-200 border border-gray-300 h-5 w-full h-40"></div>
-    </div>
+    !loading &&
+    success &&
+    user.posts.length > 0 && (
+      <AnimateSharedLayout>
+        <div className="py-5">
+          <div className="flex flex-wrap">
+            {user.posts.map((post) => (
+              <EachPost key={post._id} post={post} />
+            ))}
+          </div>
+        </div>
+      </AnimateSharedLayout>
+    )
   );
 };
 const UserSettings = () => {
@@ -20,7 +49,7 @@ const UserSettings = () => {
 };
 
 export const allItems = [
-  { icon: "⏰", label: "Posts", component: <RecentQuiz /> },
+  { icon: "⏰", label: "Posts", component: <MyPosts /> },
   { icon: "⚙️", label: "Friends", component: <UserSettings /> },
 ];
 const [Recent, Settings] = allItems;

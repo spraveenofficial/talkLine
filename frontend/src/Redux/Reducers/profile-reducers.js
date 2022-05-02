@@ -11,6 +11,9 @@ import {
   EXPLORE_PERSONS_FAILURE,
   SEND_REQUEST_FROM_EXPLORE,
   SET_USER_POSTS,
+  MY_PROFILE_REQUEST,
+  MY_PROFILE_SUCCESS,
+  MY_PROFILE_FAILURE,
 } from "../Constants/profile-constants";
 
 export const profile = (
@@ -139,6 +142,34 @@ export const explore = (
             return user;
           }
         }),
+      };
+    default:
+      return state;
+  }
+};
+
+export const myprofile = (
+  state = { loading: true, success: false, user: [], message: "" },
+  action
+) => {
+  switch (action.type) {
+    case MY_PROFILE_REQUEST:
+      return { ...state, loading: true };
+    case MY_PROFILE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        user: action.payload,
+      };
+    case MY_PROFILE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        user: [],
+        message: action.payload,
+        error: true,
       };
     default:
       return state;

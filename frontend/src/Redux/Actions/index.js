@@ -15,6 +15,7 @@ export {
   cancelFriendRequest,
   acceptFriendRequest,
   explorePersons,
+  loadMyProfile,
 } from "./profile-actions";
 
 export {

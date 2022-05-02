@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal, PencilIcon } from "../../Components";
-import { updateBio } from "../../Redux/Actions";
+import { loadMyProfile, updateBio } from "../../Redux/Actions";
 import { AnimatePresence, motion } from "framer-motion";
 import { initialTabs as tabs } from "../../Components/Shared/Profile-tabs";
 import { CreatePostProfile } from "../../Components/Shared/Create-post-profile";
@@ -45,6 +45,9 @@ export function Profile() {
       </Modal>
     );
   };
+  useEffect(() => {
+    dispatch(loadMyProfile());
+  }, []);
   return (
     <div className="w-2/3 bg-white blockW mobile:w-full">
       <ModalToUpdateBio />

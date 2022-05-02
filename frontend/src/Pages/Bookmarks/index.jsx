@@ -54,7 +54,7 @@ export function Bookmark() {
           <p>Getting your bookmarked posts.</p>
         </div>
       )}
-      {error && data.length === 0 && (
+      {!loading && data.length === 0 && (
         <div className="w-full h-40 border bg-indigo-200 rounded-xl flex justify-center text-center items-center mt-4">
           <h1 className="text-xl font-bold">
             You have not bookmarked any post yet.
