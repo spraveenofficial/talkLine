@@ -1,12 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { bookmark, getFeed, likePost } from "../../Redux/Actions";
-// import { EachPost } from "../EachPosts";
 import { Toast, EachPost } from "..";
+import InfiniteScroll from "react-infinite-scroll-component";
+
 export function Feed() {
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
   const { posts, loading, success } = useSelector((state) => state.feed);
+  const myPosts = posts?.posts;
+  const scroll = posts?.scroll;
+  const [currentPage, setCurrentPage] = useState(1);
   const handleBookmark = async (id) => {
     setMessage("");
     const response = await dispatch(bookmark(id));
@@ -41,32 +45,54 @@ export function Feed() {
       return setMessage("You unliked this post");
     }
   };
-
+  console.log(scroll?.count > scroll?.currentPage);
   useEffect(() => {
-    dispatch(getFeed());
-  }, []);
-
+    dispatch(getFeed(currentPage));
+  }, [currentPage]);
+  const loadMore = async () => {
+    setCurrentPage((old) => old + 1);
+  };
   return (
-    <div className="w-full bg-white block">
-      {loading ? (
-        <div className="text-black flex-col w-full mt-5 flex align-center texts-center min-h-screen">
+    <div className="w-full bg-white block overflow-scroll overflow-auto">
+      {loading && currentPage === 1 ? (
+        <div className="text-black flex-col w-full mt-5 flex align-center texts-center mobile:min-h-screen">
           <div
             className="w-10 mb-10 h-10 rounded-full animate-spin
                   border-2 border-dashed border-black-600 border-t-black mr-1"
           ></div>
           <p>Fetching fresh posts for you.</p>
         </div>
-      ) : success && posts.length > 0 ? (
-        posts.map((eachPost) => {
-          return (
-            <EachPost
-              key={eachPost._id}
-              post={eachPost}
-              handleBookmark={handleBookmark}
-              handleLike={handleLike}
-            />
-          );
-        })
+      ) : success && myPosts.length > 0 ? (
+        <InfiniteScroll
+          dataLength={myPosts.length}
+          next={loadMore}
+          hasMore={scroll?.count > scroll?.currentPage ? true : false}
+          loader={
+            <div className="text-black flex-col w-full mt-5 flex align-center texts-center">
+              <div
+                className="w-10 mb-10 h-10 rounded-full animate-spin
+                  border-2 border-dashed border-black-600 border-t-black mr-1"
+              ></div>
+              <p>Loading More Content..</p>
+            </div>
+          }
+        >
+          {myPosts.map((eachPost) => {
+            return (
+              <EachPost
+                key={eachPost._id}
+                post={eachPost}
+                handleBookmark={handleBookmark}
+                handleLike={handleLike}
+              />
+            );
+          })}
+          {scroll?.currentPage === scroll?.count && (
+            <div className="text-black flex-col w-full mt-5 flex align-center texts-center">
+              <p>Caught up all the posts.</p>
+            </div>
+          )}
+        </InfiniteScroll>
       ) : (
         <div className="w-full p-4 h-72 flex text-center items-center justify-center">
           <h2 className="font-bold">No Posts found. Explore Friends first.</h2>

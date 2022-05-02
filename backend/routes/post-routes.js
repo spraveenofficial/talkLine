@@ -9,6 +9,6 @@ import {
 router.use(middleware);
 
 router.route("/").post(createPost);
-router.route("/feed").get(getPosts);
+router.route("/feed/").get(getPosts);
 router.route("/:postId").get(getEachPost);
 export default router;

@@ -20,6 +20,7 @@ import {
   BOOKMARK_FETCH_FAILURE,
   UPDATE_BOOKMARK_LIKE,
   REMOVE_FROM_BOOKMARK,
+  FEED_SCROLL_DONE,
 } from "../Constants/post-constants";
 
 export const newPost = (
@@ -79,52 +80,76 @@ export const feed = (
     case ADD_POST_TO_FEED:
       return {
         ...state,
-        posts: [action.payload, ...state.posts],
+        posts: {
+          ...state.posts,
+          posts: [action.payload, ...state.posts.posts],
+        },
+      };
+    case FEED_SCROLL_DONE:
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          posts: [...state.posts.posts, ...action.payload.posts],
+          scroll: action.payload.scroll,
+        },
       };
     case UPDATE_LIKE_FEED:
       return {
         ...state,
-        posts: state.posts.map((post) => {
-          if (post._id === action.payload) {
-            return {
-              ...post,
-              likes: {
-                count: post.likes.count + 1,
-                isLiked: true,
-              },
-            };
-          }
-          return post;
-        }),
+        posts: {
+          ...state.posts,
+          posts: state.posts.posts.map((post) => {
+            if (post._id === action.payload) {
+              return {
+                ...post,
+                likes: {
+                  count: post.likes.count + 1,
+                  isLiked: true,
+                },
+              };
+            }
+            return post;
+          }),
+        },
       };
     case UPDATE_UNLIKE_FEED:
       return {
         ...state,
-        posts: state.posts.map((post) => {
-          if (post._id === action.payload) {
-            return {
-              ...post,
-              likes: {
-                count: post.likes.count - 1,
-                isLiked: false,
-              },
-            };
-          }
-          return post;
-        }),
+        posts: {
+          ...state.posts,
+          posts: state.posts.posts.map((post) => {
+            if (post._id === action.payload) {
+              return {
+                ...post,
+                likes: {
+                  count: post.likes.count - 1,
+                  isLiked: false,
+                },
+              };
+            }
+            return post;
+          }),
+        },
       };
     case UPDATE_BOOKMARK_FEED:
       return {
         ...state,
-        posts: state.posts.map((post) => {
-          if (post._id === action.payload.id) {
-            return {
-              ...post,
-              isBookmarked: action.payload.status,
-            };
-          }
-          return post;
-        }),
+        posts: {
+          ...state.posts,
+          posts: state.posts.posts.map((post) => {
+            if (post._id === action.payload) {
+              return {
+                ...post,
+                bookmarks: {
+                  count: post.bookmarks.count + 1,
+                  isBookmarked: true,
+                },
+              };
+            }
+            return post;
+          }),
+        },
       };
     default:
       return state;

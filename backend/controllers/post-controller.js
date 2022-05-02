@@ -114,7 +114,6 @@ const getPostsOfEachUser = async (req, res) => {
 // @access  Private
 
 const getPosts = async (req, res) => {
-  // Get Posts of my and my friends who's status is accepted
   const { id } = req.data;
   const acceptedFriends = await FriendRequest.find({
     $or: [
@@ -129,11 +128,18 @@ const getPosts = async (req, res) => {
       return friend.senderId.toString();
     }
   });
+  const postsPerPage = 6;
+  const currentPage = Number(req.query.page) || 1;
+  const skip = postsPerPage * (currentPage - 1);
+  const limit = postsPerPage;
   const posts = await Post.find({
     $or: [{ userId: id }, { userId: { $in: friends } }],
   })
     .sort({ createdAt: -1 })
-    .populate("userId", "name avatar");
+    .populate("userId", "name avatar")
+    .skip(skip)
+    .limit(limit);
+
   if (posts.length === 0) {
     return res.status(200).json({
       success: true,
@@ -141,6 +147,10 @@ const getPosts = async (req, res) => {
       posts,
     });
   }
+  const totalPosts = await Post.find({
+    $or: [{ userId: id }, { userId: { $in: friends } }],
+  }).countDocuments();
+  const totalPages = Math.ceil(totalPosts / postsPerPage);
   const likes = await Like.find({
     postId: { $in: posts.map((post) => post._id.toString()) },
   });
@@ -174,6 +184,10 @@ const getPosts = async (req, res) => {
         },
       };
     }),
+    scroll: {
+      count: totalPages,
+      currentPage: currentPage,
+    },
   });
 };
 

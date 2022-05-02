@@ -10,8 +10,6 @@ export function Profile() {
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const { user } = useSelector((state) => state.auth);
   const [isOpenToChangeBio, setIsOpenToChangeBio] = useState(false);
-
-  // Modal to Update Bio
   const ModalToUpdateBio = () => {
     const [bio, setBio] = useState("");
     return (

@@ -83,7 +83,7 @@ export function CreatePost() {
   );
 
   return (
-    <div className="w-2/3 border mb-4 border-gray-600 h-auto border-t-1 mobile:w-full">
+    <div className="w-2/3 border border-gray-600 border-t-1 mobile:w-full h-fit mobile:min-h-screen">
       <Promotion />
       <ModalToUploadPhoto />
       <hr className="border-gray-600" />
@@ -174,7 +174,6 @@ export function CreatePost() {
           </button>
         </div>
       </div>
-
       <hr className="border-indigo-600 border-1" />
       <Feed />
     </div>
