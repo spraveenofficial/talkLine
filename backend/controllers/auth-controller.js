@@ -140,6 +140,7 @@ const verifyUser = async (req, res) => {
           ...checkIfInFriendSchema.map((user) => user.senderId),
         ],
       },
+      isActivated: true,
     })
       .select("id name bio avatar")
       .limit(2);
@@ -224,6 +225,5 @@ const loginUsingOtp = async (req, res) => {
       .json({ success: false, message: "Something went wrong!" });
   }
 };
-
 
 export { sendOtp, verifyOtp, uploadAvatar, verifyUser, loginUsingOtp };
