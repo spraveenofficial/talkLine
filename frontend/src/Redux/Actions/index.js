@@ -16,6 +16,7 @@ export {
   acceptFriendRequest,
   explorePersons,
   loadMyProfile,
+  unfriendUser,
 } from "./profile-actions";
 
 export {

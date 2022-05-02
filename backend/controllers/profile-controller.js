@@ -3,6 +3,7 @@ import FriendRequest from "../models/Friend-request.js";
 import Posts from "../models/Post.js";
 import Bookmark from "../models/Bookmark.js";
 import Like from "../models/Like.js";
+import Message from "../models/Message.js";
 // @desc    Get User Profile
 // @route   GET /api/v1/friend
 // @access  Private
@@ -219,4 +220,48 @@ const explorePersons = async (req, res) => {
   }
 };
 
-export { getProfile, getEachProfile, seachUser, updateBio, explorePersons };
+const unfriendProfile = async (req, res) => {
+  const { id } = req.data;
+  const { friendId } = req.body;
+  try {
+    const checkIfAlreadyFriend = await FriendRequest.findOne({
+      $or: [
+        { senderId: id, receiverId: friendId },
+        { senderId: friendId, receiverId: id },
+      ],
+      status: "accepted",
+    });
+    if (!checkIfAlreadyFriend) {
+      return res
+        .status(404)
+        .json({ success: false, message: "You are not friends!" });
+    }
+    await FriendRequest.deleteOne({
+      $or: [
+        { senderId: id, receiverId: friendId },
+        { senderId: friendId, receiverId: id },
+      ],
+    });
+    await Message.deleteMany({
+      $or: [
+        { senderId: id, receiverId: friendId },
+        { senderId: friendId, receiverId: id },
+      ],
+    });
+    return res.status(200).json({
+      message: "Friend deleted successfully",
+      success: true,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Something went wrong!" });
+  }
+};
+export {
+  getProfile,
+  getEachProfile,
+  seachUser,
+  updateBio,
+  explorePersons,
+  unfriendProfile,
+};

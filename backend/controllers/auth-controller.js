@@ -225,4 +225,5 @@ const loginUsingOtp = async (req, res) => {
   }
 };
 
+
 export { sendOtp, verifyOtp, uploadAvatar, verifyUser, loginUsingOtp };

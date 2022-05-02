@@ -76,9 +76,6 @@ export function Profile() {
               onClick={() => setIsOpenToChangeBio(!isOpenToChangeBio)}
             />
           </div>
-          <button className="bg-red-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-red-800">
-            Deactivate account
-          </button>
           <CreatePostProfile />
           <div className="window">
             <div>

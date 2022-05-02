@@ -14,7 +14,7 @@ import {
   MY_PROFILE_SUCCESS,
   MY_PROFILE_FAILURE,
 } from "../Constants/profile-constants";
-import { UPDATE_USER_BIO } from "../Constants/auth-constants";
+import { UNFRIEND_FRIEND, UPDATE_USER_BIO } from "../Constants/auth-constants";
 export const loadUserProfile = (id) => async (dispatch) => {
   try {
     dispatch({
@@ -173,6 +173,26 @@ export const loadMyProfile = () => async (dispatch) => {
           ? error.response.data.message
           : error.message,
     });
+    return false;
+  }
+};
+
+export const unfriendUser = (id) => async (dispatch) => {
+  try {
+    const { data } = await axios({
+      method: "PUT",
+      url: `${baseUrl}/profile/unfriend`,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+      data: { friendId: id },
+    });
+    if (!data.success) return;
+    dispatch({
+      type: UNFRIEND_FRIEND,
+      payload: id,
+    });
+  } catch (error) {
     return false;
   }
 };

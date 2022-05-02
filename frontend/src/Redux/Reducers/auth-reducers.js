@@ -16,6 +16,7 @@ import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
   USER_LOGIN_FAILURE,
+  UNFRIEND_FRIEND,
 } from "../Constants/auth-constants";
 
 const initialState = {
@@ -36,6 +37,16 @@ export const auth = (state = initialState, action) => {
       return { isAuthenticated: false, loading: false, user: null };
     case UPDATE_USER_BIO:
       return { ...state, user: { ...state.user, bio: action.payload } };
+    case UNFRIEND_FRIEND:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          friends: state.user.friends.filter(
+            (friend) => friend.id !== action.payload
+          ),
+        },
+      };
     default:
       return state;
   }
