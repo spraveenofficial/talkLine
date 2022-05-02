@@ -2,7 +2,16 @@ import "./style.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import {
+  HomeIcon,
+  ExploreIcon,
+  NotificationIcon,
+  MessageIcon,
+  BookMarkIcon,
+  ListIcon,
+  ProfileIcon,
+  MoreIcon,
+} from "..";
 const Navbar = () => {
   const navigate = useNavigate();
   const [deviceType, setDeviceType] = useState("desktop");
@@ -56,7 +65,9 @@ const Navbar = () => {
             <div className="navbar-container">
               <Link to="/">
                 <div className="navbar-logo">
-                  <span className="text-3xl text-black font-bold">TalkLine</span>
+                  <span className="text-3xl text-black font-bold">
+                    TalkLine
+                  </span>
                 </div>
               </Link>
               <div className="navbar-items">
@@ -111,37 +122,60 @@ const Navbar = () => {
               </svg>
               <div className="mobile-nav-items">
                 <p
-                  onClick={() => navigate("/categories/men") || setNav(!setNav)}
+                  className="flex items-center"
+                  onClick={() => navigate("/") || setNav(!setNav)}
                 >
-                  Mens
+                  <HomeIcon />
+                  Home
                 </p>
                 <p
-                  onClick={() =>
-                    navigate("/categories/women") || setNav(!setNav)
-                  }
+                  className="flex items-center"
+                  onClick={() => navigate("/explore") || setNav(!setNav)}
                 >
-                  Women
+                  <ExploreIcon />
+                  Explore
                 </p>
                 <p
-                  onClick={() =>
-                    navigate("/categories/kids") || setNav(!setNav)
-                  }
+                  onClick={() => navigate("/notification") || setNav(!setNav)}
+                  className="flex items-center"
                 >
-                  Kids
+                  <NotificationIcon />
+                  Notifications
                 </p>
                 <p
-                  onClick={() =>
-                    navigate("/categories/footwear") || setNav(!setNav)
-                  }
+                  onClick={() => navigate("/messages") || setNav(!setNav)}
+                  className="flex items-center"
                 >
-                  Footwear
+                  <MessageIcon />
+                  Message
                 </p>
                 <p
-                  onClick={() =>
-                    navigate("/categories/gadgets") || setNav(!setNav)
-                  }
+                  onClick={() => navigate("/bookmarks") || setNav(!setNav)}
+                  className="flex items-center"
                 >
-                  Gadgets
+                  <BookMarkIcon />
+                  Bookmarks
+                </p>
+                <p
+                  onClick={() => navigate("/lists") || setNav(!setNav)}
+                  className="flex items-center"
+                >
+                  <ListIcon />
+                  Lists
+                </p>
+                <p
+                  onClick={() => navigate("/profile") || setNav(!setNav)}
+                  className="flex items-center"
+                >
+                  <ProfileIcon />
+                  Profile
+                </p>
+                <p
+                  onClick={() => navigate("/setting") || setNav(!setNav)}
+                  className="flex items-center"
+                >
+                  <MoreIcon />
+                  Settings
                 </p>
               </div>
             </motion.div>

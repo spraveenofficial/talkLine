@@ -12,6 +12,7 @@ import {
   SEND_REQUEST_FROM_EXPLORE,
   SET_USER_POSTS,
   MY_PROFILE_REQUEST,
+  UNFRIEND_FRIEND_PROFILE,
   MY_PROFILE_SUCCESS,
   MY_PROFILE_FAILURE,
 } from "../Constants/profile-constants";
@@ -72,6 +73,20 @@ export const profile = (
         user: {
           ...state.user,
           isRequested: { ...state.user.isRequested, haveSentRequest: false },
+        },
+      };
+    case UNFRIEND_FRIEND_PROFILE:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        user: {
+          ...state.user,
+          isRequested: {
+            isFriend: false,
+            isRequested: false,
+            haveSentRequest: false,
+          },
         },
       };
     case ACCEPT_FRIEND_REQUEST:

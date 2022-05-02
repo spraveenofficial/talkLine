@@ -1,5 +1,6 @@
 import { AnimateSharedLayout, motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { EachPost } from "..";
 import { unfriendUser } from "../../Redux/Actions";
 const MyPosts = () => {
@@ -44,11 +45,15 @@ const MyFriends = () => {
     dispatch(unfriendUser(id));
   };
   const Cards = ({ user }) => {
+    const navigate = useNavigate();
+    const handleNavigate = (id) => {
+      navigate(`/user/${id}`);
+    };
     return (
       <div className="w-max mobile:w-full mb-2 lg:w-full desktop:w-full">
         <div className="cursor-pointer card p-2 border hover:shadow-none relative flex flex-col shadow-lg">
           <div
-            // onClick={handleNavigate}
+            onClick={() => handleNavigate(user.id)}
             className="profile w-72 flex m-3 ml-4 text-white"
           >
             <img
@@ -69,7 +74,6 @@ const MyFriends = () => {
             <button
               onClick={() => handleUnfriend(user.id)}
               className="bg-indigo-500 text-white p-2 font-semibold rounded-xl mt-2"
-              // disabled={user.isRequested}
             >
               Unfriend
             </button>
@@ -99,7 +103,11 @@ const MyFriends = () => {
 
 export const allItems = [
   { icon: "⏰", label: "My Posts", component: <MyPosts /> },
-  { icon: "🤝", label: "My Friends", component: <MyFriends /> },
+  {
+    icon: "🤝",
+    label: "My Friends",
+    component: <MyFriends />,
+  },
 ];
 const [Recent, Settings] = allItems;
 export const initialTabs = [Recent, Settings];

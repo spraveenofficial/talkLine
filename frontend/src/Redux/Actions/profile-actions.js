@@ -187,11 +187,12 @@ export const unfriendUser = (id) => async (dispatch) => {
       },
       data: { friendId: id },
     });
-    if (!data.success) return;
+    if (!data.success) return false;
     dispatch({
       type: UNFRIEND_FRIEND,
       payload: id,
     });
+    return true;
   } catch (error) {
     return false;
   }

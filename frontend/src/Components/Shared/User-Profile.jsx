@@ -4,6 +4,7 @@ import {
   sendFriendRequest,
   cancelFriendRequest,
   acceptFriendRequest,
+  unfriendUser,
 } from "../../Redux/Actions";
 
 export function ProfileButton(props) {
@@ -19,6 +20,14 @@ export function ProfileButton(props) {
   };
   const handleAcceptFriendRequest = () => {
     dispatch(acceptFriendRequest(id));
+  };
+  const handleUnfriend = async () => {
+    const response = await dispatch(unfriendUser(id));
+    if (response) {
+      dispatch({
+        type: "UNFRIEND_FRIEND_PROFILE",
+      });
+    }
   };
   const handleNavigateToChat = () => {
     const transfromData = {
@@ -52,12 +61,12 @@ export function ProfileButton(props) {
           <div className="gap-2 flex">
             <button
               onClick={() => handleNavigateToChat()}
-              className="bg-indigo-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-red-800"
+              className="bg-indigo-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-indigo-800"
             >
               Message
             </button>
             <button
-              //   onClick={() => handleUnfriend()}
+              onClick={() => handleUnfriend()}
               className="bg-red-600 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-red-800"
             >
               Unfriend
@@ -74,7 +83,7 @@ export function ProfileButton(props) {
             Accept Request
           </button>
           <button
-            //   onClick={() => handleCancelFriendRequest()}
+              onClick={() => handleCancelFriendRequest()}
             className="bg-red-600 ml-1 text-white mt-3 font-bold p-2 rounded-xl w-max hover:bg-indigo-800"
           >
             Cancel Request

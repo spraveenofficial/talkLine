@@ -198,34 +198,41 @@ const getPosts = async (req, res) => {
 const getEachPost = async (req, res) => {
   const { id } = req.data;
   const { postId } = req.params;
-  const post = await Post.findById(postId).populate("userId", "name avatar");
-  const likes = await Like.find({ postId: postId });
-  const isLiked = likes.some((like) => like.userId.toString() === id);
-  if (!post) {
+  try {
+    const post = await Post.findById(postId).populate("userId", "name avatar");
+    const likes = await Like.find({ postId: postId });
+    const isLiked = likes.some((like) => like.userId.toString() === id);
+    if (!post) {
+      return res.status(400).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+    const checkIfBookmarked = await Bookmark.find({
+      postId,
+      userId: id,
+    });
+    res.status(200).json({
+      success: true,
+      message: "Post fetched successfully",
+      post: {
+        ...post._doc,
+        userId: post.userId._id,
+        userName: post.userId.name,
+        userAvatar: post.userId.avatar,
+        isBookmarked: checkIfBookmarked.length > 0 ? true : false,
+      },
+      likeData: {
+        likes: likes.length,
+        isLiked,
+      },
+    });
+  } catch (error) {
     return res.status(400).json({
       success: false,
       message: "Post not found",
     });
   }
-  const checkIfBookmarked = await Bookmark.find({
-    postId,
-    userId: id,
-  });
-  res.status(200).json({
-    success: true,
-    message: "Post fetched successfully",
-    post: {
-      ...post._doc,
-      userId: post.userId._id,
-      userName: post.userId.name,
-      userAvatar: post.userId.avatar,
-      isBookmarked: checkIfBookmarked.length > 0 ? true : false,
-    },
-    likeData: {
-      likes: likes.length,
-      isLiked,
-    },
-  });
 };
 
 // Export all the functions
