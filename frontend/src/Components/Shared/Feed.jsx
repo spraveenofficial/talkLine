@@ -45,7 +45,6 @@ export function Feed() {
       return setMessage("You unliked this post");
     }
   };
-  console.log(scroll?.count > scroll?.currentPage);
   useEffect(() => {
     dispatch(getFeed(currentPage));
   }, [currentPage]);

@@ -32,6 +32,7 @@ export function CreatePostProfile() {
         caption,
         isPhoto: selectedImage !== null ? true : false,
         photoUrl: selectedImage,
+        status: false,
       })
     );
     setCaption("");
@@ -83,7 +84,7 @@ export function CreatePostProfile() {
   );
 
   return (
-    <div className="w-full mt-4 border border-gray-600 h-auto mobile:w-full">
+    <div className="w-full border border-gray-600 border-t-1 mobile:w-full h-fit mobile:min-h-screen mt-2">
       <ModalToUploadPhoto />
       <div className="flex">
         <div className="w-auto h-fit m-2 rounded-full border-2 border-indigo-600">
@@ -121,7 +122,7 @@ export function CreatePostProfile() {
           <div className="flex items-center">
             <div
               onClick={() => setIsFileUploadOpen(true)}
-              className="flex-1 text-center px-1 py-1 m-2"
+              className="cursor-pointer text-center px-1 m-2"
             >
               <p className="mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
                 <svg
@@ -137,42 +138,9 @@ export function CreatePostProfile() {
                 </svg>
               </p>
             </div>
-
-            <div className="flex-1 text-center py-2 m-2">
-              <p className="mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
-                <svg
-                  className="text-center h-7 w-6"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                  <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-              </p>
-            </div>
-
-            <div className="flex-1 text-center py-2 m-2">
-              <p className="mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
-                <svg
-                  className="text-center h-7 w-6"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-              </p>
-            </div>
             <div
               onClick={() => setIsEmojiOpen(!isEmojiOpen)}
-              className="flex-1 text-center py-2 m-2"
+              className="cursor-pointer text-center py-2 m-2"
             >
               <p className="mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
                 <svg
@@ -189,7 +157,7 @@ export function CreatePostProfile() {
               </p>
             </div>
             {isEmojiOpen && (
-              <div className="absolute left-0 top-16">
+              <div className="absolute z-50 left-0 top-16">
                 <Picker onEmojiClick={handleEmojiClick} />
               </div>
             )}

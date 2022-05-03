@@ -17,6 +17,7 @@ import {
   MY_PROFILE_FAILURE,
   UPDATE_PROFILE_LIKE,
   UPDATE_PROFILE_BOOKMARK,
+  ADD_NEW_POST_PROFILE,
 } from "../Constants/profile-constants";
 
 export const profile = (
@@ -224,6 +225,14 @@ export const myprofile = (
         user: [],
         message: action.payload,
         error: true,
+      };
+    case ADD_NEW_POST_PROFILE:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          posts: [action.payload, ...state.user.posts],
+        },
       };
     default:
       return state;

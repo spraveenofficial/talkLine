@@ -32,6 +32,7 @@ export function CreatePost() {
         caption,
         isPhoto: selectedImage !== null ? true : false,
         photoUrl: selectedImage,
+        status: true,
       })
     );
     setCaption("");

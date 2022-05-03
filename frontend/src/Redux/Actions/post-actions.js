@@ -16,7 +16,9 @@ import {
   BOOKMARK_FETCH_FAILURE,
   FEED_SCROLL_DONE,
 } from "../Constants/post-constants";
+import { ADD_NEW_POST_PROFILE } from "../Constants/profile-constants";
 export const createNewPost = (post) => async (dispatch) => {
+  const { status } = post;
   try {
     dispatch({
       type: NEW_POST_REQUEST,
@@ -33,10 +35,17 @@ export const createNewPost = (post) => async (dispatch) => {
       type: NEW_POST_SUCCESS,
       payload: data.post,
     });
-    dispatch({
-      type: ADD_POST_TO_FEED,
-      payload: data.post,
-    });
+    if (status) {
+      dispatch({
+        type: ADD_POST_TO_FEED,
+        payload: data.post,
+      });
+    } else {
+      dispatch({
+        type: ADD_NEW_POST_PROFILE,
+        payload: data.post,
+      });
+    }
   } catch (error) {
     dispatch({
       type: NEW_POST_FAILURE,
