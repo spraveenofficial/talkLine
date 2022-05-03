@@ -1,17 +1,24 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { loadUserProfile } from "../../Redux/Actions";
 import { JoinedIcon, ProfileButton } from "../../Components";
+import { initialTabs as tabs } from "../../Components/Shared/OtherProfile-tabs";
+import { AnimatePresence, motion } from "framer-motion";
+
 import moment from "moment";
 export function UserProfile() {
   const { id } = useParams();
+  const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const dispatch = useDispatch();
   const { success, error, user, loading, message } = useSelector(
     (state) => state.profile
   );
   useEffect(() => {
     dispatch(loadUserProfile(id));
+    return () => {
+      dispatch({ type: "CLEAR_PROFILE" });
+    };
   }, [id]);
   return (
     <div className="w-2/3 bg-white block py-10 mobile:w-full mobile:py-0">
@@ -49,6 +56,38 @@ export function UserProfile() {
                 Joined {moment(user.createdAt).format("LL")}
               </p>
               <ProfileButton user={user} />
+              {user.isRequested.isFriend && (
+                <div className="window">
+                  <div>
+                    <ul className="flex">
+                      {tabs.map((item) => (
+                        <li
+                          key={item.label}
+                          className={
+                            item === selectedTab ? "selected flex" : "flex"
+                          }
+                          onClick={() => setSelectedTab(item)}
+                        >
+                          {`${item.icon} ${item.label}`}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <main>
+                    <AnimatePresence exitBeforeEnter>
+                      <motion.div
+                        key={selectedTab ? selectedTab.label : "empty"}
+                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.15 }}
+                      >
+                        {selectedTab ? selectedTab.component : "😋"}
+                      </motion.div>
+                    </AnimatePresence>
+                  </main>
+                </div>
+              )}
             </>
           ) : (
             error && (

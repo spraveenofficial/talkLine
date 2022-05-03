@@ -98,6 +98,16 @@ const getEachProfile = async (req, res) => {
     const user = await User.findOne({ _id: id }).select(
       "id name avatar bio cover createdAt"
     );
+    const myPosts = await Posts.find({ userId: id }).populate(
+      "userId",
+      "name avatar"
+    );
+    const likes = await Like.find({
+      postId: { $in: myPosts.map((post) => post._id.toString()) },
+    });
+    const checkIfBookmarked = await Bookmark.find({
+      postId: { $in: myPosts.map((post) => post._id.toString()) },
+    });
     if (!user) {
       return res
         .status(404)
@@ -114,6 +124,35 @@ const getEachProfile = async (req, res) => {
           haveToAccept:
             !checkIfUserHaveSentFriendRequest && checkIfExist ? true : false,
         },
+        posts: checkIfAlreadyFriend
+          ? myPosts.map((post) => {
+              return {
+                ...post._doc,
+                userId: post.userId._id,
+                userName: post.userId.name,
+                userAvatar: post.userId.avatar,
+                isBookmarked: checkIfBookmarked.find(
+                  (bookmark) =>
+                    bookmark.postId.toString() === post._id.toString()
+                )
+                  ? true
+                  : false,
+                likes: {
+                  count: likes.filter(
+                    (like) => like.postId.toString() === post._id.toString()
+                  ).length,
+                  isLiked: likes.some((like) => {
+                    return (
+                      like.postId.toString() === post._id.toString() &&
+                      like.userId.toString() === id
+                    );
+                  })
+                    ? true
+                    : false,
+                },
+              };
+            })
+          : [],
       },
     });
   } catch (err) {

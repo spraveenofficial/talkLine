@@ -15,6 +15,8 @@ import {
   UNFRIEND_FRIEND_PROFILE,
   MY_PROFILE_SUCCESS,
   MY_PROFILE_FAILURE,
+  UPDATE_PROFILE_LIKE,
+  UPDATE_PROFILE_BOOKMARK,
 } from "../Constants/profile-constants";
 
 export const profile = (
@@ -101,6 +103,43 @@ export const profile = (
             isFriend: true,
             haveToAccept: false,
           },
+        },
+      };
+    case UPDATE_PROFILE_LIKE:
+      return {
+        ...state,
+        loading: false,
+        user: {
+          ...state.user,
+          posts: state.user.posts.map((post) => {
+            if (post._id === action.payload.id) {
+              return {
+                ...post,
+                likes: {
+                  count: action.payload.status
+                    ? post.likes.count + 1
+                    : post.likes.count - 1,
+                  isLiked: action.payload.status,
+                },
+              };
+            }
+            return post;
+          }),
+        },
+      };
+    case UPDATE_PROFILE_BOOKMARK:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          posts: state.user.posts.map((post) => {
+            if (post._id === action.payload.id) {
+              return {
+                ...post,
+                isBookmarked: action.payload.status,
+              };
+            }
+          }),
         },
       };
     case SET_USER_POSTS:
