@@ -213,6 +213,9 @@ const getEachPost = async (req, res) => {
       postId,
       userId: id,
     });
+    const getComments = await Comment.find({ postId: postId })
+      .populate("userId", "name avatar")
+      .sort({ createdAt: 1 });
     res.status(200).json({
       success: true,
       message: "Post fetched successfully",
@@ -227,6 +230,14 @@ const getEachPost = async (req, res) => {
         likes: likes.length,
         isLiked,
       },
+      comments: getComments.map((eachComment) => {
+        return {
+          ...eachComment._doc,
+          userId: eachComment.userId._id,
+          userName: eachComment.userId.name,
+          userAvatar: eachComment.userId.avatar,
+        };
+      }),
     });
   } catch (error) {
     return res.status(400).json({

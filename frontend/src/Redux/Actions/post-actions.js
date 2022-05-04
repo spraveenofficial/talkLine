@@ -112,6 +112,7 @@ export const getPost = (id) => async (dispatch) => {
     const dataToSend = {
       post: data.post,
       likes: data.likeData,
+      comments: data.comments,
     };
     dispatch({
       type: POST_FETCH_SUCCESS,
@@ -188,5 +189,21 @@ export const getBookmarks = () => async (dispatch) => {
           ? error.response.data.message
           : error.message,
     });
+  }
+};
+
+export const addComment = (payload) => async (dispatch) => {
+  try {
+    const { data } = await axios({
+      method: "POST",
+      url: `${baseUrl}/post/comment`,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+      data: payload,
+    });
+    return data.success;
+  } catch (error) {
+    return false;
   }
 };

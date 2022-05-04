@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPost, likePost, bookmark } from "../../Redux/Actions";
+import { getPost, likePost, bookmark, addComment } from "../../Redux/Actions";
 import { LikeIcon, Toast, BookMarkIcon } from "../../Components";
 import moment from "moment";
 import Picker from "emoji-picker-react";
@@ -16,6 +16,7 @@ export function Post() {
   const { data, loading, error, success } = useSelector((state) => state.post);
   const post = data ? data.post : null;
   const likeData = data ? data.likes : null;
+  const comments = data ? data.comments : [];
   const handleTyping = (e) => {
     setComment(e.target.value);
   };
@@ -66,6 +67,47 @@ export function Post() {
     });
     return setMessage("You unbookmarked this post");
   };
+
+  const handleComment = async () => {
+    dispatch(addComment({ postId, comment }));
+  };
+  const CommentsComponent = () => {
+    return (
+      <div className="comments">
+        {comments.length > 0 ? (
+          comments.map((comment) => (
+            <div className="flex items-center bg-white ">
+              <div className="bg-white text-black ml-4 mt-2 antialiased flex max-w-lg">
+                <img
+                  className="rounded-full h-10 w-10 mr-2 mt-1 "
+                  src={comment.userAvatar}
+                />
+                <div>
+                  <div className="bg-gray-100 dark:bg-gray-700 rounded-3xl px-4 pt-2 pb-2.5">
+                    <div
+                      className="text-gray-600 text-sm font-semibold cursor-pointer"
+                      onClick={handleNavigateToProfile}
+                    >
+                      {comment.userName}
+                    </div>
+                    <div className="text-black font-medium text-sm">
+                      {comment.comment}
+                    </div>
+                  </div>
+                  <div className="text-sm ml-4 mt-0.5 text-gray-500">
+                    {moment(comment.createdAt).fromNow()}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="text-center text-gray-500">No comments yet</div>
+        )}
+      </div>
+    );
+  };
+
   if (!loading && error && !success) {
     return (
       <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center bg-slate-50">
@@ -183,11 +225,12 @@ export function Post() {
                   <div className="flex text-gray-700 font-normal text-sm rounded-md mb-2 mr-4 items-center">
                     Comments:
                     <div className="ml-1 text-gray-400 font-thin text-ms">
-                      0
+                      {comments.length}
                     </div>
                   </div>
                 </div>
               </div>
+              <CommentsComponent />
               <div className="relative flex items-center self-center w-full p-4 text-gray-600 focus-within:text-gray-400">
                 <img
                   className="w-10 h-10 object-cover rounded-full shadow mr-2 cursor-pointer"
@@ -197,7 +240,7 @@ export function Post() {
                 <span className="absolute inset-y-0 right-0 flex items-center pr-6">
                   <button
                     type="submit"
-                    className="p-1 focus:outline-none focus:shadow-none hover:text-blue-500"
+                    className="p-1 focus:outline-none focus:shadow-none hover:text-blue-500 flex items-center justify-center text-gray-600 rounded-full"
                   >
                     <svg
                       className="w-6 h-6 transition ease-out duration-300 hover:text-blue-500 text-gray-400"
@@ -213,6 +256,16 @@ export function Post() {
                         strokeWidth={2}
                         d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
+                    </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      stroke="currentColor"
+                      className="h-6 w-6 ml-2 transform rotate-90 w-6 h-6 transition ease-out duration-300 hover:text-blue-500 text-gray-400"
+                      onClick={() => setShowEmoji(false) || handleComment()}
+                    >
+                      <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                     </svg>
                   </button>
                 </span>
