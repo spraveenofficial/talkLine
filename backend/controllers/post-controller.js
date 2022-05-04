@@ -3,6 +3,7 @@ import imageService from "../services/image-services.js";
 import Like from "../models/Like.js";
 import FriendRequest from "../models/Friend-request.js";
 import Bookmark from "../models/Bookmark.js";
+import Comment from "../models/Comments.js";
 // @desc    Create Post
 // @route   POST /api/v1/post/create-post
 // @access  Private
@@ -235,5 +236,37 @@ const getEachPost = async (req, res) => {
   }
 };
 
+const createComment = async (req, res) => {
+  const { id } = req.data;
+  const { postId, comment } = req.body;
+  try {
+    // Check if post exists
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(400).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+    // Create comment
+    const newComment = new Comment({
+      userId: id,
+      postId,
+      comment,
+    });
+    await newComment.save();
+    return res.status(200).json({
+      success: true,
+      message: "Comment created successfully",
+      comment: newComment,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 // Export all the functions
-export { createPost, getPostsOfEachUser, getPosts, getEachPost };
+export { createPost, getPostsOfEachUser, getPosts, getEachPost, createComment };
