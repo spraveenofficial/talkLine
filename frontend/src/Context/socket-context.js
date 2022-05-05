@@ -16,7 +16,6 @@ const connectSocketReducer = (state, action) => {
         ...state,
         onlineFriends: action.payload,
       };
-
     default:
       return state;
   }
