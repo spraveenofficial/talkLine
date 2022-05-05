@@ -14,7 +14,7 @@ import {
   MY_PROFILE_SUCCESS,
   MY_PROFILE_FAILURE,
 } from "../Constants/profile-constants";
-import { UNFRIEND_FRIEND, UPDATE_USER_BIO } from "../Constants/auth-constants";
+import { UNFRIEND_FRIEND, UPDATE_USER_BIO, ADD_NEW_FRIEND_TO_CONTEXT } from "../Constants/auth-constants";
 export const loadUserProfile = (id) => async (dispatch) => {
   try {
     dispatch({
@@ -114,6 +114,10 @@ export const acceptFriendRequest = (id) => async (dispatch) => {
     });
     dispatch({
       type: ACCEPT_FRIEND_REQUEST,
+      payload: data.data,
+    });
+    dispatch({
+      type: ADD_NEW_FRIEND_TO_CONTEXT,
       payload: data.data,
     });
   } catch (error) {

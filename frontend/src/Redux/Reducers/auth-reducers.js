@@ -17,6 +17,8 @@ import {
   USER_LOGIN_SUCCESS,
   USER_LOGIN_FAILURE,
   UNFRIEND_FRIEND,
+  SENT_REQUEST_FROM_SUGGESTION,
+  ADD_NEW_FRIEND_TO_CONTEXT,
 } from "../Constants/auth-constants";
 
 const initialState = {
@@ -45,6 +47,27 @@ export const auth = (state = initialState, action) => {
           friends: state.user.friends.filter(
             (friend) => friend.id !== action.payload
           ),
+        },
+      };
+    case SENT_REQUEST_FROM_SUGGESTION:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          suggestions: state.user.suggestions.map((eachSuggestion) => {
+            if (eachSuggestion._id === action.payload) {
+              return { ...eachSuggestion, isRequested: true };
+            }
+            return eachSuggestion;
+          }),
+        },
+      };
+    case ADD_NEW_FRIEND_TO_CONTEXT:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          friends: [action.payload, ...state.user.friends],
         },
       };
     default:

@@ -1,14 +1,27 @@
 import { SearchBarforSideBar } from "./searchBar";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Fragment } from "react";
+import { sendFriendRequest } from "../../Redux/Actions";
 export function RightSidebar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const navigateToExplore = () => {
     navigate("/explore");
   };
   const { user } = useSelector((state) => state.auth);
   const suggestions = user.suggestions;
+
+  const handleUserClick = (user, event) => {
+    if (event.target.tagName === "BUTTON") {
+      return (
+        dispatch(sendFriendRequest(user._id)) &&
+        dispatch({ type: "SENT_REQUEST_FROM_SUGGESTION", payload: user._id })
+      );
+    } else {
+      navigate(`/user/${user._id}`);
+    }
+  };
   return (
     <div className="sticky left-0 top-0 w-2/6 text-white flex flex-col h-screen mobile:w-full mobile:h-full">
       <div className="pr-3 h-full flex flex-col">
@@ -25,30 +38,31 @@ export function RightSidebar() {
           {suggestions.map((eachUser) => {
             return (
               <Fragment key={eachUser._id}>
-                <div className="flex flex-shrink-0">
-                  <div className="flex-1 ">
-                    <div className="flex items-center w-48">
-                      <div>
+                <div className="flex flex-shrink-1">
+                  <div className="w-full">
+                    <div
+                      onClick={(e) => handleUserClick(eachUser, e)}
+                      className="flex p-2 cursor-pointer items-center w-full justify-between"
+                    >
+                      <div className="min-w-fit p-2">
                         <img
-                          className="inline-block h-10 w-auto rounded-full ml-4 mt-2"
+                          className="inline-block h-10 w-auto rounded-full"
                           src={eachUser.avatar}
                           alt={eachUser.name}
                         />
                       </div>
-                      <div className="ml-3 mt-3">
+                      <div className="w-full">
                         <p className="text-base leading-6 font-medium text-black">
                           {eachUser.name}
                         </p>
-                        <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                          @spraveenofficial
-                        </p>
                       </div>
+                      <button
+                        disabled={eachUser.isRequested}
+                        className="min-w-fit float-left bg-indigo-600 hover:bg-indigo-800 text-white font-thin py-1 px-2 border border-white hover:border-transparent rounded-full"
+                      >
+                        {eachUser.isRequested ? "Request sent" : "Add Friend"}
+                      </button>
                     </div>
-                  </div>
-                  <div className="flex-1 px-4 py-2 m-2">
-                    <button className="float-right bg-indigo-600 hover:bg-indigo-800 text-white font-semibold py-2 px-4 border border-white hover:border-transparent rounded-full">
-                      Request
-                    </button>
                   </div>
                 </div>
                 <hr className="border-gray-800" />

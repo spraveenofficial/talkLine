@@ -108,10 +108,13 @@ const acceptFriendRequest = async (req, res) => {
     });
     friendRequest.status = "accepted";
     const savedFriendRequest = await friendRequest.save();
+    const sender = await User.findOne({
+      _id: savedFriendRequest.senderId,
+    }).select("id name avatar bio");
     res.status(200).json({
       success: true,
       message: "Friend request accepted successfully",
-      friendRequest: savedFriendRequest,
+      data: sender,
     });
   } catch (err) {
     console.log(err);
