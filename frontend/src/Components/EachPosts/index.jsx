@@ -17,25 +17,34 @@ export function EachPost(props) {
     navigate(`/post/${post._id}`);
   };
   return (
-    <div className="container w-full b">
-      <div className="flex flex-row mt-2 px-2 py-3 mx-3">
-        <div className="w-auto h-auto rounded-full border-2 border-indigo-600">
-          <img
-            className="w-12 h-12 object-cover rounded-full shadow cursor-pointer"
-            alt="User avatar"
-            src={post.userAvatar}
-          />
-        </div>
-        <div className="flex flex-col mb-2 ml-4 mt-1">
-          <div
-            onClick={navigateToUserProfile}
-            className="text-gray-600 text-sm font-semibold cursor-pointer hover:text-black"
-          >
-            {post.userName}
+    <div className="container overflow-x-hidden w-full b">
+      <div className="pr-4 flex justify-between flex-row mt-2 px-2 py-3 mx-3 w-full">
+        <div className="flex">
+          <div className="w-auto h-auto rounded-full border-2 border-indigo-600">
+            <img
+              className="w-12 h-12 object-cover rounded-full shadow cursor-pointer"
+              alt="User avatar"
+              src={post.userAvatar}
+            />
           </div>
-          <div className="flex w-full mt-1">
-            <div className="text-gray-400 font-thin text-xs">
-              {moment(post.createdAt).fromNow()}
+          <div className="flex flex-col mb-2 ml-4 mt-1">
+            <div
+              onClick={navigateToUserProfile}
+              className="text-gray-600 text-sm font-semibold cursor-pointer hover:text-black"
+            >
+              {post.userName}
+            </div>
+            <div className="flex w-full mt-1">
+              <div className="text-gray-400 font-thin text-xs">
+                {moment(post.createdAt).fromNow()}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-red-400 items-center text-center">
+          <div className="flex items-center">
+            <div className="text-gray-600 text-sm font-semibold cursor-pointer hover:text-black">
+              Options
             </div>
           </div>
         </div>
