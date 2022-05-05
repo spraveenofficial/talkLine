@@ -15,6 +15,7 @@ import {
   BOOKMARK_FETCH_SUCCESS,
   BOOKMARK_FETCH_FAILURE,
   FEED_SCROLL_DONE,
+  ADD_COMMENT_TO_POST,
 } from "../Constants/post-constants";
 import { ADD_NEW_POST_PROFILE } from "../Constants/profile-constants";
 export const createNewPost = (post) => async (dispatch) => {
@@ -201,6 +202,10 @@ export const addComment = (payload) => async (dispatch) => {
         token: `Bearer ${localStorage.getItem("token")}`,
       },
       data: payload,
+    });
+    dispatch({
+      type: ADD_COMMENT_TO_POST,
+      payload: data.comment,
     });
     return data.success;
   } catch (error) {

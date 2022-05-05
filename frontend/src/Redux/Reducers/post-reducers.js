@@ -21,6 +21,7 @@ import {
   UPDATE_BOOKMARK_LIKE,
   REMOVE_FROM_BOOKMARK,
   FEED_SCROLL_DONE,
+  ADD_COMMENT_TO_POST,
 } from "../Constants/post-constants";
 
 export const newPost = (
@@ -208,6 +209,14 @@ export const post = (
             ...state.data.post,
             isBookmarked: action.payload,
           },
+        },
+      };
+    case ADD_COMMENT_TO_POST:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          comments: [...state.data.comments, action.payload],
         },
       };
     default:

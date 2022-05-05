@@ -69,7 +69,13 @@ export function Post() {
   };
 
   const handleComment = async () => {
-    dispatch(addComment({ postId, comment }));
+    setMessage("");
+    const response = await dispatch(addComment({ postId, comment }));
+    if (response) {
+      setComment("");
+      setShowEmoji(false);
+      return setMessage("You commented on this post");
+    }
   };
   const CommentsComponent = () => {
     return (
@@ -102,7 +108,9 @@ export function Post() {
             </div>
           ))
         ) : (
-          <div className="text-center text-gray-500">No comments yet</div>
+          <div className="text-center text-gray-500">
+            No comments yet, be the first one.
+          </div>
         )}
       </div>
     );

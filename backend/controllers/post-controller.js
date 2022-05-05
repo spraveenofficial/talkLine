@@ -247,11 +247,14 @@ const getEachPost = async (req, res) => {
   }
 };
 
+// @desc    Comment on a post
+// @route   POST /api/v1/post/comment
+// @access  Private
+
 const createComment = async (req, res) => {
   const { id } = req.data;
   const { postId, comment } = req.body;
   try {
-    // Check if post exists
     const post = await Post.findById(postId);
     if (!post) {
       return res.status(400).json({
@@ -259,17 +262,26 @@ const createComment = async (req, res) => {
         message: "Post not found",
       });
     }
-    // Create comment
+    // TODO: Check if user is friend or not of the post owner
     const newComment = new Comment({
       userId: id,
       postId,
       comment,
     });
     await newComment.save();
+    const commented = await Comment.findById(newComment._id).populate(
+      "userId",
+      "name avatar"
+    );
     return res.status(200).json({
       success: true,
       message: "Comment created successfully",
-      comment: newComment,
+      comment: {
+        ...commented._doc,
+        userId: commented.userId._id,
+        userName: commented.userId.name,
+        userAvatar: commented.userId.avatar,
+      },
     });
   } catch (err) {
     return res.status(400).json({
