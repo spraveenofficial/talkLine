@@ -71,54 +71,52 @@ const sendMessage = async (req, res) => {
 
 const getUserChats = async (req, res) => {
   const { id } = req.data;
-  // Get all the friends of the user and there total unseen messages by the users
   const acceptedFriends = await FriendRequest.find({
-    $or: [{ senderId: id }, { receiverId: id }],
-    status: "accepted",
-  })
-    .select()
-    .populate("senderId", "name avatar")
-    .populate("receiverId", "name avatar");
-  console.log(acceptedFriends);
+    $or: [
+      { senderId: id, status: "accepted" },
+      { receiverId: id, status: "accepted" },
+    ],
+  }).select();
   const friends = acceptedFriends.map((friend) => {
-    if (friend.senderId._id.toString() === id) {
-      return friend.receiverId._id.toString();
+    if (friend.senderId.toString() === id) {
+      return friend.receiverId;
     } else {
-      return friend.senderId._id.toString();
+      return friend.senderId;
     }
   });
+  const friendsList = await User.find({ _id: { $in: friends } })
+    .select("id name avatar bio")
+    .sort({ updatedAt: -1 });
 
-  const messages = await Message.find({
-    $in: [{ sender: { $in: friends }, receiver: id }],
+  //  Get all the unseen received messages
+  const unseenMessages = await Message.find({
+    receiver: id,
     seen: false,
-  })
-    .select("-receiver")
-    .populate("sender", "name avatar");
-  if (messages.length === 0) {
-    return res.status(200).json({
-      success: true,
-      message: "No messages found",
-      messages: [],
-    });
-  }
-  return res.status(200).json({
+  }).select("sender message seen");
+  const unseenMessagesList = unseenMessages.map((message) => {
+    return {
+      sender: message.sender,
+      message: message.message,
+      seen: message.seen,
+    };
+  });
+
+  res.json({
     success: true,
-    message: "Messages fetched successfully",
-    // Send all the friends of the user and there total unseen messages by the users
-    messages: acceptedFriends.map((friend) => {
-      const friendId =
-        friend.senderId._id.toString() === id
-          ? friend.receiverId
-          : friend.senderId;
-      const friendMessages = messages.filter(
-        (message) => message.sender.toString() === friendId.toString()
-      );
+    message: "Chats fetched successfully",
+    friendsList: friendsList.map((friend) => {
       return {
-        friend,
-        friendId: friendId.toString(),
-        friendName: friend.senderId.name,
-        friendAvatar: friend.senderId.avatar,
-        friendMessages: friendMessages,
+        id: friend._id,
+        name: friend.name,
+        avatar: friend.avatar,
+        bio: friend.bio,
+        unseenMessages: unseenMessagesList.filter(
+          (message) => message.sender.toString() === friend._id.toString()
+        )
+          ? unseenMessagesList.filter(
+              (message) => message.sender.toString() === friend._id.toString()
+            ).length
+          : 0,
       };
     }),
   });
