@@ -60,9 +60,6 @@ const connectSocketReducer = (state, action) => {
 const SocketContextProvider = ({ children }) => {
   const ENDPOINT = process.env.REACT_APP_SOCKET_URL;
   const dispatch = useDispatch();
-  let messageAudio = new Audio(
-    "https://sendeyo.com/up/f56ea5eed7085d5441519fcc66f3bfd9.wav"
-  );
   const [state, setDispatch] = useReducer(connectSocketReducer, {
     socket: null,
     onlineFriends: [],
@@ -91,20 +88,18 @@ const SocketContextProvider = ({ children }) => {
         });
       });
       state.socket.on("receiveMessage", (data) => {
-        if (selectedId?.id === data.sender.id) {
-          const checkIfThisExists = chats.find((chat) => chat.id !== data.id);
-          if (!checkIfThisExists) {
-            return dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
-          }
+        if (selectedId !== null && selectedId?.id === data.sender.id) {
+          console.log("Executed if....");
+          return dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
+        } else {
+          return setDispatch({
+            type: "UPDATE_MESSAGE_NOTIFICATION",
+            payload: data,
+          });
         }
-        messageAudio.play();
-        return setDispatch({
-          type: "UPDATE_MESSAGE_NOTIFICATION",
-          payload: data,
-        });
       });
     }
-  }, [state.socket, selectedId]);
+  }, [state.socket, selectedId?.id]);
 
   const getMessagesNotification = async () => {
     const { data } = await getMessageNotification();
