@@ -66,7 +66,7 @@ const SocketContextProvider = ({ children }) => {
     messageNotification: [],
   });
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-  const { selectedId, chats } = useSelector((state) => state.message);
+  const { selectedId } = useSelector((state) => state.message);
   useEffect(() => {
     if (isAuthenticated) {
       const socket = io(ENDPOINT);
