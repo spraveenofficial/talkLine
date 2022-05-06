@@ -44,6 +44,7 @@ export function Profile() {
     );
   };
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(loadMyProfile());
   }, []);
   return (

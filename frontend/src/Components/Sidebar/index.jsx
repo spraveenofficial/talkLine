@@ -13,9 +13,14 @@ import {
   Modal,
 } from "../index";
 import { userLogout } from "../../Redux/Actions";
+import { useSocket } from "../../Context/socket-context";
 
 export function Sidebar() {
   const dispatch = useDispatch();
+  const { messageNotification } = useSocket();
+  const getNotificationCount = messageNotification.filter(
+    (eachNotifiaction) => eachNotifiaction.unseenMessages > 0
+  );
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const [isSelectedLogout, setIsSelectedLogout] = useState(false);
@@ -78,7 +83,14 @@ export function Sidebar() {
               to="/messages"
             >
               <MessageIcon />
-              Messages
+              <div className="flex gap-2">
+                <p>Messages</p>
+                {getNotificationCount.length > 0 && (
+                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs">
+                    {getNotificationCount.length}
+                  </span>
+                )}
+              </div>
             </NavLink>
             <NavLink
               className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full text-black"

@@ -8,7 +8,8 @@ import { debounce } from "../../Utils/debounce";
 
 export function Message() {
   const dispatch = useDispatch();
-  const { onlineFriends } = useSocket();
+  const { onlineFriends, messageNotification } = useSocket();
+  console.log(messageNotification);
   const { user } = useSelector((state) => state.auth);
   const { selectedId } = useSelector((state) => state.message);
   const { friends } = user;
@@ -100,6 +101,9 @@ export function Message() {
               const isOnline = onlineFriends.some(
                 (eachUser) => eachUser.userId === eachFriend.id
               );
+              const eachNotification = messageNotification.find(
+                (each) => each.id === eachFriend.id
+              );
               return (
                 <div
                   key={eachFriend.id}
@@ -114,6 +118,11 @@ export function Message() {
                   <p className="whitespace-nowrap overflow-hidden w-full text-ellipsis font-bold text-sm mt-1">
                     {eachFriend.name}
                   </p>
+                  {eachNotification.unseenMessages > 0 && (
+                    <span className="bg-indigo-500 absolute top-0 -right-2 text-white px-3 py-1 rounded-full text-xs">
+                      {eachNotification.unseenMessages}
+                    </span>
+                  )}
                   <span
                     className={`top-12 left-12 absolute w-4 h-4 border-2 border-white dark:border-gray-800 rounded-full ${
                       isOnline ? "bg-green-500" : "bg-red-500"

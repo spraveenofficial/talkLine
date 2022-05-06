@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
+import { getMessageNotification } from "../Redux/Actions";
 const SocketContext = createContext();
 const useSocket = () => useContext(SocketContext);
 
@@ -16,6 +17,11 @@ const connectSocketReducer = (state, action) => {
         ...state,
         onlineFriends: action.payload,
       };
+    case "GET_MESSAGE_NOTIFICATION":
+      return {
+        ...state,
+        messageNotification: action.payload,
+      };
     default:
       return state;
   }
@@ -26,6 +32,7 @@ const SocketContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(connectSocketReducer, {
     socket: null,
     onlineFriends: [],
+    messageNotification: [],
   });
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   useEffect(() => {
@@ -36,6 +43,7 @@ const SocketContextProvider = ({ children }) => {
         type: "CONNECT_SOCKET",
         payload: socket,
       });
+      getMessagesNotification();
     }
   }, [isAuthenticated]);
 
@@ -49,9 +57,21 @@ const SocketContextProvider = ({ children }) => {
       });
     }
   }, [state.socket]);
+
+  const getMessagesNotification = async () => {
+    const { data } = await getMessageNotification();
+    return dispatch({
+      type: "GET_MESSAGE_NOTIFICATION",
+      payload: data ? data : [],
+    });
+  };
   return (
     <SocketContext.Provider
-      value={{ socket: state.socket, onlineFriends: state.onlineFriends }}
+      value={{
+        socket: state.socket,
+        onlineFriends: state.onlineFriends,
+        messageNotification: state.messageNotification,
+      }}
     >
       {children}
     </SocketContext.Provider>

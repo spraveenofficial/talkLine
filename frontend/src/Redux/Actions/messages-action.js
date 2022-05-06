@@ -52,3 +52,19 @@ export const sendMessage = (payload) => async (dispatch) => {
     return false;
   }
 };
+
+export const getMessageNotification = async () => {
+  try {
+    const { data } = await axios({
+      method: "GET",
+      url: `${baseUrl}/message/messages`,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return { data: data.data };
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};

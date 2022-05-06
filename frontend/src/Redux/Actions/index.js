@@ -31,4 +31,8 @@ export {
 
 export { fetchNotification, markAsSeen } from "./notification-actions";
 
-export { fetchChat, sendMessage } from "./messages-action";
+export {
+  fetchChat,
+  sendMessage,
+  getMessageNotification,
+} from "./messages-action";

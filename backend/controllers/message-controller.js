@@ -104,7 +104,7 @@ const getUserChats = async (req, res) => {
   res.json({
     success: true,
     message: "Chats fetched successfully",
-    friendsList: friendsList.map((friend) => {
+    data: friendsList.map((friend) => {
       return {
         id: friend._id,
         name: friend.name,
