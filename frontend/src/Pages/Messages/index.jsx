@@ -1,6 +1,5 @@
 import { MessageIcon } from "../../Components";
-import { io } from "socket.io-client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChatScreen } from "./ChatScreen";
 import { useSocket } from "../../Context/socket-context";
@@ -14,6 +13,26 @@ export function Message() {
   const { friends } = user;
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [friendsWithNotification, setFriendsWithNotification] =
+    useState(friends);
+  useEffect(() => {
+    if (messageNotification) {
+      const sortedFriends = friends.map((friend) => {
+        const friendWithNotification = messageNotification.find(
+          (notification) => notification.id === friend.id
+        );
+        if (friendWithNotification) {
+          return { ...friend, ...friendWithNotification };
+        } else {
+          return friend;
+        }
+      });
+      const sortedFriendsWithNotification = sortedFriends.sort(
+        (a, b) => new Date(b.recentMessage) - new Date(a.recentMessage)
+      );
+      setFriendsWithNotification(sortedFriendsWithNotification);
+    }
+  }, [messageNotification, friends]);
   useEffect(() => {
     return () => {
       dispatch({ type: "MESSAGE_CLEAR" });
@@ -52,7 +71,7 @@ export function Message() {
           className="bg-dim-700 font-black h-10 p-4 w-full rounded-full text-sm focus:outline-none bg-purple-white shadow rounded border"
           placeholder="Search Friends"
           onChange={handleType}
-          // value={search}
+          defaultValue={search}
         />
         <div className="absolute w-full top-100 left-0 right-0 z-40 pt-2 pb-1 max-h-select overflow-y-auto">
           {searchResult.map((eachUser) => {
@@ -96,12 +115,9 @@ export function Message() {
               No friends, connect to users first.
             </h1>
           ) : (
-            friends.map((eachFriend) => {
+            friendsWithNotification.map((eachFriend) => {
               const isOnline = onlineFriends.some(
                 (eachUser) => eachUser.userId === eachFriend.id
-              );
-              const eachNotification = messageNotification.find(
-                (each) => each.id === eachFriend.id
               );
               return (
                 <div
@@ -117,9 +133,9 @@ export function Message() {
                   <p className="whitespace-nowrap overflow-hidden w-full text-ellipsis font-bold text-sm mt-1">
                     {eachFriend.name}
                   </p>
-                  {eachNotification?.unseenMessages > 0 && (
+                  {eachFriend?.unseenMessages > 0 && (
                     <span className="bg-indigo-500 absolute top-0 -right-2 text-white px-3 py-1 rounded-full text-xs">
-                      {eachNotification.unseenMessages}
+                      {eachFriend.unseenMessages}
                     </span>
                   )}
                   <span

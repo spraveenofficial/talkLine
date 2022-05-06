@@ -31,6 +31,7 @@ const connectSocketReducer = (state, action) => {
               return {
                 ...eachNotification,
                 unseenMessages: eachNotification.unseenMessages + 1,
+                recentMessage: action.payload.createdAt,
               };
             }
             return eachNotification;
@@ -66,7 +67,7 @@ const SocketContextProvider = ({ children }) => {
     messageNotification: [],
   });
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-  const { selectedId } = useSelector((state) => state.message);
+  const { selectedId, chats } = useSelector((state) => state.message);
   useEffect(() => {
     if (isAuthenticated) {
       const socket = io(ENDPOINT);
@@ -88,8 +89,8 @@ const SocketContextProvider = ({ children }) => {
         });
       });
       state.socket.on("receiveMessage", (data) => {
-        if (selectedId !== null && selectedId?.id === data.sender.id) {
-          console.log("Executed if....");
+        if (selectedId?.id === data.sender.id) {
+          if (chats.some((chat) => chat._id === data._id)) return;
           return dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
         } else {
           return setDispatch({

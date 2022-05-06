@@ -98,10 +98,9 @@ const getEachProfile = async (req, res) => {
     const user = await User.findOne({ _id: id }).select(
       "id name avatar bio cover createdAt"
     );
-    const myPosts = await Posts.find({ userId: id }).populate(
-      "userId",
-      "name avatar"
-    );
+    const myPosts = await Posts.find({ userId: id })
+      .populate("userId", "name avatar")
+      .sort({ createdAt: -1 });
     const likes = await Like.find({
       postId: { $in: myPosts.map((post) => post._id.toString()) },
     });

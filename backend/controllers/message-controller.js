@@ -102,6 +102,14 @@ const getUserChats = async (req, res) => {
     receiver: id,
     seen: false,
   }).select("sender message seen");
+
+  // Get all the user recent messages with timestamp
+  const recentMessages = await Message.find({
+    $or: [
+      { sender: id, receiver: { $in: friends } },
+      { sender: { $in: friends }, receiver: id },
+    ],
+  }).sort({ updatedAt: -1 });
   const unseenMessagesList = unseenMessages.map((message) => {
     return {
       sender: message.sender,
@@ -113,21 +121,40 @@ const getUserChats = async (req, res) => {
   res.json({
     success: true,
     message: "Chats fetched successfully",
-    data: friendsList.map((friend) => {
-      return {
-        id: friend._id,
-        name: friend.name,
-        avatar: friend.avatar,
-        bio: friend.bio,
-        unseenMessages: unseenMessagesList.filter(
-          (message) => message.sender.toString() === friend._id.toString()
-        )
-          ? unseenMessagesList.filter(
-              (message) => message.sender.toString() === friend._id.toString()
-            ).length
-          : 0,
-      };
-    }),
+    data: friendsList
+      .map((friend) => {
+        return {
+          id: friend._id,
+          name: friend.name,
+          avatar: friend.avatar,
+          bio: friend.bio,
+          unseenMessages: unseenMessagesList.filter(
+            (message) => message.sender.toString() === friend._id.toString()
+          )
+            ? unseenMessagesList.filter(
+                (message) => message.sender.toString() === friend._id.toString()
+              ).length
+            : 0,
+          recentMessage: recentMessages.filter(
+            (message) =>
+              message.sender.toString() === friend._id.toString() ||
+              message.receiver.toString() === friend._id.toString()
+          )[0]
+            ? recentMessages.filter(
+                (message) =>
+                  message.sender.toString() === friend._id.toString() ||
+                  message.receiver.toString() === friend._id.toString()
+              )[0].updatedAt
+            : null,
+        };
+      })
+      .sort((a, b) => {
+        if (a.recentMessage > b.recentMessage) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }),
   });
 };
 

@@ -118,14 +118,14 @@ export function Post() {
 
   if (!loading && error && !success) {
     return (
-      <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center bg-slate-50">
+      <div className="text-black flex-col w-2/3 mobile:w-full h-screen flex justify-center align-center texts-center bg-slate-50">
         <p className="text-xl">404 || Post Not Found.</p>
       </div>
     );
   }
   if (loading) {
     return (
-      <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center">
+      <div className="text-black flex-col w-2/3 h-screen flex justify-center align-center texts-center mobile:w-full">
         <div
           className="w-10 mb-10 h-10 rounded-full animate-spin
                 border-2 border-dashed border-black-600 border-t-black mr-1"
