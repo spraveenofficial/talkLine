@@ -24,6 +24,15 @@ const accessChats = async (req, res) => {
         chats: [],
       });
     }
+    await Message.updateMany(
+      {
+        $or: [
+          { sender: userId, receiver: id },
+          { sender: id, receiver: userId },
+        ],
+      },
+      { seen: true }
+    );
     return res.status(200).json({
       success: true,
       message: "Chats fetched successfully",
