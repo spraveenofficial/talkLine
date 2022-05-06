@@ -11,7 +11,7 @@ import {
 } from "./renderlogin";
 import { useSocket } from "../../Context/socket-context";
 export const ChatScreen = () => {
-  const { socket, onlineFriends } = useSocket();
+  const { socket, onlineFriends, setDispatch } = useSocket();
   const messagesEndRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,6 +28,10 @@ export const ChatScreen = () => {
     dispatch(fetchChat(selectedId.id));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
+    setDispatch({
+      type: "UPDATE_SEEN_MESSAGE",
+      payload: selectedId.id,
+    });
   }, [selectedId]);
 
   useEffect(() => {
@@ -37,15 +41,6 @@ export const ChatScreen = () => {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-
-  useEffect(() => {
-    socket.on("receiveMessage", (data) => {
-      const checkIfThisExists = chats.find((chat) => chat.id !== data.id);
-      if (!checkIfThisExists) {
-        dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
-      }
-    });
-  }, []);
 
   // Detect if user is pressing enter key
   const handleKeyPress = (e) => {

@@ -9,7 +9,6 @@ import { debounce } from "../../Utils/debounce";
 export function Message() {
   const dispatch = useDispatch();
   const { onlineFriends, messageNotification } = useSocket();
-  console.log(messageNotification);
   const { user } = useSelector((state) => state.auth);
   const { selectedId } = useSelector((state) => state.message);
   const { friends } = user;
@@ -118,7 +117,7 @@ export function Message() {
                   <p className="whitespace-nowrap overflow-hidden w-full text-ellipsis font-bold text-sm mt-1">
                     {eachFriend.name}
                   </p>
-                  {eachNotification.unseenMessages > 0 && (
+                  {eachNotification?.unseenMessages > 0 && (
                     <span className="bg-indigo-500 absolute top-0 -right-2 text-white px-3 py-1 rounded-full text-xs">
                       {eachNotification.unseenMessages}
                     </span>
