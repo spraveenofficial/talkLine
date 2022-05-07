@@ -291,5 +291,43 @@ const createComment = async (req, res) => {
   }
 };
 
+// @desc    Delete post
+// @route   DELETE /api/v1/post/:postId
+// @access  Private
+
+const deletePost = async (req, res) => {
+  const { id } = req.data;
+  const { postId } = req.body;
+  try {
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(400).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+    if (post.userId.toString() !== id) {
+      return res.status(400).json({
+        success: false,
+        message: "You are not authorized to delete this post",
+      });
+    }
+    await post.remove();
+    // Delete all the likes, comments, bookmarks related to this post
+    await Like.deleteMany({ postId });
+    await Comment.deleteMany({ postId });
+    await Bookmark.deleteMany({ postId });
+    return res.status(200).json({
+      success: true,
+      message: "Post deleted successfully",
+    });
+  } catch (err) {
+    return res.status(400).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 // Export all the functions
-export { createPost, getPostsOfEachUser, getPosts, getEachPost, createComment };
+export { createPost, getPostsOfEachUser, getPosts, getEachPost, createComment, deletePost };

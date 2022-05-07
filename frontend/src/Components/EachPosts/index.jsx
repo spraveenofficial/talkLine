@@ -1,12 +1,15 @@
 import moment from "moment";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LikeIcon, BookMarkIcon } from "..";
+import { deletePost } from "../../Redux/Actions";
 export function EachPost(props) {
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const post = props.post;
   const like = props.post.likes;
+  const [isOpen, setIsOpen] = useState(false);
   const navigateToUserProfile = () => {
     if (user.id !== post.userId) {
       return navigate(`/user/${post.userId}`);
@@ -15,6 +18,34 @@ export function EachPost(props) {
   };
   const navigateToPost = () => {
     navigate(`/post/${post._id}`);
+  };
+
+  const handleDelete = () => {
+    setIsOpen(!isOpen);
+    deletePost(post._id);
+  };
+
+  const RenderOptions = () => {
+    return (
+      <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+        {user.id === post.userId && (
+          <>
+            <p
+              onClick={() => handleDelete()}
+              className="pointer text-gray-500 font-medium hover:text-gray-900 hover:bg-gray-50 block px-4 py-2 text-sm"
+            >
+              Delete Post
+            </p>
+            <p className="pointer text-gray-500 font-medium hover:text-gray-900 hover:bg-gray-50 block px-4 py-2 text-sm">
+              Edit Post
+            </p>
+          </>
+        )}
+        <p className="pointer text-gray-500 font-medium hover:text-gray-900 hover:bg-gray-50 block px-4 py-2 text-sm">
+          Report Post
+        </p>
+      </div>
+    );
   };
   return (
     <div className="container overflow-x-hidden w-full b">
@@ -41,10 +72,29 @@ export function EachPost(props) {
             </div>
           </div>
         </div>
-        <div className="bg-red-400 items-center text-center">
-          <div className="flex items-center">
-            <div className="text-gray-600 text-sm font-semibold cursor-pointer hover:text-black">
-              Options
+        <div className="items-center text-center">
+          <div className="flex items-center w-full h-full">
+            <div className="inline-block relative text-left">
+              <button
+                type="button"
+                className="flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                id="menu-button"
+                aria-expanded="true"
+                aria-haspopup="true"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <span className="sr-only" />
+                <svg
+                  className="h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                </svg>
+              </button>
+              {isOpen && <RenderOptions />}
             </div>
           </div>
         </div>

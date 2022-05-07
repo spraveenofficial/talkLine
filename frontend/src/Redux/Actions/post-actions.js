@@ -212,3 +212,21 @@ export const addComment = (payload) => async (dispatch) => {
     return false;
   }
 };
+
+export const deletePost = async (id) =>  {
+  try {
+    const { data } = await axios({
+      method: "DELETE",
+      url: `${baseUrl}/post/delete`,
+      headers: {
+        token: `Bearer ${localStorage.getItem("token")}`,
+      },
+      data: {
+        postId: id,
+      },
+    });
+    return data.success;
+  } catch (error) {
+    return false;
+  }
+};
