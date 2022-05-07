@@ -30,7 +30,7 @@ const MyPosts = () => {
         <div className="py-5">
           <div className="flex flex-wrap">
             {user.posts.map((post) => (
-              <EachPost key={post._id} post={post} />
+              <EachPost key={post._id} post={post} superAccess={true} />
             ))}
           </div>
         </div>

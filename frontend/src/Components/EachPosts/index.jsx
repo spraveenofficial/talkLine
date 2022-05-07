@@ -48,7 +48,7 @@ export function EachPost(props) {
     );
   };
   return (
-    <div className="container overflow-x-hidden w-full b">
+    <div className="container overflow-x-hidden w-full">
       <div className="pr-4 flex justify-between flex-row mt-2 px-2 py-3 mx-3 w-full">
         <div className="flex">
           <div className="w-auto h-auto rounded-full border-2 border-indigo-600">
@@ -72,32 +72,34 @@ export function EachPost(props) {
             </div>
           </div>
         </div>
-        <div className="items-center text-center">
-          <div className="flex items-center w-full h-full">
-            <div className="inline-block relative text-left">
-              <button
-                type="button"
-                className="flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
-                id="menu-button"
-                aria-expanded="true"
-                aria-haspopup="true"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-                <span className="sr-only" />
-                <svg
-                  className="h-5 w-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
+        {props.superAccess && (
+          <div className="items-center text-center">
+            <div className="flex items-center w-full h-full">
+              <div className="inline-block relative text-left">
+                <button
+                  type="button"
+                  className="flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                  id="menu-button"
+                  aria-expanded="true"
+                  aria-haspopup="true"
+                  onClick={() => setIsOpen(!isOpen)}
                 >
-                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                </svg>
-              </button>
-              {isOpen && <RenderOptions />}
+                  <span className="sr-only" />
+                  <svg
+                    className="h-5 w-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                  </svg>
+                </button>
+                {isOpen && <RenderOptions />}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
       <div className="border-b border-gray-100" />
       <div onClick={navigateToPost} className="mt-5">
