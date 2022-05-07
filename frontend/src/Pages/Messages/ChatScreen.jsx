@@ -57,6 +57,10 @@ export const ChatScreen = () => {
     );
     socket.emit("send-message", data);
     setUserMessage("");
+    setDispatch({
+      type: "UPDATE_RESENT_MESSAGE",
+      payload: data,
+    });
   };
 
   // Function to handle typing

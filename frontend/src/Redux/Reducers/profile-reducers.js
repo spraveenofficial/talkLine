@@ -18,6 +18,7 @@ import {
   UPDATE_PROFILE_LIKE,
   UPDATE_PROFILE_BOOKMARK,
   ADD_NEW_POST_PROFILE,
+  DELETE_POST_PROFILE,
 } from "../Constants/profile-constants";
 
 export const profile = (
@@ -232,6 +233,14 @@ export const myprofile = (
         user: {
           ...state.user,
           posts: [action.payload, ...state.user.posts],
+        },
+      };
+    case DELETE_POST_PROFILE:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          posts: state.user.posts.filter((post) => post._id !== action.payload),
         },
       };
     default:

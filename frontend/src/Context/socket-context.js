@@ -53,6 +53,21 @@ const connectSocketReducer = (state, action) => {
           }
         ),
       };
+    case "UPDATE_RESENT_MESSAGE":
+      return {
+        ...state,
+        messageNotification: state.messageNotification.map(
+          (eachNotification) => {
+            if (eachNotification.id === action.payload.receiver) {
+              return {
+                ...eachNotification,
+                recentMessage: action.payload.createdAt,
+              };
+            }
+            return eachNotification;
+          }
+        ),
+      };
     default:
       return state;
   }

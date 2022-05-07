@@ -1,10 +1,26 @@
 import { AnimateSharedLayout, motion } from "framer-motion";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { EachPost } from "..";
-import { unfriendUser } from "../../Redux/Actions";
+import { EachPost, Toast } from "..";
+import { deletePost, unfriendUser } from "../../Redux/Actions";
 const MyPosts = () => {
+  const dispatch = useDispatch();
+  const [message, setMessage] = useState("");
   const { user, loading, success } = useSelector((state) => state.myprofile);
+
+  const handleDeletePost = async (id) => {
+    setMessage("");
+    const response = await deletePost(id);
+    if (response) {
+      setMessage("Post Deleted");
+      return dispatch({
+        type: "DELETE_POST_PROFILE",
+        payload: id,
+      });
+    }
+    return setMessage("Post Not Deleted");
+  };
   if (loading) {
     return (
       <AnimateSharedLayout>
@@ -30,10 +46,16 @@ const MyPosts = () => {
         <div className="py-5">
           <div className="flex flex-wrap">
             {user.posts.map((post) => (
-              <EachPost key={post._id} post={post} superAccess={true} />
+              <EachPost
+                key={post._id}
+                post={post}
+                handleDeletePost={handleDeletePost}
+                superAccess={true}
+              />
             ))}
           </div>
         </div>
+        {message && <Toast message={message} success={true} />}
       </AnimateSharedLayout>
     )
   );
