@@ -213,9 +213,17 @@ const getEachPost = async (req, res) => {
       postId,
       userId: id,
     });
+    // Get comments for each post and populate userId of each comment and postId of each comment replies
     const getComments = await Comment.find({ postId: postId })
       .populate("userId", "name avatar")
-      .sort({ createdAt: 1 });
+      .populate({
+        path: "replies",
+        populate: {
+          path: "userId",
+          select: "name avatar",
+        },
+      });
+
     res.status(200).json({
       success: true,
       message: "Post fetched successfully",
@@ -236,10 +244,19 @@ const getEachPost = async (req, res) => {
           userId: eachComment.userId._id,
           userName: eachComment.userId.name,
           userAvatar: eachComment.userId.avatar,
+          replies: eachComment.replies.map((eachReply) => {
+            return {
+              ...eachReply._doc,
+              userId: eachReply.userId._id,
+              userName: eachReply.userId.name,
+              userAvatar: eachReply.userId.avatar,
+            };
+          }),
         };
       }),
     });
   } catch (error) {
+    console.log(error);
     return res.status(400).json({
       success: false,
       message: "Post not found",
@@ -253,13 +270,31 @@ const getEachPost = async (req, res) => {
 
 const createComment = async (req, res) => {
   const { id } = req.data;
-  const { postId, comment } = req.body;
+  const { postId, comment, commentId } = req.body;
   try {
     const post = await Post.findById(postId);
     if (!post) {
       return res.status(400).json({
         success: false,
         message: "Post not found",
+      });
+    }
+    if (commentId) {
+      const IscommentExist = await Comment.findById(commentId);
+      if (!IscommentExist) {
+        return res.status(400).json({
+          success: false,
+          message: "Comment not found",
+        });
+      }
+      IscommentExist.replies.push({
+        userId: id,
+        comment,
+      });
+      await IscommentExist.save();
+      return res.status(200).json({
+        success: true,
+        message: "Comment added successfully",
       });
     }
     // TODO: Check if user is friend or not of the post owner
@@ -273,9 +308,10 @@ const createComment = async (req, res) => {
       "userId",
       "name avatar"
     );
-    return res.status(200).json({
+    // Send populated replies to the user
+    res.status(200).json({
       success: true,
-      message: "Comment created successfully",
+      message: "Comment added successfully",
       comment: {
         ...commented._doc,
         userId: commented.userId._id,
@@ -330,4 +366,11 @@ const deletePost = async (req, res) => {
 };
 
 // Export all the functions
-export { createPost, getPostsOfEachUser, getPosts, getEachPost, createComment, deletePost };
+export {
+  createPost,
+  getPostsOfEachUser,
+  getPosts,
+  getEachPost,
+  createComment,
+  deletePost,
+};

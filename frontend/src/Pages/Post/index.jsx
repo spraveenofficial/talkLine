@@ -13,10 +13,14 @@ export function Post() {
   const [comment, setComment] = useState("");
   const { user } = useSelector((state) => state.auth);
   const { postId } = useParams();
+  const [isReply, setIsReply] = useState(false);
+  const [replyTo, setReplyTo] = useState("");
+  const [replyToUserName, setReplyToUserName] = useState("");
   const { data, loading, error, success } = useSelector((state) => state.post);
   const post = data ? data.post : null;
   const likeData = data ? data.likes : null;
   const comments = data ? data.comments : [];
+  console.log(comments);
   const handleTyping = (e) => {
     setComment(e.target.value);
   };
@@ -32,10 +36,21 @@ export function Post() {
     }
     navigate(`/user/${post.userId}`);
   };
+
   useEffect(() => {
     dispatch(getPost(postId));
   }, []);
 
+  useEffect(() => {
+    if (isReply) {
+      if (comment.includes(replyToUserName)) return;
+      else {
+        setIsReply(false);
+        setReplyTo("");
+        setReplyToUserName("");
+      }
+    }
+  }, [comment, isReply, replyToUserName]);
   const handleLike = async () => {
     setMessage("");
     const response = await dispatch(likePost(postId));
@@ -68,7 +83,28 @@ export function Post() {
     return setMessage("You unbookmarked this post");
   };
 
+  const handlePushToReply = (userName, commentId) => {
+    setComment(`${userName} `);
+    setIsReply(true);
+    setReplyTo(commentId);
+    setReplyToUserName(userName);
+  };
+
+  const handleCommentReply = async () => {
+    const commentText = comment.replace(replyToUserName, "").trim();
+    if (commentText.length < 1) {
+      return setMessage("Comment cannot be empty");
+    }
+    setMessage("");
+    const response = await dispatch(
+      addComment({ postId, comment: commentText, commentId: replyTo })
+    );
+  };
+
   const handleComment = async () => {
+    if (isReply) {
+      return handleCommentReply();
+    }
     setMessage("");
     const response = await dispatch(addComment({ postId, comment }));
     if (response) {
@@ -82,7 +118,7 @@ export function Post() {
       <div className="comments">
         {comments.length > 0 ? (
           comments.map((comment) => (
-            <div className="flex items-center bg-white ">
+            <div key={comment._id} className="flex items-center bg-white ">
               <div className="bg-white text-black ml-4 mt-2 antialiased flex max-w-lg">
                 <img
                   className="rounded-full h-10 w-10 mr-2 mt-1 "
@@ -100,9 +136,20 @@ export function Post() {
                       {comment.comment}
                     </div>
                   </div>
-                  <div className="text-sm ml-4 mt-0.5 text-gray-500">
-                    {moment(comment.createdAt).fromNow()}
+                  <div className="text-sm ml-4 mt-0.5 text-center item-center text-gray-500">
+                    <span
+                      onClick={() =>
+                        handlePushToReply(comment.userName, comment._id)
+                      }
+                      className="text-gray-500 pointer mr-2 hover:text-gray-400"
+                    >
+                      Reply
+                    </span>
+                    <span className="mt-1">
+                      {moment(comment.createdAt).fromNow()}
+                    </span>
                   </div>
+                  {/* Replies here */}
                 </div>
               </div>
             </div>
