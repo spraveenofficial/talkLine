@@ -20,7 +20,6 @@ export function Post() {
   const post = data ? data.post : null;
   const likeData = data ? data.likes : null;
   const comments = data ? data.comments : [];
-  console.log(comments);
   const handleTyping = (e) => {
     setComment(e.target.value);
   };

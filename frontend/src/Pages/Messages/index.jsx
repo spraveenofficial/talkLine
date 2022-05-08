@@ -39,10 +39,6 @@ export function Message() {
     };
   }, []);
   const handleSelectToChat = (user) => {
-    if (searchResult.length > 0) {
-      setSearch("");
-      setSearchResult([]);
-    }
     dispatch({
       type: "MESSAGE_SELECT",
       payload: user,

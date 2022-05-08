@@ -96,7 +96,9 @@ const SocketContextProvider = ({ children }) => {
   }, [isAuthenticated]);
 
   useEffect(() => {
+    // console.log(state.socket);
     if (state.socket) {
+      console.log(selectedId);
       state.socket.on("connectedUsers", (users) => {
         setDispatch({
           type: "SET_ONLINE_FRIENDS",
@@ -104,18 +106,20 @@ const SocketContextProvider = ({ children }) => {
         });
       });
       state.socket.on("receiveMessage", (data) => {
-        if (selectedId?.id === data.sender.id) {
+        console.log(data);
+        console.log(selectedId && selectedId.id === data.sender.id);
+        if (selectedId && selectedId.id === data.sender.id) {
           if (chats.some((chat) => chat._id === data._id)) return;
-          return dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
+          dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
         } else {
-          return setDispatch({
+          setDispatch({
             type: "UPDATE_MESSAGE_NOTIFICATION",
             payload: data,
           });
         }
       });
     }
-  }, [state.socket, selectedId?.id]);
+  }, [state.socket, selectedId]);
 
   const getMessagesNotification = async () => {
     const { data } = await getMessageNotification();
