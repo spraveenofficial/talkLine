@@ -22,6 +22,7 @@ import {
   REMOVE_FROM_BOOKMARK,
   FEED_SCROLL_DONE,
   ADD_COMMENT_TO_POST,
+  ADD_REPLY_TO_COMMENT,
 } from "../Constants/post-constants";
 
 export const newPost = (
@@ -217,6 +218,21 @@ export const post = (
         data: {
           ...state.data,
           comments: [...state.data.comments, action.payload],
+        },
+      };
+    case ADD_REPLY_TO_COMMENT:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          comments: state.data.comments.map((comment) => {
+            if (comment._id === action.payload._id) {
+              return {
+                ...action.payload,
+              };
+            }
+            return comment;
+          }),
         },
       };
     default:

@@ -16,6 +16,7 @@ import {
   BOOKMARK_FETCH_FAILURE,
   FEED_SCROLL_DONE,
   ADD_COMMENT_TO_POST,
+  ADD_REPLY_TO_COMMENT,
 } from "../Constants/post-constants";
 import { ADD_NEW_POST_PROFILE } from "../Constants/profile-constants";
 export const createNewPost = (post) => async (dispatch) => {
@@ -203,17 +204,24 @@ export const addComment = (payload) => async (dispatch) => {
       },
       data: payload,
     });
-    dispatch({
-      type: ADD_COMMENT_TO_POST,
-      payload: data.comment,
-    });
+    if (payload.commentId) {
+      dispatch({
+        type: ADD_REPLY_TO_COMMENT,
+        payload: data.comment,
+      });
+    } else {
+      dispatch({
+        type: ADD_COMMENT_TO_POST,
+        payload: data.comment,
+      });
+    }
     return data.success;
   } catch (error) {
     return false;
   }
 };
 
-export const deletePost = async (id) =>  {
+export const deletePost = async (id) => {
   try {
     const { data } = await axios({
       method: "DELETE",

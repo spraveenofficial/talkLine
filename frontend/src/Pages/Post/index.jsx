@@ -99,6 +99,13 @@ export function Post() {
     const response = await dispatch(
       addComment({ postId, comment: commentText, commentId: replyTo })
     );
+    if (response) {
+      setComment("");
+      setIsReply(false);
+      setReplyTo("");
+      setReplyToUserName("");
+      return setMessage("Comment added successfully");
+    }
   };
 
   const handleComment = async () => {
@@ -149,7 +156,37 @@ export function Post() {
                       {moment(comment.createdAt).fromNow()}
                     </span>
                   </div>
-                  {/* Replies here */}
+                  {comment.replies.length > 0 &&
+                    comment.replies.map((reply) => {
+                      return (
+                        <div
+                          key={reply._id}
+                          className="flex items-center bg-white "
+                        >
+                          <div className="bg-white text-black ml-4 mt-2 antialiased flex max-w-lg">
+                            <img
+                              className="rounded-full h-10 w-10 mr-2 mt-1 "
+                              src={reply.userAvatar}
+                            />
+                            <div>
+                              <div className="bg-gray-100 dark:bg-gray-700 rounded-3xl px-4 pt-2 pb-2.5">
+                                <div className="text-gray-600 text-sm font-semibold cursor-pointer">
+                                  {reply.userName}
+                                </div>
+                                <div className="text-black font-medium text-sm align-left">
+                                  {reply.comment}
+                                </div>
+                              </div>
+                              <div className="text-sm ml-4 mt-0.5 text-center item-center text-gray-500">
+                                <span className="mt-1">
+                                  {moment(reply.createdAt).fromNow()}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             </div>

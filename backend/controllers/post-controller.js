@@ -292,9 +292,32 @@ const createComment = async (req, res) => {
         comment,
       });
       await IscommentExist.save();
+      const commentData = await Comment.findById(commentId)
+        .populate("userId", "name avatar")
+        .populate({
+          path: "replies",
+          populate: {
+            path: "userId",
+            select: "name avatar",
+          },
+        });
       return res.status(200).json({
         success: true,
         message: "Comment added successfully",
+        comment: {
+          ...commentData._doc,
+          userId: commentData.userId._id,
+          userName: commentData.userId.name,
+          userAvatar: commentData.userId.avatar,
+          replies: commentData.replies.map((eachReply) => {
+            return {
+              ...eachReply._doc,
+              userId: eachReply.userId._id,
+              userName: eachReply.userId.name,
+              userAvatar: eachReply.userId.avatar,
+            };
+          }),
+        },
       });
     }
     // TODO: Check if user is friend or not of the post owner
