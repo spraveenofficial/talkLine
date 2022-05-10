@@ -31,7 +31,7 @@ export const fetchChat = (payload) => async (dispatch) => {
           ? error.response.data.message
           : error.message,
     });
-    return false;
+    // return false;
   }
 };
 

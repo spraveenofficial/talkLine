@@ -7,7 +7,7 @@ import {
   UPDATE_SENT_MESSAGE,
 } from "../Constants/message-constant";
 const initialState = {
-  selectedId: null,
+  selectedId: "",
   loading: false,
   chats: [],
   error: null,

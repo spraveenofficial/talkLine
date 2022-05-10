@@ -129,6 +129,7 @@ export function Post() {
                 <img
                   className="rounded-full h-10 w-10 mr-2 mt-1 "
                   src={comment.userAvatar}
+                  alt={comment.userAvatar}
                 />
                 <div>
                   <div className="bg-gray-100 dark:bg-gray-700 rounded-3xl px-4 pt-2 pb-2.5">

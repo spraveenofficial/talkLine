@@ -145,7 +145,7 @@ export function Message() {
           )}
         </div>
       </div>
-      {selectedId?.id ? (
+      {selectedId ? (
         <ChatScreen />
       ) : (
         <div className="w-full h-72 flex justify-center items-center">
