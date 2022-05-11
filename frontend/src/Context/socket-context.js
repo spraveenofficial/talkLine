@@ -104,7 +104,6 @@ const SocketContextProvider = ({ children }) => {
         });
       });
       state.socket.on("receiveMessage", (data) => {
-
         if (selectedId && selectedId.id === data.sender.id) {
           if (chats.some((chat) => chat._id === data._id)) return;
           dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
@@ -117,7 +116,6 @@ const SocketContextProvider = ({ children }) => {
       });
     }
   }, [selectedId, state.socket]);
-
 
   const getMessagesNotification = async () => {
     const { data } = await getMessageNotification();

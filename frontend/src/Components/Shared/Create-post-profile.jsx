@@ -84,7 +84,7 @@ export function CreatePostProfile() {
   );
 
   return (
-    <div className="w-full border border-gray-600 border-t-1 mobile:w-full h-fit mobile:min-h-screen mt-2">
+    <div className="w-full border border-gray-600 border-t-1 mobile:w-full h-fit mt-2">
       <ModalToUploadPhoto />
       <div className="flex">
         <div className="w-auto h-fit m-2 rounded-full border-2 border-indigo-600">
