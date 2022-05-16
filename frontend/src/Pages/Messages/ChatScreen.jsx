@@ -23,7 +23,7 @@ export const ChatScreen = () => {
   const isThisUserOnline = onlineFriends.some(
     (eachUser) => eachUser.userId === selectedId.id
   );
-
+  console.log(selectedId);
   useEffect(() => {
     dispatch(fetchChat(selectedId.id));
     socket.on("typing", () => setIsTyping(true));
@@ -87,6 +87,7 @@ export const ChatScreen = () => {
       <img
         src={selectedId.avatar}
         className="w-8 h-8 rounded-full mt-2 mr-1 cursor-pointer"
+        alt="userAvatar"
       />
       <div
         className="flex flex-col space-y-2 text-xs border-1 items-start px-4 rounded-lg inline-block
@@ -132,7 +133,7 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
             ></div>
             <p>Loading.</p>
           </div>
-        ) : !loading && chats.length == 0 ? (
+        ) : !loading && chats.length === 0 ? (
           <div className="text-black flex-col w-full h-screen flex justify-center align-center texts-center">
             <p>No Earlier Chats.</p>
           </div>
@@ -144,6 +145,7 @@ bg-gray-300 text-gray-600 rounded-bl-none justify-center"
                 <img
                   src={m.sender.avatar}
                   className="w-8 h-8 rounded-full mt-2 mr-1 cursor-pointer"
+                  alt="userAvatar"
                 />
               )}
               <div

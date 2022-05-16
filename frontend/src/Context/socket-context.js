@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { getMessageNotification } from "../Redux/Actions";
@@ -83,6 +89,8 @@ const SocketContextProvider = ({ children }) => {
   });
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const { selectedId, chats } = useSelector((state) => state.message);
+  const ref = useRef(selectedId);
+
   useEffect(() => {
     if (isAuthenticated) {
       const socket = io(ENDPOINT);
@@ -96,6 +104,7 @@ const SocketContextProvider = ({ children }) => {
   }, [isAuthenticated]);
 
   useEffect(() => {
+    ref.current = selectedId;
     if (state.socket) {
       state.socket.on("connectedUsers", (users) => {
         setDispatch({
@@ -104,7 +113,7 @@ const SocketContextProvider = ({ children }) => {
         });
       });
       state.socket.on("receiveMessage", (data) => {
-        if (selectedId && selectedId.id === data.sender.id) {
+        if (ref.current && ref.current.id === data.sender.id) {
           if (chats.some((chat) => chat._id === data._id)) return;
           dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
         } else {
