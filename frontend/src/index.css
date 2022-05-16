@@ -300,3 +300,7 @@ input::-webkit-inner-spin-button {
 .window button {
   margin-bottom: 0.625rem;
 }
+
+.fix-chat-width {
+  width: 53%;
+}
