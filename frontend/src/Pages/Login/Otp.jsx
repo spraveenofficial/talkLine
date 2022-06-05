@@ -16,16 +16,27 @@ export function Otp({ onBack }) {
     3: "",
     4: "",
   });
+
   const { user } = useSelector((state) => state.login);
   const { loading, success, message } = useSelector((state) => state.verifyOtp);
   const handleOtpChange = (e) => {
     const { name, value } = e.target;
+    if (!value) return;
     setOtp((prev) => ({
       ...prev,
       [name]: value,
     }));
+    focusNextInput(e);
   };
   const enTeredOtp = Object.values(otp).join("");
+  
+  const focusNextInput = (e) => {
+    const input = e.target;
+    const nextInput = input.nextElementSibling;
+    if (nextInput) {
+      nextInput.focus();
+    }
+  };
 
   const handleVerifyOtp = async () => {
     const response = await dispatch(

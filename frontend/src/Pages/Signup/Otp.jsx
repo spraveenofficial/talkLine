@@ -16,12 +16,21 @@ export function Otp({ onBack, onNext }) {
   const { loading, success, message } = useSelector((state) => state.verifyOtp);
   const handleOtpChange = (e) => {
     const { name, value } = e.target;
+    if (!value) return;
     setOtp((prev) => ({
       ...prev,
       [name]: value,
     }));
+    focusNextInput(e);
   };
   const enTeredOtp = Object.values(otp).join("");
+  const focusNextInput = (e) => {
+    const input = e.target;
+    const nextInput = input.nextElementSibling;
+    if (nextInput) {
+      nextInput.focus();
+    }
+  };
   const handleVerifyOtp = async () => {
     const response = await dispatch(
       verifyOtp({ otp: enTeredOtp, hash: user.hash, email: user.email })
@@ -30,6 +39,7 @@ export function Otp({ onBack, onNext }) {
       return onNext();
     }
   };
+
   return (
     <motion.div
       initial="hidden"
