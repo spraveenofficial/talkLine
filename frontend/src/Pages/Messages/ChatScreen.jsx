@@ -23,11 +23,12 @@ export const ChatScreen = () => {
   const isThisUserOnline = onlineFriends.some(
     (eachUser) => eachUser.userId === selectedId.id
   );
-  console.log(selectedId);
+  const ref = useRef(selectedId);
   useEffect(() => {
     dispatch(fetchChat(selectedId.id));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
+    ref.current = selectedId;
     setDispatch({
       type: "UPDATE_SEEN_MESSAGE",
       payload: selectedId.id,
@@ -68,7 +69,7 @@ export const ChatScreen = () => {
     setUserMessage(e.target.value);
     if (!typing) {
       setTyping(true);
-      socket.emit("typing", selectedId.id);
+      socket.emit("typing", ref.current.id);
     }
     let lastTypingTime = new Date().getTime();
     var timerLength = 3000;
@@ -76,7 +77,7 @@ export const ChatScreen = () => {
       var timeNow = new Date().getTime();
       var timeDiff = timeNow - lastTypingTime;
       if (timeDiff >= timerLength && typing) {
-        socket.emit("stop typing", selectedId.id);
+        socket.emit("stop typing", ref.current.id);
         setTyping(false);
       }
     }, timerLength);

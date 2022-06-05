@@ -89,8 +89,14 @@ const SocketContextProvider = ({ children }) => {
   });
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const { selectedId, chats } = useSelector((state) => state.message);
+  const testingRef = useRef({ selectedId, chats });
   const ref = useRef(selectedId);
-
+  const currentChat = useRef(chats);
+  useEffect(() => {
+    ref.current = selectedId;
+    currentChat.current = chats;
+    testingRef.current = { selectedId, chats };
+  });
   useEffect(() => {
     if (isAuthenticated) {
       const socket = io(ENDPOINT);
@@ -104,7 +110,6 @@ const SocketContextProvider = ({ children }) => {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    ref.current = selectedId;
     if (state.socket) {
       state.socket.on("connectedUsers", (users) => {
         setDispatch({
@@ -113,9 +118,15 @@ const SocketContextProvider = ({ children }) => {
         });
       });
       state.socket.on("receiveMessage", (data) => {
-        if (ref.current && ref.current.id === data.sender.id) {
-          if (chats.some((chat) => chat._id === data._id)) return;
-          dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
+        if (ref.current?.id && ref.current.id === data.sender.id) {
+          const isExist = currentChat.current.some(
+            (eachChat) => eachChat.id === data.id
+          );
+          if (isExist) {
+            return;
+          } else {
+            dispatch({ type: "UPDATE_SENT_MESSAGE", payload: data });
+          }
         } else {
           setDispatch({
             type: "UPDATE_MESSAGE_NOTIFICATION",

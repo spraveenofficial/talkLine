@@ -91,7 +91,7 @@ export function Notification() {
         : success &&
           notifications.length === 0 && (
             <div className="w-full h-40 border bg-indigo-200 rounded-xl flex justify-center text-center items-center mt-4">
-              <h1 className="text-xl font-bold">No Nofification Found.</h1>
+              <h1 className="text-xl font-bold">No Notification Found.</h1>
             </div>
           )}
     </div>
