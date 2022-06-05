@@ -7,7 +7,6 @@ import {
   NotificationIcon,
   MessageIcon,
   BookMarkIcon,
-  ListIcon,
   ProfileIcon,
   MoreIcon,
   Modal,
@@ -99,14 +98,6 @@ export function Sidebar() {
             >
               <BookMarkIcon />
               Bookmarks
-            </NavLink>
-            <NavLink
-              className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full text-black"
-              activeclassname="active"
-              to="/lists"
-            >
-              <ListIcon />
-              Lists
             </NavLink>
             <NavLink
               className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full text-black"
