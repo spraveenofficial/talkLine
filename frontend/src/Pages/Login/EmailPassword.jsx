@@ -5,47 +5,37 @@ import {
   EmailIcon,
   PasswordIcon,
 } from "../../Components";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogin } from "../../Redux/Actions";
-export function EmailPassword({ onNext }) {
+import { userLogin, verifyUser } from "../../Redux/Actions";
+import { useState } from "react";
+export function EmailPassword() {
+  const [isGuest, setIsGuest] = useState(false);
+  const location = useLocation();
   const dispatch = useDispatch();
-  const { loading, user, success, message } = useSelector(
-    (state) => state.login
-  );
+  const navigate = useNavigate();
+  let from = location.state?.from?.pathname || "/";
+  const { loading, success, message } = useSelector((state) => state.login);
   const formik = useFormik({
     initialValues: {
-      email: user.email,
-      password: user.password,
+      email: "",
+      password: "",
     },
     onSubmit: async (values) => {
       const response = await dispatch(userLogin(values));
       if (response) {
-        return onNext();
+        return dispatch(verifyUser()) && navigate(from, { replace: true });
       }
-    },
-    validate: (values) => {
-      const regularExpression = new RegExp(
-        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-      );
-      let errors = {};
-      if (!values.email) {
-        errors.email = "Valid email is required";
-      } else if (
-        !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)
-      ) {
-        errors.email = "Invalid email address";
-      }
-      if (!values.password) {
-        errors.password = "Valid password is required";
-      } else if (!regularExpression.test(values.password)) {
-        errors.password =
-          "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character";
-      }
-      return errors;
     },
   });
+
+  const handleGuestLogin = async () => {
+    formik.setFieldValue("email", "spraveen593@gmail.com");
+    formik.setFieldValue("password", "Praveen8874@");
+    setIsGuest(true);
+    formik.handleSubmit();
+  };
   return (
     <form
       className="bg-white w-80 max-w-sm mobile:max-w-full mobile:p-10 mobile:w-full"
@@ -55,9 +45,6 @@ export function EmailPassword({ onNext }) {
       <p className="text-sm font-normal text-gray-600 mb-5">
         Enter your email and password
       </p>
-      {formik.touched.email && formik.errors.email ? (
-        <p className="text-red-600 mb-2">{formik.errors.email}</p>
-      ) : null}
       <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
         <EmailIcon />
         <Input
@@ -69,9 +56,6 @@ export function EmailPassword({ onNext }) {
           placeholder="Enter Email"
         />
       </div>
-      {formik.touched.password && formik.errors.password ? (
-        <p className="text-red-600 mb-2">{formik.errors.password}</p>
-      ) : null}
       <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
         <PasswordIcon />
         <Input
@@ -84,8 +68,11 @@ export function EmailPassword({ onNext }) {
           placeholder="Enter Password"
         />
       </div>
-      <Button loading={loading} type="submit">
-        {loading ? "Sending otp..." : "Login"}
+      <Button loading={!isGuest && loading} type="submit">
+        {!isGuest && loading ? "Loading." : "Login"}
+      </Button>
+      <Button loading={isGuest} onClick={handleGuestLogin}>
+        {loading ? "Loading." : "Login as Guest"}
       </Button>
       {!loading && message && !success && (
         <Toast message={message} success={success} />

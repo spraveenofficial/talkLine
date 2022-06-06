@@ -155,7 +155,7 @@ export const uploadAvatar = (
 };
 
 export const login = (
-  state = { loading: false, success: false, user: {}, message: "" },
+  state = { loading: false, success: false, message: "" },
   action
 ) => {
   switch (action.type) {
@@ -166,14 +166,12 @@ export const login = (
         ...state,
         loading: false,
         success: true,
-        user: action.payload,
       };
     case USER_LOGIN_FAILURE:
       return {
         ...state,
         loading: false,
         success: false,
-        user: {},
         message: action.payload,
       };
     default:

@@ -192,19 +192,10 @@ const loginUsingOtp = async (req, res) => {
         .json({ success: false, message: "User not found!" });
     }
     if (user && user.isActivated && (await user.matchPassword(password))) {
-      const otp = await otpServices.generateOtp();
-      const ttl = 1000 * 60 * 2; // 2 min
-      const expires = Date.now() + ttl;
-      const data = `${email}.${otp}.${expires}`;
-      const hash = hashServices.hashOtp(data);
-
-      //Sending Otp Via Email
-      const sendEmailWithOtp = await Email.sendSignupOtp(email, otp);
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
-        message: "Otp Sent Successfully",
-        hash: `${hash}.${expires}`,
-        otp: otp,
+        message: "Login Successful",
+        token: generateAuthToken(user._id),
       });
     } else if (!user) {
       return res.status(400).json({

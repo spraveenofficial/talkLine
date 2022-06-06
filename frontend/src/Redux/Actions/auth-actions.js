@@ -195,12 +195,9 @@ export const userLogin = (payload) => async (dispatch) => {
       });
       return false;
     } else {
+      localStorage.setItem("token", data.token);
       dispatch({
         type: USER_LOGIN_SUCCESS,
-        payload: {
-          ...payload,
-          hash: data.hash,
-        },
       });
       return true;
     }
