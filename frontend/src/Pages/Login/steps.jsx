@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { EmailPassword } from "./EmailPassword";
-import { Otp } from "./Otp";
 export function Login() {
   const Steps = {
     1: EmailPassword,
-    // 2: Otp,
-    // 2: Otp,
   };
   const [step, setStep] = useState(1);
   const Step = Steps[step];
