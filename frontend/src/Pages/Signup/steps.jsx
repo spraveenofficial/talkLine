@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { EmailPassword } from "./EmailPassword";
 import { Otp } from "./Otp";
 import { SetAvatar } from "./SetAvatar";
@@ -10,7 +11,11 @@ const Steps = {
 
 export function Signup() {
   const [step, setStep] = useState(1);
+  const navigate = useNavigate();
   const Step = Steps[step];
+  const handleNavigate = () => {
+    navigate("/readmore");
+  };
   return (
     <div className="h-screen flex mobile:flex-col ">
       <div className="flex w-1/2 bg-gradient-to-tr from-blue-800 to-purple-700 i justify-around items-center mobile:w-full mobile:h-80">
@@ -20,8 +25,8 @@ export function Signup() {
             The best way to connect with people and make new friends.
           </p>
           <button
-            type="submit"
             className="block w-28 bg-white text-indigo-800 mt-4 py-2 rounded-2xl font-bold mb-2"
+            onClick={handleNavigate}
           >
             Read More
           </button>

@@ -1,6 +1,6 @@
 import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Signup, Login, Error } from "./Pages";
+import { Signup, Login, Error, ReadMore } from "./Pages";
 import {
   Navbar,
   HomeComponent,
@@ -57,6 +57,7 @@ function App() {
         <Route element={<GuestRoutes />}>
           <Route path="signup" element={<Signup />} />
           <Route path="login" element={<Login />} />
+          <Route path="readmore" element={<ReadMore />} />
         </Route>
       </Routes>
     </Router>

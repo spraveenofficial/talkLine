@@ -10,3 +10,4 @@ export { Message } from "./Messages";
 export { Post } from "./Post";
 export { Setting } from "./Settings";
 export { Bookmark } from "./Bookmarks";
+export { ReadMore } from "./ReadMore";

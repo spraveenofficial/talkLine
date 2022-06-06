@@ -83,11 +83,6 @@ export function EmailPassword() {
             New User ?
           </span>
         </Link>
-        <Link to="/forget-password">
-          <span className="mt-2 text-sm ml-2 hover:text-blue-500 cursor-pointer">
-            Forgot Password?
-          </span>
-        </Link>
       </div>
     </form>
   );
