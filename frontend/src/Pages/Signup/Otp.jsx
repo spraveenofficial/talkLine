@@ -24,6 +24,14 @@ export function Otp({ onBack, onNext }) {
     focusNextInput(e);
   };
   const enTeredOtp = Object.values(otp).join("");
+  const handleBackSpace = (e) => {
+    const input = e.target;
+    const prevInput = input.previousSibling;
+    if (e.keyCode === 8 && prevInput) {
+      input.value = "";
+      prevInput.focus();
+    }
+  };
   const focusNextInput = (e) => {
     const input = e.target;
     const nextInput = input.nextElementSibling;
@@ -73,6 +81,7 @@ export function Otp({ onBack, onNext }) {
                 onChange={handleOtpChange}
                 placeholder="0"
                 name="1"
+                onKeyDown={handleBackSpace}
               />
               <input
                 type="number"
@@ -81,6 +90,7 @@ export function Otp({ onBack, onNext }) {
                 onChange={handleOtpChange}
                 placeholder="0"
                 name="2"
+                onKeyDown={handleBackSpace}
               />
               <input
                 type="number"
@@ -89,6 +99,7 @@ export function Otp({ onBack, onNext }) {
                 onChange={handleOtpChange}
                 placeholder="0"
                 name="3"
+                onKeyDown={handleBackSpace}
               />
               <input
                 type="text"
@@ -97,6 +108,7 @@ export function Otp({ onBack, onNext }) {
                 onChange={handleOtpChange}
                 placeholder="0"
                 name="4"
+                onKeyDown={handleBackSpace}
               />
             </div>
             <button className="resend">
