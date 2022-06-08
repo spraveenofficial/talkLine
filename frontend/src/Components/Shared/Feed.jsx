@@ -8,7 +8,6 @@ export function Feed() {
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
   const { posts, loading, success } = useSelector((state) => state.feed);
-  console.log(posts);
   const myPosts = posts?.posts;
   const scroll = posts?.scroll;
   const [currentPage, setCurrentPage] = useState(1);
