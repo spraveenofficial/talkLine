@@ -140,13 +140,10 @@ export const feed = (
         posts: {
           ...state.posts,
           posts: state.posts.posts.map((post) => {
-            if (post._id === action.payload) {
+            if (post._id === action.payload.id) {
               return {
                 ...post,
-                bookmarks: {
-                  count: post.bookmarks.count + 1,
-                  isBookmarked: true,
-                },
+                isBookmarked: action.payload.status,
               };
             }
             return post;

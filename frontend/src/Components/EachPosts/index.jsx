@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LikeIcon, BookMarkIcon, Toast } from "..";
 export function EachPost(props) {
+  const [message, setMessage] = useState("");
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const post = props.post;
@@ -18,13 +19,11 @@ export function EachPost(props) {
   const navigateToPost = () => {
     navigate(`/post/${post._id}`);
   };
+  const handleReport = () => {
+    setMessage("");
+    setMessage(() => "Work under progress");
+  };
   const RenderOptions = () => {
-    const [message, setMessage] = useState("");
-    const handleReport = () => {
-      setMessage("");
-      // setIsOpen(false);
-      setMessage(() => "Work under progress");
-    };
     return (
       <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
         {user.id === post.userId && props.superAccess && (
@@ -48,9 +47,14 @@ export function EachPost(props) {
         >
           Report Post
         </p>
-        {message && <Toast message={message} success={true} />}
       </div>
     );
+  };
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(
+      `https://talk-line.vercel.app/post/${post._id}`
+    );
+    setMessage(() => "Copied to clipboard");
   };
   return (
     <div className="container overflow-x-hidden w-full">
@@ -139,7 +143,10 @@ export function EachPost(props) {
           }`}</p>
         </div>
         <div className="flex justify-end w-full mt-1 pt-2 pr-5">
-          <span className="transition ease-out duration-300 hover:bg-blue-50 bg-blue-100 h-8 px-2 py-2 text-center rounded-full text-blue-400 cursor-pointer mr-2">
+          <span
+            onClick={handleCopyToClipboard}
+            className="transition ease-out duration-300 hover:bg-blue-50 bg-blue-100 h-8 px-2 py-2 text-center rounded-full text-blue-400 cursor-pointer mr-2"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -165,6 +172,7 @@ export function EachPost(props) {
           </span>
         </div>
       </div>
+      {message && <Toast message={message} success={true} />}
       <hr className="border-gray-600" />
     </div>
   );

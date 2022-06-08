@@ -82,6 +82,10 @@ export function Post() {
     return setMessage("You unbookmarked this post");
   };
 
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setMessage("Link copied to clipboard");
+  };
   const handlePushToReply = (userName, commentId) => {
     setComment(`${userName} `);
     setIsReply(true);
@@ -284,7 +288,10 @@ export function Post() {
                   }`}</p>
                 </div>
                 <div className="flex justify-end w-full mt-1 pt-2 pr-5">
-                  <span className="transition ease-out duration-300 hover:bg-blue-50 bg-blue-100 h-8 px-2 py-2 text-center rounded-full text-blue-400 cursor-pointer mr-2">
+                  <span
+                    onClick={handleCopyToClipboard}
+                    className="transition ease-out duration-300 hover:bg-blue-50 bg-blue-100 h-8 px-2 py-2 text-center rounded-full text-blue-400 cursor-pointer mr-2"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
