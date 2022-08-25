@@ -212,3 +212,37 @@ export const userLogin = (payload) => async (dispatch) => {
     return false;
   }
 };
+
+
+export const handleChangePassword = (payload) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem("token");
+    const { data } = await axios({
+      method: "POST",
+      url: `${baseUrl}/auth/change`,
+      headers: {
+        token: `Bearer ${token}`,
+      },
+      data: payload,
+    });
+    return data.success;
+  } catch (error) {
+    return false;
+  }
+}
+
+export const handleDeleteAccount = () => async (dispatch) => {
+  try {
+    const token = localStorage.getItem("token");
+    const { data } = await axios({
+      method: "GET",
+      url: `${baseUrl}/auth/delete`,
+      headers: {
+        token: `Bearer ${token}`,
+      },
+    });
+    return data.success;
+  } catch (error) {
+    return false;
+  }
+}

@@ -6,6 +6,8 @@ export {
   userLogout,
   nullUser,
   userLogin,
+  handleChangePassword,
+  handleDeleteAccount
 } from "./auth-actions";
 
 export {

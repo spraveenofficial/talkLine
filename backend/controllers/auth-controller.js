@@ -1,11 +1,15 @@
 import { generateAuthToken } from "../utils/token.js";
 import User from "../models/User.js";
+import Post from "../models/Post.js";
+import Message from "../models/Message.js";
 import hashServices from "../services/hash-services.js";
 import otpServices from "../services/otp-services.js";
 import userService from "../services/user-services.js";
 import Email from "../services/email-services.js";
 import imageServices from "../services/image-services.js";
 import FriendRequest from "../models/Friend-request.js";
+import Notification from "../models/Notification.js";
+
 
 // @desc    Send OTP
 // @route   POST /api/v1/auth/send-otp
@@ -217,4 +221,66 @@ const loginUsingOtp = async (req, res) => {
   }
 };
 
-export { sendOtp, verifyOtp, uploadAvatar, verifyUser, loginUsingOtp };
+// @desc    Change Password
+// @route   POST /api/v1/auth/change
+// @access  Private
+
+const changePassword = async (req, res) => {
+  const { id } = req.data;
+  const { password } = req.body;
+  try {
+    const user = await User.findOne({ _id: id });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found!" });
+    }
+    user.password = password;
+    await user.save();
+    return res.status(200).json({
+      success: true,
+      message: "Password changed successfully",
+    });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Something went wrong!" });
+  }
+}
+
+// @desc    Delete Account
+// @route   POST /api/v1/auth/delete
+// @access  Private
+
+
+const deleteAccount = async (req, res) => {
+  const { id } = req.data;
+  try {
+    const user = await User.findOne({ _id: id });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found!" });
+    }
+    await user.remove();
+    // Remove all the posts of the user, messages and friends, notifications
+    await Post.deleteMany({ userId: id });
+    await Message.deleteMany({ senderId: id });
+    await Message.deleteMany({ receiverId: id });
+    await FriendRequest.deleteMany({ senderId: id });
+    await FriendRequest.deleteMany({ receiverId: id });
+    await Notification.deleteMany({ userId: id });
+    return res.status(200).json({
+      success: true,
+      message: "Account deleted successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ success: false, message: "Something went wrong!" });
+  }
+}
+
+
+export { sendOtp, verifyOtp, uploadAvatar, verifyUser, loginUsingOtp, changePassword, deleteAccount };
